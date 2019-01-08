@@ -2,8 +2,10 @@
 using MilenioApi.DAO;
 using MilenioApi.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 
 namespace MilenioApi.Action
@@ -11,14 +13,18 @@ namespace MilenioApi.Action
     public class aPersona
     {
         TokenController tk = new TokenController();
+        ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
-        public Return CreatePersona(HttpRequest httpRequest)
+        public Basic CreatePersona(HttpRequest httpRequest)
         {
-            Return ret = new Return();
+            Basic ret = new Basic();
             try
             {
-                if (tk.ValidateToken(Convert.ToString(httpRequest.Form["Token"])) != null)
+                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["Token"]));
+                if (cp != null)
                 {
+                    cp.Claims.Select(c => c.Type == ClaimTypes.NameIdentifier);
+
                     String file = string.Empty;
                     if (httpRequest.Files.Count > 0)
                     {
@@ -35,15 +41,6 @@ namespace MilenioApi.Action
                         int nroidentificacion = Convert.ToInt32(httpRequest.Form["NroIdentificacion"]);
                         string email = Convert.ToString(httpRequest.Form["Email"]);
                         string login = Convert.ToString(httpRequest.Form["Login"]);
-                        Guid entidad_id = Guid.Parse(httpRequest.Form["Entidad_Id"]);
-
-                        Guid? user_id = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["User_Id"]))
-                            user_id = Guid.Parse(httpRequest.Form["User_Id"]);
-
-                        Guid? rol_id = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["Roles"]))
-                            rol_id = Guid.Parse(httpRequest.Form["Roles"]);
 
                         int vcedula = (from pr in ent.Persona
                                        where pr.NumeroIdentificacion == nroidentificacion
@@ -63,6 +60,17 @@ namespace MilenioApi.Action
                             {
                                 if (vlogin == 0)
                                 {
+                                    //se saca el id de la entidad del token
+                                    string entidad = cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault();
+                                    Guid entidad_id = Guid.Parse(entidad);
+
+                                    //se saca el usiario que esta creando la persona del token
+                                    Guid? user_id = null;
+                                    string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                                    if (!string.IsNullOrEmpty(usid))
+                                        user_id = Guid.Parse(usid);
+
+
                                     //SE VALIDA EL GUID DE TIPO DE IDENTIFICACION//
                                     Guid ti = new Guid();
                                     if (!string.IsNullOrEmpty(httpRequest.Form["TipoIdentificacion"]))
@@ -108,22 +116,14 @@ namespace MilenioApi.Action
                                     p.Usuario_Update = user_id;
                                     ent.Persona.Add(p);
 
-                                    //ASIGNAMOS LA PERSONA A LA ENTIDAD//
-                                    Entidad_Persona_Rol ep = new Entidad_Persona_Rol();
-                                    ep.Persona_Id = p.Codigo_Id;
-                                    ep.Entidad_Id = entidad_id;
-                                    ep.Created_At = DateTime.Now;
-                                    ep.Updated_At = DateTime.Now;
-                                    ep.Estado = true;
-                                    ep.Usuario_Update = user_id;
-                                    ent.Entidad_Persona_Rol.Add(ep);
+                                    //SE ASIGNAN LOS ROLES EN LA ENTIDAD
+                                    IList<string> _Roles = httpRequest.Form["Roles"].Split(',').Reverse().ToList<string>();
 
-                                    //SI TIENE ROLL SE LO ASIGNAMOS
-                                    if (rol_id != null)
+                                    foreach (var i in _Roles)
                                     {
                                         Entidad_Persona_Rol ur = new Entidad_Persona_Rol();
                                         ur.Persona_Id = p.Codigo_Id;
-                                        ur.Rol_Id = rol_id.Value;
+                                        ur.Rol_Id = Guid.Parse(i);
                                         ur.Entidad_Id = entidad_id;
                                         ur.Created_At = DateTime.Now;
                                         ur.Updated_At = DateTime.Now;

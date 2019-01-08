@@ -315,6 +315,7 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Basic.cs" />
+    <Compile Include="Models\ComboModel.cs" />
     <Compile Include="Models\EntidadModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\oPersonaModel.cs" />
@@ -335,6 +336,7 @@
       <DependentUpon>MilenioModel.edmx</DependentUpon>
       <LastGenOutput>MilenioModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="DAO\MilenioModel.edmx.sql" />
     <Content Include="DAO\MilenioModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MilenioModel.edmx</DependentUpon>
@@ -371,6 +373,7 @@
     <Content Include="DAO\MilenioModel.edmx.diagram">
       <DependentUpon>MilenioModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

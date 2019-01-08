@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using MilenioApi.DAO;
 using System.Web.Script.Serialization;
+using MilenioApi.Models;
 
 namespace WebApi.Jwt
 {
@@ -20,14 +21,13 @@ namespace WebApi.Jwt
         /// </summary>
         private const string Secret = "db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==";
 
-        public static string GenerateToken(string login, List<Entidad> entidades, string userid, List<Rol> roles)
+        public static string GenerateToken(string login, List<ComboModel> entidades, string userid, List<ComboModel> roles, Guid entidad_id)
         {
             var symmetricKey = Convert.FromBase64String(Secret);
             var tokenHandler = new JwtSecurityTokenHandler();
 
 
-            var listroles = new JavaScriptSerializer().Serialize(roles);
-           // string listroles = JsonConvert.SerializeObject(roles);
+            var listroles = new JavaScriptSerializer().Serialize(roles);           
             string listentidades = JsonConvert.SerializeObject(entidades);
 
             var now = DateTime.UtcNow;
@@ -38,7 +38,8 @@ namespace WebApi.Jwt
                         {
                             new Claim(ClaimTypes.Name, login),
                             new Claim(ClaimTypes.NameIdentifier, userid),
-                            new Claim(ClaimTypes.PrimaryGroupSid, listentidades),
+                            new Claim(ClaimTypes.GroupSid, listroles),
+                            new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()),
                             new Claim(ClaimTypes.Role, listroles)
                         }),
                 Expires = now.AddMinutes(expireMinutes),

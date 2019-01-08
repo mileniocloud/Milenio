@@ -10,10 +10,18 @@ namespace MilenioApi.Controllers
     {
         [AllowAnonymous]
         [Route("Login")]
-        public Return Login()
+        public oPersonaModel Login()
         {
             aSeguridad s = new aSeguridad();
             return s.Login(HttpContext.Current.Request);
+        }
+
+        [AllowAnonymous]
+        [Route("LoginEntidad")]
+        public oPersonaModel LoginEntidad()
+        {
+            aSeguridad s = new aSeguridad();
+            return s.LoginEntidad(HttpContext.Current.Request);
         }
     }
 }

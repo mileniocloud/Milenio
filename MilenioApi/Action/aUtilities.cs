@@ -7,7 +7,7 @@ namespace MilenioApi.Action
 {
     public class aUtilities
     {
-        public Return MensajeRetorno(ref Return ret, int idmensje, string custom, Guid? id)
+        public Basic MensajeRetorno(ref Basic ret, int idmensje, string custom, Guid? id)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {

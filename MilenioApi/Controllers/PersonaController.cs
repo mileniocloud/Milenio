@@ -10,7 +10,7 @@ namespace MilenioApi.Controllers
     {        
         [AllowAnonymous]
         [Route("CreatePersona")]
-        public Return CreatePersona()
+        public Basic CreatePersona()
         {
             aPersona e = new aPersona();
             return e.CreatePersona(HttpContext.Current.Request);

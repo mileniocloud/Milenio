@@ -12,7 +12,7 @@
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="Referencia" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Descripcion" Type="text" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
           <Property Name="Marca" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="ValorUnitario" Type="int" Nullable="false" />
           <Property Name="PrecioIn" Type="int" Nullable="false" />
@@ -63,8 +63,8 @@
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Dane_Id" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Entidad">
           <Key>
@@ -80,8 +80,8 @@
           <Property Name="FfinFiscal" Type="datetime" Nullable="false" />
           <Property Name="Entidad_Padre" Type="uniqueidentifier" />
           <Property Name="Ubicacion_Id" Type="uniqueidentifier" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Entidad_Persona_Rol">
           <Key>
@@ -93,8 +93,8 @@
           <Property Name="Persona_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Entidad_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Estado" Type="bit" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="GenericError">
@@ -126,8 +126,8 @@
           <Property Name="FfinVigencia" Type="datetime" Nullable="false" />
           <Property Name="Estado" Type="bit" />
           <Property Name="CostoLicencia" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
           <Property Name="IsTest" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Municipio">
@@ -138,8 +138,8 @@
           <Property Name="Departamento_Id" Type="int" Nullable="false" />
           <Property Name="Dane_Id" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Persona">
           <Key>
@@ -176,8 +176,8 @@
           <Property Name="Poblado_Id" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -187,8 +187,8 @@
           <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Estado" Type="bit" />
           <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Subcategoria">
           <Key>
@@ -197,7 +197,7 @@
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Referencia" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Descripcion" Type="text" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
           <Property Name="Estado" Type="bit" />
           <Property Name="Categoria_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Created_At" Type="datetime" Nullable="false" />
@@ -212,8 +212,8 @@
           <Property Name="Entidad_Id" Type="uniqueidentifier" />
           <Property Name="Numero" Type="int" Nullable="false" />
           <Property Name="Tipo" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="TipoIdentificacion">
           <Key>
@@ -233,8 +233,8 @@
           <Property Name="Direccion" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Latitud" Type="varchar" MaxLength="50" />
           <Property Name="Longitud" Type="varchar" MaxLength="50" />
-          <Property Name="Created_At" Type="datetime2" Precision="7" />
-          <Property Name="Updated_At" Type="datetime2" Precision="7" />
+          <Property Name="Created_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
         </EntityType>
         <Association Name="FK_CAula">
@@ -274,6 +274,42 @@
             </Principal>
             <Dependent Role="Entidad1">
               <PropertyRef Name="Entidad_Padre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Persona_Rol_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Entidad_Persona_Rol">
+              <PropertyRef Name="Entidad_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Persona_Rol_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Entidad_Persona_Rol">
+              <PropertyRef Name="Persona_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Persona_Rol_Rol">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Entidad_Persona_Rol">
+              <PropertyRef Name="Rol_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -342,18 +378,6 @@
             </Principal>
             <Dependent Role="Municipio">
               <PropertyRef Name="Departamento_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Persona_Rol_Entidad">
-          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
-          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Entidad_Persona_Rol">
-              <PropertyRef Name="Entidad_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -439,30 +463,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usuario_Rol_Persona1">
-          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
-          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Persona">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Entidad_Persona_Rol">
-              <PropertyRef Name="Persona_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Usuario_Rol_Rol">
-          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
-          <End Role="Entidad_Persona_Rol" Type="Self.Entidad_Persona_Rol" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rol">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Entidad_Persona_Rol">
-              <PropertyRef Name="Rol_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_USubcategoria">
           <End Role="Subcategoria" Type="Self.Subcategoria" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -477,40 +477,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="sp_create_entidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Nit" Type="int" Mode="In" />
-          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
-          <Parameter Name="CodigoEntidad" Type="int" Mode="In" />
-          <Parameter Name="codigodane" Type="int" Mode="In" />
-          <Parameter Name="FiniFiscal" Type="datetime" Mode="In" />
-          <Parameter Name="FfinFiscal" Type="datetime" Mode="In" />
-          <Parameter Name="Entidad_Padre" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="Poblado_Id" Type="int" Mode="In" />
-          <Parameter Name="Direccion" Type="varchar" Mode="In" />
-          <Parameter Name="Latitud" Type="varchar" Mode="In" />
-          <Parameter Name="Longitud" Type="varchar" Mode="In" />
-          <Parameter Name="File" Type="nvarchar(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_create_persona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="NumeroIdentificacion" Type="int" Mode="In" />
-          <Parameter Name="Nombres" Type="varchar" Mode="In" />
-          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
-          <Parameter Name="Sexo" Type="varchar" Mode="In" />
-          <Parameter Name="FNacimiento" Type="datetime" Mode="In" />
-          <Parameter Name="Nacionalidad" Type="varchar" Mode="In" />
-          <Parameter Name="LibretaMilitar" Type="varchar" Mode="In" />
-          <Parameter Name="TipoSangre" Type="varchar" Mode="In" />
-          <Parameter Name="Foto" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="TipoIdentificacion_Id" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="Poblado_Id" Type="int" Mode="In" />
-          <Parameter Name="Direccion" Type="varchar" Mode="In" />
-          <Parameter Name="Latitud" Type="varchar" Mode="In" />
-          <Parameter Name="Longitud" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="sp_create_user" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="email" Type="varchar" Mode="In" />
-          <Parameter Name="password" Type="varchar" Mode="In" />
-        </Function>
         <EntityContainer Name="MilenioCloudModelStoreContainer">
           <EntitySet Name="Articulo" EntityType="Self.Articulo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Aula" EntityType="Self.Aula" Schema="dbo" store:Type="Tables" />
@@ -542,6 +508,18 @@
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Entidad1" EntitySet="Entidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Entidad" Association="Self.FK_Entidad_Persona_Rol_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Persona" Association="Self.FK_Entidad_Persona_Rol_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Rol" Association="Self.FK_Entidad_Persona_Rol_Rol">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
+          </AssociationSet>
           <AssociationSet Name="FK_EUbicacion" Association="Self.FK_EUbicacion">
             <End Role="Ubicacion" EntitySet="Ubicacion" />
             <End Role="Entidad" EntitySet="Entidad" />
@@ -561,10 +539,6 @@
           <AssociationSet Name="FK_MDepartamento" Association="Self.FK_MDepartamento">
             <End Role="Departamento" EntitySet="Departamento" />
             <End Role="Municipio" EntitySet="Municipio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Persona_Rol_Entidad" Association="Self.FK_Persona_Rol_Entidad">
-            <End Role="Entidad" EntitySet="Entidad" />
-            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
           </AssociationSet>
           <AssociationSet Name="FK_PMunicipio" Association="Self.FK_PMunicipio">
             <End Role="Municipio" EntitySet="Municipio" />
@@ -589,14 +563,6 @@
           <AssociationSet Name="FK_UPoblado" Association="Self.FK_UPoblado">
             <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Ubicacion" EntitySet="Ubicacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Rol_Persona1" Association="Self.FK_Usuario_Rol_Persona1">
-            <End Role="Persona" EntitySet="Persona" />
-            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Rol_Rol" Association="Self.FK_Usuario_Rol_Rol">
-            <End Role="Rol" EntitySet="Rol" />
-            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
           </AssociationSet>
           <AssociationSet Name="FK_USubcategoria" Association="Self.FK_USubcategoria">
             <End Role="Subcategoria" EntitySet="Subcategoria" />
@@ -684,6 +650,10 @@
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Entidad1" EntitySet="Entidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Entidad" Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
+          </AssociationSet>
           <AssociationSet Name="FK_EUbicacion" Association="MilenioCloudModel.FK_EUbicacion">
             <End Role="Ubicacion" EntitySet="Ubicacion" />
             <End Role="Entidad" EntitySet="Entidad" />
@@ -692,19 +662,15 @@
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Licencia" EntitySet="Licencia" />
           </AssociationSet>
-          <AssociationSet Name="FK_Persona_Rol_Entidad" Association="MilenioCloudModel.FK_Persona_Rol_Entidad">
-            <End Role="Entidad" EntitySet="Entidad" />
-            <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
-          </AssociationSet>
           <AssociationSet Name="FK_TEntidad" Association="MilenioCloudModel.FK_TEntidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Rol_Persona1" Association="MilenioCloudModel.FK_Usuario_Rol_Persona1">
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Persona" Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Persona">
             <End Role="Persona" EntitySet="Persona" />
             <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
           </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Rol_Rol" Association="MilenioCloudModel.FK_Usuario_Rol_Rol">
+          <AssociationSet Name="FK_Entidad_Persona_Rol_Rol" Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Rol">
             <End Role="Rol" EntitySet="Rol" />
             <End Role="Entidad_Persona_Rol" EntitySet="Entidad_Persona_Rol" />
           </AssociationSet>
@@ -796,8 +762,8 @@
           <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
           <Property Name="Dane_Id" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_MDepartamento" FromRole="Departamento" ToRole="Municipio" />
         </EntityType>
         <EntityType Name="Entidad">
@@ -814,13 +780,13 @@
           <Property Name="FfinFiscal" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Entidad_Padre" Type="Guid" />
           <Property Name="Ubicacion_Id" Type="Guid" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Entidad1" Relationship="MilenioCloudModel.FK_EEntidad_Padre" FromRole="Entidad" ToRole="Entidad1" />
           <NavigationProperty Name="Entidad2" Relationship="MilenioCloudModel.FK_EEntidad_Padre" FromRole="Entidad1" ToRole="Entidad" />
+          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Entidad" FromRole="Entidad" ToRole="Entidad_Persona_Rol" />
           <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_EUbicacion" FromRole="Entidad" ToRole="Ubicacion" />
           <NavigationProperty Name="Licencia" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Entidad" ToRole="Licencia" />
-          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Persona_Rol_Entidad" FromRole="Entidad" ToRole="Entidad_Persona_Rol" />
           <NavigationProperty Name="Telefono" Relationship="MilenioCloudModel.FK_TEntidad" FromRole="Entidad" ToRole="Telefono" />
         </EntityType>
         <EntityType Name="Entidad_Persona_Rol">
@@ -833,12 +799,12 @@
           <Property Name="Persona_Id" Type="Guid" Nullable="false" />
           <Property Name="Entidad_Id" Type="Guid" Nullable="false" />
           <Property Name="Estado" Type="Boolean" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
-          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Persona_Rol_Entidad" FromRole="Entidad_Persona_Rol" ToRole="Entidad" />
-          <NavigationProperty Name="Persona" Relationship="MilenioCloudModel.FK_Usuario_Rol_Persona1" FromRole="Entidad_Persona_Rol" ToRole="Persona" />
-          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.FK_Usuario_Rol_Rol" FromRole="Entidad_Persona_Rol" ToRole="Rol" />
+          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Entidad" FromRole="Entidad_Persona_Rol" ToRole="Entidad" />
+          <NavigationProperty Name="Persona" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Persona" FromRole="Entidad_Persona_Rol" ToRole="Persona" />
+          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Rol" FromRole="Entidad_Persona_Rol" ToRole="Rol" />
         </EntityType>
         <EntityType Name="GenericError">
           <Key>
@@ -871,8 +837,8 @@
           <Property Name="FfinVigencia" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Estado" Type="Boolean" />
           <Property Name="CostoLicencia" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <Property Name="IsTest" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Licencia" ToRole="Entidad" />
         </EntityType>
@@ -884,8 +850,8 @@
           <Property Name="Departamento_Id" Type="Int32" Nullable="false" />
           <Property Name="Dane_Id" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Departamento" Relationship="MilenioCloudModel.FK_MDepartamento" FromRole="Municipio" ToRole="Departamento" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_PMunicipio" FromRole="Municipio" ToRole="Poblado" />
         </EntityType>
@@ -914,7 +880,7 @@
           <Property Name="Estado_Usuario" Type="Boolean" />
           <Property Name="Cambiar_Clave" Type="Boolean" />
           <Property Name="Usuario_Update" Type="Guid" />
-          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Usuario_Rol_Persona1" FromRole="Persona" ToRole="Entidad_Persona_Rol" />
+          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Persona" FromRole="Persona" ToRole="Entidad_Persona_Rol" />
           <NavigationProperty Name="Imagen" Relationship="MilenioCloudModel.FK_IPersona" FromRole="Persona" ToRole="Imagen" />
           <NavigationProperty Name="TipoIdentificacion" Relationship="MilenioCloudModel.FK_PTipoIdentificacion" FromRole="Persona" ToRole="TipoIdentificacion" />
           <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_PUbicacion" FromRole="Persona" ToRole="Ubicacion" />
@@ -929,8 +895,8 @@
           <Property Name="Poblado_Id" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_PMunicipio" FromRole="Poblado" ToRole="Municipio" />
           <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_UPoblado" FromRole="Poblado" ToRole="Ubicacion" />
         </EntityType>
@@ -942,9 +908,9 @@
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Estado" Type="Boolean" />
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
-          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Usuario_Rol_Rol" FromRole="Rol" ToRole="Entidad_Persona_Rol" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Rol" FromRole="Rol" ToRole="Entidad_Persona_Rol" />
         </EntityType>
         <EntityType Name="Subcategoria">
           <Key>
@@ -970,8 +936,8 @@
           <Property Name="Entidad_Id" Type="Guid" />
           <Property Name="Numero" Type="Int32" Nullable="false" />
           <Property Name="Tipo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_TEntidad" FromRole="Telefono" ToRole="Entidad" />
           <NavigationProperty Name="Persona" Relationship="MilenioCloudModel.FK_Telefono_Persona" FromRole="Telefono" ToRole="Persona" />
         </EntityType>
@@ -994,8 +960,8 @@
           <Property Name="Direccion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="7" />
-          <Property Name="Updated_At" Type="DateTime" Precision="7" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_EUbicacion" FromRole="Ubicacion" ToRole="Entidad" />
           <NavigationProperty Name="Persona" Relationship="MilenioCloudModel.FK_PUbicacion" FromRole="Ubicacion" ToRole="Persona" />
@@ -1081,6 +1047,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Entidad_Persona_Rol_Entidad">
+          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Entidad_Persona_Rol" Role="Entidad_Persona_Rol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Entidad_Persona_Rol">
+              <PropertyRef Name="Entidad_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_EUbicacion">
           <End Type="MilenioCloudModel.Ubicacion" Role="Ubicacion" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1109,18 +1087,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Persona_Rol_Entidad">
-          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Entidad_Persona_Rol" Role="Entidad_Persona_Rol" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Entidad_Persona_Rol">
-              <PropertyRef Name="Entidad_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TEntidad">
           <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1135,7 +1101,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usuario_Rol_Persona1">
+        <Association Name="FK_Entidad_Persona_Rol_Persona">
           <End Type="MilenioCloudModel.Persona" Role="Persona" Multiplicity="1" />
           <End Type="MilenioCloudModel.Entidad_Persona_Rol" Role="Entidad_Persona_Rol" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1147,7 +1113,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usuario_Rol_Rol">
+        <Association Name="FK_Entidad_Persona_Rol_Rol">
           <End Type="MilenioCloudModel.Rol" Role="Rol" Multiplicity="1" />
           <End Type="MilenioCloudModel.Entidad_Persona_Rol" Role="Entidad_Persona_Rol" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1245,11 +1211,8 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MilenioCloudModelStoreContainer" CdmEntityContainer="MilenioCloudEntities" >
-          <FunctionImportMapping FunctionImportName="sp_create_user" FunctionName="MilenioCloudModel.Store.sp_create_user" />
-          <FunctionImportMapping FunctionImportName="sp_create_entidad" FunctionName="MilenioCloudModel.Store.sp_create_entidad" />
-          <FunctionImportMapping FunctionImportName="sp_create_persona" FunctionName="MilenioCloudModel.Store.sp_create_persona" />
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MilenioCloudModelStoreContainer" CdmEntityContainer="MilenioCloudEntities">
           <EntitySetMapping Name="Articulo">
             <EntityTypeMapping TypeName="MilenioCloudModel.Articulo">
               <MappingFragment StoreEntitySet="Articulo">
@@ -1498,9 +1461,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+        </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -1514,7 +1476,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
       </DesignerInfoPropertySet>
     </Options>

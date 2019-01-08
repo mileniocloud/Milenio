@@ -11,16 +11,16 @@
         <EntityTypeShape EntityType="MilenioCloudModel.Curso" Width="1.5" PointX="3" PointY="5.375" />
         <EntityTypeShape EntityType="MilenioCloudModel.Departamento" Width="1.5" PointX="0.75" PointY="9.625" />
         <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="9.75" PointY="15.25" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Persona_Rol" Width="1.5" PointX="15" PointY="12.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Persona_Rol" Width="1.5" PointX="12" PointY="12.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.GenericError" Width="1.5" PointX="0.75" PointY="1.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.Imagen" Width="1.5" PointX="12" PointY="8.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="12" PointY="23.125" />
         <EntityTypeShape EntityType="MilenioCloudModel.Municipio" Width="1.5" PointX="3" PointY="9.375" />
         <EntityTypeShape EntityType="MilenioCloudModel.Persona" Width="1.5" PointX="9.75" PointY="7.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Poblado" Width="1.5" PointX="5.25" PointY="9.375" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="12.75" PointY="16.5" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="9.75" PointY="27.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Subcategoria" Width="1.5" PointX="7.5" PointY="1.25" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="12" PointY="12.375" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="15" PointY="12.375" />
         <EntityTypeShape EntityType="MilenioCloudModel.TipoIdentificacion" Width="1.5" PointX="7.5" PointY="5.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Ubicacion" Width="1.5" PointX="7.5" PointY="9.125" />
         <AssociationConnector Association="MilenioCloudModel.FK_IArticulo" />
@@ -29,12 +29,12 @@
         <AssociationConnector Association="MilenioCloudModel.FK_CSubcategoria" />
         <AssociationConnector Association="MilenioCloudModel.FK_MDepartamento" />
         <AssociationConnector Association="MilenioCloudModel.FK_EEntidad_Padre" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Entidad" />
         <AssociationConnector Association="MilenioCloudModel.FK_EUbicacion" />
         <AssociationConnector Association="MilenioCloudModel.FK_LEntidad" />
-        <AssociationConnector Association="MilenioCloudModel.FK_Persona_Rol_Entidad" />
         <AssociationConnector Association="MilenioCloudModel.FK_TEntidad" />
-        <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Rol_Persona1" />
-        <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Rol_Rol" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Persona" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Persona_Rol_Rol" />
         <AssociationConnector Association="MilenioCloudModel.FK_IPersona" />
         <AssociationConnector Association="MilenioCloudModel.FK_PMunicipio" />
         <AssociationConnector Association="MilenioCloudModel.FK_PTipoIdentificacion" />

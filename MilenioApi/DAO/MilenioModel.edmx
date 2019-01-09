@@ -30,8 +30,9 @@
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CodigoAula" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="Sede_Id" Type="uniqueidentifier" />
-          <Property Name="Created_At" Type="datetime" Nullable="false" />
+          <Property Name="Entidad_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" />
+          <Property Name="Created_At" Type="datetime" />
           <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Categoria">
@@ -237,6 +238,18 @@
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
         </EntityType>
+        <Association Name="FK_Aula_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Aula" Type="Self.Aula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Aula">
+              <PropertyRef Name="Entidad_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CAula">
           <End Role="Aula" Type="Self.Aula" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -496,6 +509,10 @@
           <EntitySet Name="Telefono" EntityType="Self.Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoIdentificacion" EntityType="Self.TipoIdentificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Aula_Entidad" Association="Self.FK_Aula_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Aula" EntitySet="Aula" />
+          </AssociationSet>
           <AssociationSet Name="FK_CAula" Association="Self.FK_CAula">
             <End Role="Aula" EntitySet="Aula" />
             <End Role="Curso" EntitySet="Curso" />
@@ -634,6 +651,10 @@
             <End Role="Subcategoria" EntitySet="Subcategoria" />
             <End Role="Articulo" EntitySet="Articulo" />
           </AssociationSet>
+          <AssociationSet Name="FK_Aula_Entidad" Association="MilenioCloudModel.FK_Aula_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Aula" EntitySet="Aula" />
+          </AssociationSet>
           <AssociationSet Name="FK_CAula" Association="MilenioCloudModel.FK_CAula">
             <End Role="Aula" EntitySet="Aula" />
             <End Role="Curso" EntitySet="Curso" />
@@ -726,9 +747,11 @@
           <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
           <Property Name="CodigoAula" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Sede_Id" Type="Guid" />
-          <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Entidad_Id" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" />
+          <Property Name="Created_At" Type="DateTime" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Aula_Entidad" FromRole="Aula" ToRole="Entidad" />
           <NavigationProperty Name="Curso" Relationship="MilenioCloudModel.FK_CAula" FromRole="Aula" ToRole="Curso" />
         </EntityType>
         <EntityType Name="Categoria">
@@ -782,6 +805,7 @@
           <Property Name="Ubicacion_Id" Type="Guid" />
           <Property Name="Created_At" Type="DateTime" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Aula" Relationship="MilenioCloudModel.FK_Aula_Entidad" FromRole="Entidad" ToRole="Aula" />
           <NavigationProperty Name="Entidad1" Relationship="MilenioCloudModel.FK_EEntidad_Padre" FromRole="Entidad" ToRole="Entidad1" />
           <NavigationProperty Name="Entidad2" Relationship="MilenioCloudModel.FK_EEntidad_Padre" FromRole="Entidad1" ToRole="Entidad" />
           <NavigationProperty Name="Entidad_Persona_Rol" Relationship="MilenioCloudModel.FK_Entidad_Persona_Rol_Entidad" FromRole="Entidad" ToRole="Entidad_Persona_Rol" />
@@ -990,6 +1014,18 @@
             </Principal>
             <Dependent Role="Articulo">
               <PropertyRef Name="Subcategoria_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Aula_Entidad">
+          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Aula" Role="Aula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Aula">
+              <PropertyRef Name="Entidad_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1237,7 +1273,8 @@
               <MappingFragment StoreEntitySet="Aula">
                 <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
                 <ScalarProperty Name="Created_At" ColumnName="Created_At" />
-                <ScalarProperty Name="Sede_Id" ColumnName="Sede_Id" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Entidad_Id" ColumnName="Entidad_Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="CodigoAula" ColumnName="CodigoAula" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />

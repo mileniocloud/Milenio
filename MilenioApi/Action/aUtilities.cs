@@ -1,7 +1,10 @@
 ﻿using MilenioApi.DAO;
 using MilenioApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace MilenioApi.Action
 {
@@ -31,6 +34,23 @@ namespace MilenioApi.Action
             String hash = System.Text.Encoding.ASCII.GetString(data);
 
             return hash;
+        }
+
+        /// <summary>
+        /// Metodo que convierte la respuesta en un HttpResponseMessage
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+
+        public HttpResponseMessage ReturnResponse(object o)
+        {
+            HttpResponseMessage httpResponseMessage = null;
+            StringContent content = null;
+
+            content = new StringContent(JsonConvert.SerializeObject(o, Formatting.Indented, new JsonSerializerSettings() { DateFormatString = "dd/MM/yyyy" }));
+            httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+            httpResponseMessage.Content = content;
+            return httpResponseMessage;
         }
     }
 }

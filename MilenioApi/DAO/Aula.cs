@@ -33,13 +33,17 @@ public partial class Aula
 
     public string Nombre { get; set; }
 
-    public Nullable<System.Guid> Sede_Id { get; set; }
+    public System.Guid Entidad_Id { get; set; }
 
-    public System.DateTime Created_At { get; set; }
+    public Nullable<bool> Estado { get; set; }
+
+    public Nullable<System.DateTime> Created_At { get; set; }
 
     public Nullable<System.DateTime> Updated_At { get; set; }
 
 
+
+    public virtual Entidad Entidad { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

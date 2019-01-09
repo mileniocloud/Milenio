@@ -38,7 +38,7 @@ namespace WebApi.Jwt
                         {
                             new Claim(ClaimTypes.Name, login),
                             new Claim(ClaimTypes.NameIdentifier, userid),
-                            new Claim(ClaimTypes.GroupSid, listroles),
+                            new Claim(ClaimTypes.GroupSid, listentidades),
                             new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()),
                             new Claim(ClaimTypes.Role, listroles)
                         }),

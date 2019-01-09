@@ -16,6 +16,7 @@ namespace MilenioApi.Models
         public Guid? id { get; set; }
         public string custom { get; set; }
         public string token { get; set; }
+        public string Value { get; set; }
 
     }
     public enum messagetype

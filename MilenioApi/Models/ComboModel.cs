@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MilenioApi.Models
 {
-    public class ComboModel
+    public class ComboModel: Basic
     {
         public Guid Id { get; set; }
         public string Value { get; set; }

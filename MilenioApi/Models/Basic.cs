@@ -17,6 +17,8 @@ namespace MilenioApi.Models
         public string custom { get; set; }
         public string token { get; set; }
         public string Value { get; set; }
+        public bool Estado { get; set; }
+        public int codigoint { get; set; }
 
     }
     public enum messagetype

@@ -66,7 +66,7 @@ namespace MilenioApi.Controllers
         public HttpResponseMessage GetRolesPersonaEntidad()
         {
             aPersona e = new aPersona();
-            return e.GetRolesPersonaEntidad(HttpContext.Current.Request);
+            return ut.ReturnResponse(e.GetRolesPersonaEntidad(HttpContext.Current.Request));
         }
 
         [AllowAnonymous]

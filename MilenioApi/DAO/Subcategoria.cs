@@ -43,6 +43,8 @@ public partial class Subcategoria
 
     public Nullable<System.DateTime> Updated_At { get; set; }
 
+    public Nullable<System.Guid> Usuario_Update { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

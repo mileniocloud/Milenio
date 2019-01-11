@@ -20,15 +20,17 @@ public partial class Curso
 
     public System.Guid Codigo_Id { get; set; }
 
+    public Nullable<System.Guid> Aula_Id { get; set; }
+
     public int Nivel { get; set; }
 
     public string Nombre { get; set; }
 
-    public Nullable<System.Guid> Aula_Id { get; set; }
-
     public System.DateTime Created_At { get; set; }
 
     public Nullable<System.DateTime> Updated_At { get; set; }
+
+    public Nullable<System.Guid> Usuario_Update { get; set; }
 
 
 

@@ -53,7 +53,7 @@ namespace MilenioApi.Action
                                                               Value = t.Entidad.Nombre
                                                           }).ToList();
 
-                            op.Entidades = entidades;
+                            op.Entidades = entidades.GroupBy(et => et.Id).Select(g => g.First()).ToList();
                         }
                         else
                         {

@@ -29,17 +29,25 @@ public partial class Categoria
 
     public System.Guid Codigo_Id { get; set; }
 
+    public System.Guid Entidad_Id { get; set; }
+
     public int Referencia { get; set; }
 
     public string Nombre { get; set; }
 
-    public Nullable<bool> Estado { get; set; }
+    public string Descripcion { get; set; }
+
+    public bool Estado { get; set; }
 
     public System.DateTime Created_At { get; set; }
 
     public Nullable<System.DateTime> Updated_At { get; set; }
 
+    public Nullable<System.Guid> Usuario_Update { get; set; }
 
+
+
+    public virtual Entidad Entidad { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

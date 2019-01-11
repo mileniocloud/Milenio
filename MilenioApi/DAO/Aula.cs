@@ -41,6 +41,8 @@ public partial class Aula
 
     public Nullable<System.DateTime> Updated_At { get; set; }
 
+    public Nullable<System.Guid> Usuario_Update { get; set; }
+
 
 
     public virtual Entidad Entidad { get; set; }

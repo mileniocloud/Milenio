@@ -24,6 +24,8 @@ public partial class Entidad
 
         this.Aula = new HashSet<Aula>();
 
+        this.Categoria = new HashSet<Categoria>();
+
         this.Entidad1 = new HashSet<Entidad>();
 
         this.Entidad_Persona_Rol = new HashSet<Entidad_Persona_Rol>();
@@ -64,6 +66,10 @@ public partial class Entidad
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Aula> Aula { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Categoria> Categoria { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

@@ -26,11 +26,15 @@ public partial class Telefono
 
     public int Numero { get; set; }
 
+    public string Descripcion { get; set; }
+
     public string Tipo { get; set; }
 
     public Nullable<System.DateTime> Created_At { get; set; }
 
     public Nullable<System.DateTime> Updated_At { get; set; }
+
+    public Nullable<System.Guid> Usuario_Update { get; set; }
 
 
 

@@ -14,6 +14,7 @@ namespace MilenioApi.Controllers
     {
         aUtilities ut = new aUtilities();
         
+        [HttpPost]
         [AllowAnonymous]
         [Route("Login")]
         public HttpResponseMessage Login()
@@ -22,7 +23,7 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.Login(HttpContext.Current.Request));
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [Route("LoginEntidad")]
         public HttpResponseMessage LoginEntidad()

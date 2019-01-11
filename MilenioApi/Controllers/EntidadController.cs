@@ -1,5 +1,4 @@
 ﻿using MilenioApi.Action;
-using MilenioApi.Models;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -33,6 +32,21 @@ namespace MilenioApi.Controllers
         {
             aEntidad e = new aEntidad();
             return ut.ReturnResponse(e.CreateAula(HttpContext.Current.Request));
+        }
+        [AllowAnonymous]
+        [Route("EditAula")]
+        public HttpResponseMessage EditAula()
+        {
+            aEntidad e = new aEntidad();
+            return ut.ReturnResponse(e.EditAula(HttpContext.Current.Request));
+        }
+
+        [AllowAnonymous]
+        [Route("GetAula")]
+        public HttpResponseMessage GetAula()
+        {
+            aEntidad e = new aEntidad();
+            return ut.ReturnResponse(e.GetAula(HttpContext.Current.Request));
         }
     }
 }

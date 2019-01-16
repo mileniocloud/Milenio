@@ -9,6 +9,7 @@ using WebApi.Jwt;
 using System.Collections.Generic;
 using System.Security.Claims;
 
+
 namespace MilenioApi.Action
 {
     public class aSeguridad
@@ -25,8 +26,8 @@ namespace MilenioApi.Action
                 oPersonaModel op = new oPersonaModel();
                 try
                 {
-                    string login = Convert.ToString(httpRequest.Form["input-email"]);
-                    string pass = Convert.ToString(httpRequest.Form["input-password"]);
+                    string login = Convert.ToString(httpRequest.Form["user"]);
+                    string pass = Convert.ToString(httpRequest.Form["password"]);
                     pass = autil.Sha(pass);
 
                     Persona p = (from pr in ent.Persona
@@ -83,7 +84,7 @@ namespace MilenioApi.Action
                 {
                     //error general
                     Basic b = new Basic();
-                    autil.MensajeRetorno(ref b, 4, ex.Message, null);
+                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
 
                     op.Codigo = b.Codigo;
                     op.custom = b.custom;
@@ -103,8 +104,8 @@ namespace MilenioApi.Action
                 oPersonaModel op = new oPersonaModel();
                 try
                 {
-                    string login = Convert.ToString(httpRequest.Form["input-email"]);
-                    string pass = Convert.ToString(httpRequest.Form["input-password"]);
+                    string login = Convert.ToString(httpRequest.Form["user"]);
+                    string pass = Convert.ToString(httpRequest.Form["password"]);
                     Guid entidad = Guid.Parse(httpRequest.Form["Entidad_Id"]);
 
                     pass = autil.Sha(pass);

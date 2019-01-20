@@ -55,11 +55,15 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Licencia> Licencia { get; set; }
 
+    public virtual DbSet<Marca> Marca { get; set; }
+
     public virtual DbSet<Municipio> Municipio { get; set; }
 
     public virtual DbSet<Persona> Persona { get; set; }
 
     public virtual DbSet<Poblado> Poblado { get; set; }
+
+    public virtual DbSet<Proveedor> Proveedor { get; set; }
 
     public virtual DbSet<Rol> Rol { get; set; }
 
@@ -230,6 +234,229 @@ public partial class MilenioCloudEntities : DbContext
 
 
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("sp_create_persona", numeroIdentificacionParameter, nombresParameter, apellidosParameter, sexoParameter, fNacimientoParameter, nacionalidadParameter, libretaMilitarParameter, tipoSangreParameter, fotoParameter, tipoIdentificacion_IdParameter, poblado_IdParameter, direccionParameter, latitudParameter, longitudParameter);
+    }
+
+
+    public virtual int sp_valida_articulos(Nullable<int> codigo, string nombre, string referencia, Nullable<System.Guid> entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id.HasValue ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(System.Guid));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_valida_articulos", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual int sp_validacion_articulos(Nullable<int> codigo, string nombre, string referencia, Nullable<System.Guid> entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id.HasValue ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(System.Guid));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_validacion_articulos", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual int sp_todos_articulos(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id != null ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_todos_articulos", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual ObjectResult<sp_mc_select_persona_Result> sp_mc_select_persona(string cAMPOS, string pARAMETROS)
+    {
+
+        var cAMPOSParameter = cAMPOS != null ?
+            new ObjectParameter("CAMPOS", cAMPOS) :
+            new ObjectParameter("CAMPOS", typeof(string));
+
+
+        var pARAMETROSParameter = pARAMETROS != null ?
+            new ObjectParameter("PARAMETROS", pARAMETROS) :
+            new ObjectParameter("PARAMETROS", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_mc_select_persona_Result>("sp_mc_select_persona", cAMPOSParameter, pARAMETROSParameter);
+    }
+
+
+    public virtual int sp_todos_articulos2(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id != null ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_todos_articulos2", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual int sp_todos_articulos3(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id != null ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_todos_articulos3", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual ObjectResult<sp_mc_select_persona2_Result> sp_mc_select_persona2(string cAMPOS, string pARAMETROS)
+    {
+
+        var cAMPOSParameter = cAMPOS != null ?
+            new ObjectParameter("CAMPOS", cAMPOS) :
+            new ObjectParameter("CAMPOS", typeof(string));
+
+
+        var pARAMETROSParameter = pARAMETROS != null ?
+            new ObjectParameter("PARAMETROS", pARAMETROS) :
+            new ObjectParameter("PARAMETROS", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_mc_select_persona2_Result>("sp_mc_select_persona2", cAMPOSParameter, pARAMETROSParameter);
+    }
+
+
+    public virtual ObjectResult<sp_mc_select_persona4_Result> sp_mc_select_persona4(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id != null ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_mc_select_persona4_Result>("sp_mc_select_persona4", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
+    }
+
+
+    public virtual int sp_valida_articulo(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
+    {
+
+        var codigoParameter = codigo.HasValue ?
+            new ObjectParameter("codigo", codigo) :
+            new ObjectParameter("codigo", typeof(int));
+
+
+        var nombreParameter = nombre != null ?
+            new ObjectParameter("nombre", nombre) :
+            new ObjectParameter("nombre", typeof(string));
+
+
+        var referenciaParameter = referencia != null ?
+            new ObjectParameter("referencia", referencia) :
+            new ObjectParameter("referencia", typeof(string));
+
+
+        var entidad_idParameter = entidad_id != null ?
+            new ObjectParameter("entidad_id", entidad_id) :
+            new ObjectParameter("entidad_id", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_valida_articulo", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
     }
 
 }

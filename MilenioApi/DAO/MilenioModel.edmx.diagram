@@ -5,26 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c5d09a04b6f94026a0dbaacde9846aca" Name="Diagram1" >
-        <EntityTypeShape EntityType="MilenioCloudModel.Articulo" Width="1.5" PointX="16.5" PointY="27.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Aula" Width="1.5" PointX="12" PointY="32.125" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Categoria" Width="1.5" PointX="12" PointY="27.875" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Curso" Width="1.5" PointX="14.25" PointY="32.375" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Departamento" Width="1.5" PointX="0.75" PointY="14" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="9.75" PointY="19.375" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Persona_Rol" Width="1.5" PointX="15" PointY="16.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Articulo" Width="1.5" PointX="16.5" PointY="31.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Aula" Width="1.5" PointX="12" PointY="21" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Categoria" Width="1.5" PointX="12" PointY="32.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Curso" Width="1.5" PointX="14.25" PointY="21.125" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Departamento" Width="1.5" PointX="0.75" PointY="14.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="9.75" PointY="20" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Persona_Rol" Width="1.5" PointX="15" PointY="17.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.GenericError" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Imagen" Width="1.5" PointX="18.75" PointY="20.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="12" PointY="23.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Municipio" Width="1.5" PointX="3" PointY="13.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Persona" Width="1.5" PointX="9.75" PointY="12" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Poblado" Width="1.5" PointX="5.25" PointY="13.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="12.75" PointY="13" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Subcategoria" Width="1.5" PointX="14.25" PointY="27.875" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="12" PointY="16.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.TipoIdentificacion" Width="1.5" PointX="7.5" PointY="10" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Ubicacion" Width="1.5" PointX="7.5" PointY="13.5" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Imagen" Width="1.5" PointX="18.75" PointY="23.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="12" PointY="24.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Marca" Width="1.5" PointX="14.25" PointY="29" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Municipio" Width="1.5" PointX="3" PointY="14.375" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Persona" Width="1.5" PointX="9.75" PointY="12.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Poblado" Width="1.5" PointX="5.25" PointY="14.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Proveedor" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="12.75" PointY="12.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Subcategoria" Width="1.5" PointX="14.25" PointY="32.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="12" PointY="16.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.TipoIdentificacion" Width="1.5" PointX="7.5" PointY="10.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Ubicacion" Width="1.5" PointX="7.5" PointY="14.125" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Articulo_Marca1" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Articulo_Subcategoria" />
         <AssociationConnector Association="MilenioCloudModel.FK_IArticulo" />
-        <AssociationConnector Association="MilenioCloudModel.FK_USubcategoria" />
         <AssociationConnector Association="MilenioCloudModel.FK_Aula_Entidad" />
         <AssociationConnector Association="MilenioCloudModel.FK_CAula" />
         <AssociationConnector Association="MilenioCloudModel.FK_Categoria_Entidad" />

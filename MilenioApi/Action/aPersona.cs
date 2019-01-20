@@ -217,6 +217,8 @@ namespace MilenioApi.Action
                         string entidad = cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault();
                         Guid entidad_id = Guid.Parse(entidad);
 
+
+                        //TODO:CAMBIAR ESTAS VALIDACIONES POR UN SP
                         int vcedula = (from pr in ent.Persona
                                        from et in pr.Entidad_Persona_Rol
                                        where pr.NumeroIdentificacion == nroidentificacion

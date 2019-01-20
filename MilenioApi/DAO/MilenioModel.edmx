@@ -10,18 +10,23 @@
             <PropertyRef Name="Codigo_Id" />
           </Key>
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Codigo" Type="int" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="Referencia" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
-          <Property Name="Marca" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="ValorUnitario" Type="int" Nullable="false" />
-          <Property Name="PrecioIn" Type="int" Nullable="false" />
-          <Property Name="PrecioOut" Type="int" Nullable="false" />
-          <Property Name="Estado" Type="bit" />
           <Property Name="Subcategoria_Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Usuario_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Referencia" Type="varchar" MaxLength="200" />
+          <Property Name="Serial_Lote" Type="nvarchar" MaxLength="100" />
+          <Property Name="Codigo_Contable" Type="nvarchar" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Marca_Id" Type="uniqueidentifier" />
+          <Property Name="Modelo" Type="nvarchar" MaxLength="200" />
+          <Property Name="Color" Type="nvarchar" MaxLength="50" />
+          <Property Name="Talla" Type="nvarchar" MaxLength="50" />
+          <Property Name="Udm" Type="nvarchar" MaxLength="50" />
+          <Property Name="Foto" Type="nvarchar(max)" />
+          <Property Name="Estado" Type="bit" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Created_At" Type="datetime" Nullable="false" />
-          <Property Name="Updated_At" Type="datetime" />
+          <Property Name="Updated_At" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Aula">
           <Key>
@@ -136,6 +141,13 @@
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="IsTest" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Marca">
+          <Key>
+            <PropertyRef Name="Codigo_Id" />
+          </Key>
+          <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Marca" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="Municipio">
           <Key>
             <PropertyRef Name="Dane_Id" />
@@ -184,6 +196,21 @@
           <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Created_At" Type="datetime" />
           <Property Name="Updated_At" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="Codigo_Id" />
+          </Key>
+          <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Razon_Socal" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Nit" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="200" />
+          <Property Name="Persona_Contacto" Type="nvarchar" MaxLength="50" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Created_At" Type="datetime" Nullable="false" />
+          <Property Name="Update_At" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -246,6 +273,30 @@
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
         </EntityType>
+        <Association Name="FK_Articulo_Marca1">
+          <End Role="Marca" Type="Self.Marca" Multiplicity="0..1" />
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marca">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="Marca_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Articulo_Subcategoria">
+          <End Role="Subcategoria" Type="Self.Subcategoria" Multiplicity="1" />
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subcategoria">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="Subcategoria_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Aula_Entidad">
           <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
           <End Role="Aula" Type="Self.Aula" Multiplicity="*" />
@@ -496,20 +547,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_USubcategoria">
-          <End Role="Subcategoria" Type="Self.Subcategoria" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Articulo" Type="Self.Articulo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subcategoria">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Articulo">
-              <PropertyRef Name="Subcategoria_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <Function Name="sp_mc_select_persona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CAMPOS" Type="nvarchar" Mode="In" />
+          <Parameter Name="PARAMETROS" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_mc_select_persona2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CAMPOS" Type="nvarchar" Mode="In" />
+          <Parameter Name="PARAMETROS" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_mc_select_persona4" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="entidad_id" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_todos_articulos3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="entidad_id" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_valida_articulo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="entidad_id" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_valida_articulos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="entidad_id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="sp_validacion_articulos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="referencia" Type="nvarchar" Mode="In" />
+          <Parameter Name="entidad_id" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <EntityContainer Name="MilenioCloudModelStoreContainer">
           <EntitySet Name="Articulo" EntityType="Self.Articulo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Aula" EntityType="Self.Aula" Schema="dbo" store:Type="Tables" />
@@ -521,14 +596,24 @@
           <EntitySet Name="GenericError" EntityType="Self.GenericError" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Imagen" EntityType="Self.Imagen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Licencia" EntityType="Self.Licencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Marca" EntityType="Self.Marca" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Poblado" EntityType="Self.Poblado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subcategoria" EntityType="Self.Subcategoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Telefono" EntityType="Self.Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoIdentificacion" EntityType="Self.TipoIdentificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Articulo_Marca1" Association="Self.FK_Articulo_Marca1">
+            <End Role="Marca" EntitySet="Marca" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Articulo_Subcategoria" Association="Self.FK_Articulo_Subcategoria">
+            <End Role="Subcategoria" EntitySet="Subcategoria" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
           <AssociationSet Name="FK_Aula_Entidad" Association="Self.FK_Aula_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Aula" EntitySet="Aula" />
@@ -605,10 +690,6 @@
             <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Ubicacion" EntitySet="Ubicacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_USubcategoria" Association="Self.FK_USubcategoria">
-            <End Role="Subcategoria" EntitySet="Subcategoria" />
-            <End Role="Articulo" EntitySet="Articulo" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -649,6 +730,12 @@
             <Parameter Name="Latitud" Mode="In" Type="String" />
             <Parameter Name="Longitud" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_valida_articulos">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="Guid" />
+          </FunctionImport>
           <EntitySet Name="Articulo" EntityType="MilenioCloudModel.Articulo" />
           <EntitySet Name="Aula" EntityType="MilenioCloudModel.Aula" />
           <EntitySet Name="Categoria" EntityType="MilenioCloudModel.Categoria" />
@@ -659,21 +746,27 @@
           <EntitySet Name="GenericError" EntityType="MilenioCloudModel.GenericError" />
           <EntitySet Name="Imagen" EntityType="MilenioCloudModel.Imagen" />
           <EntitySet Name="Licencia" EntityType="MilenioCloudModel.Licencia" />
+          <EntitySet Name="Marca" EntityType="MilenioCloudModel.Marca" />
           <EntitySet Name="Municipio" EntityType="MilenioCloudModel.Municipio" />
           <EntitySet Name="Persona" EntityType="MilenioCloudModel.Persona" />
           <EntitySet Name="Poblado" EntityType="MilenioCloudModel.Poblado" />
+          <EntitySet Name="Proveedor" EntityType="MilenioCloudModel.Proveedor" />
           <EntitySet Name="Rol" EntityType="MilenioCloudModel.Rol" />
           <EntitySet Name="Subcategoria" EntityType="MilenioCloudModel.Subcategoria" />
           <EntitySet Name="Telefono" EntityType="MilenioCloudModel.Telefono" />
           <EntitySet Name="TipoIdentificacion" EntityType="MilenioCloudModel.TipoIdentificacion" />
           <EntitySet Name="Ubicacion" EntityType="MilenioCloudModel.Ubicacion" />
+          <AssociationSet Name="FK_Articulo_Marca1" Association="MilenioCloudModel.FK_Articulo_Marca1">
+            <End Role="Marca" EntitySet="Marca" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Articulo_Subcategoria" Association="MilenioCloudModel.FK_Articulo_Subcategoria">
+            <End Role="Subcategoria" EntitySet="Subcategoria" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
           <AssociationSet Name="FK_IArticulo" Association="MilenioCloudModel.FK_IArticulo">
             <End Role="Articulo" EntitySet="Articulo" />
             <End Role="Imagen" EntitySet="Imagen" />
-          </AssociationSet>
-          <AssociationSet Name="FK_USubcategoria" Association="MilenioCloudModel.FK_USubcategoria">
-            <End Role="Subcategoria" EntitySet="Subcategoria" />
-            <End Role="Articulo" EntitySet="Articulo" />
           </AssociationSet>
           <AssociationSet Name="FK_Aula_Entidad" Association="MilenioCloudModel.FK_Aula_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
@@ -747,26 +840,76 @@
             <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Ubicacion" EntitySet="Ubicacion" />
           </AssociationSet>
+          <FunctionImport Name="sp_validacion_articulos">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="sp_todos_articulos">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_mc_select_persona" ReturnType="Collection(MilenioCloudModel.sp_mc_select_persona_Result)">
+            <Parameter Name="CAMPOS" Mode="In" Type="String" />
+            <Parameter Name="PARAMETROS" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_todos_articulos2">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_todos_articulos3">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_mc_select_persona2" ReturnType="Collection(MilenioCloudModel.sp_mc_select_persona2_Result)">
+            <Parameter Name="CAMPOS" Mode="In" Type="String" />
+            <Parameter Name="PARAMETROS" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_mc_select_persona4" ReturnType="Collection(MilenioCloudModel.sp_mc_select_persona4_Result)">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_valida_articulo">
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="referencia" Mode="In" Type="String" />
+            <Parameter Name="entidad_id" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Articulo">
           <Key>
             <PropertyRef Name="Codigo_Id" />
           </Key>
           <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Referencia" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Marca" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ValorUnitario" Type="Int32" Nullable="false" />
-          <Property Name="PrecioIn" Type="Int32" Nullable="false" />
-          <Property Name="PrecioOut" Type="Int32" Nullable="false" />
-          <Property Name="Estado" Type="Boolean" />
           <Property Name="Subcategoria_Id" Type="Guid" Nullable="false" />
-          <Property Name="Usuario_Id" Type="Guid" Nullable="false" />
+          <Property Name="Referencia" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Serial_Lote" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo_Contable" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Marca_Id" Type="Guid" />
+          <Property Name="Modelo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Talla" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Udm" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="Boolean" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
           <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Updated_At" Type="DateTime" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Marca" Relationship="MilenioCloudModel.FK_Articulo_Marca1" FromRole="Articulo" ToRole="Marca" />
+          <NavigationProperty Name="Subcategoria" Relationship="MilenioCloudModel.FK_Articulo_Subcategoria" FromRole="Articulo" ToRole="Subcategoria" />
           <NavigationProperty Name="Imagen" Relationship="MilenioCloudModel.FK_IArticulo" FromRole="Articulo" ToRole="Imagen" />
-          <NavigationProperty Name="Subcategoria" Relationship="MilenioCloudModel.FK_USubcategoria" FromRole="Articulo" ToRole="Subcategoria" />
         </EntityType>
         <EntityType Name="Aula">
           <Key>
@@ -901,6 +1044,14 @@
           <Property Name="IsTest" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Licencia" ToRole="Entidad" />
         </EntityType>
+        <EntityType Name="Marca">
+          <Key>
+            <PropertyRef Name="Codigo_Id" />
+          </Key>
+          <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
+          <Property Name="Marca1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Articulo" Relationship="MilenioCloudModel.FK_Articulo_Marca1" FromRole="Marca" ToRole="Articulo" />
+        </EntityType>
         <EntityType Name="Municipio">
           <Key>
             <PropertyRef Name="Dane_Id" />
@@ -959,6 +1110,21 @@
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_PMunicipio" FromRole="Poblado" ToRole="Municipio" />
           <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_UPoblado" FromRole="Poblado" ToRole="Ubicacion" />
         </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="Codigo_Id" />
+          </Key>
+          <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
+          <Property Name="Razon_Socal" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Persona_Contacto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Update_At" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
         <EntityType Name="Rol">
           <Key>
             <PropertyRef Name="Codigo_Id" />
@@ -984,7 +1150,7 @@
           <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
-          <NavigationProperty Name="Articulo" Relationship="MilenioCloudModel.FK_USubcategoria" FromRole="Subcategoria" ToRole="Articulo" />
+          <NavigationProperty Name="Articulo" Relationship="MilenioCloudModel.FK_Articulo_Subcategoria" FromRole="Subcategoria" ToRole="Articulo" />
           <NavigationProperty Name="Categoria" Relationship="MilenioCloudModel.FK_CSubcategoria" FromRole="Subcategoria" ToRole="Categoria" />
         </EntityType>
         <EntityType Name="Telefono">
@@ -1029,6 +1195,30 @@
           <NavigationProperty Name="Persona" Relationship="MilenioCloudModel.FK_PUbicacion" FromRole="Ubicacion" ToRole="Persona" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_UPoblado" FromRole="Ubicacion" ToRole="Poblado" />
         </EntityType>
+        <Association Name="FK_Articulo_Marca1">
+          <End Type="MilenioCloudModel.Marca" Role="Marca" Multiplicity="0..1" />
+          <End Type="MilenioCloudModel.Articulo" Role="Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marca">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="Marca_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Articulo_Subcategoria">
+          <End Type="MilenioCloudModel.Subcategoria" Role="Subcategoria" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Articulo" Role="Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subcategoria">
+              <PropertyRef Name="Codigo_Id" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="Subcategoria_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_IArticulo">
           <End Type="MilenioCloudModel.Articulo" Role="Articulo" Multiplicity="1" />
           <End Type="MilenioCloudModel.Imagen" Role="Imagen" Multiplicity="*" />
@@ -1038,20 +1228,6 @@
             </Principal>
             <Dependent Role="Imagen">
               <PropertyRef Name="Fuente_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_USubcategoria">
-          <End Type="MilenioCloudModel.Subcategoria" Role="Subcategoria" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MilenioCloudModel.Articulo" Role="Articulo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subcategoria">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Articulo">
-              <PropertyRef Name="Subcategoria_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1293,27 +1469,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_mc_select_persona_Result">
+          <Property Type="Int32" Name="ErrorNumber" Nullable="true" />
+          <Property Type="String" Name="ErrorProcedure" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="ErrorMessage" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="sp_mc_select_persona2_Result">
+          <Property Type="Int32" Name="ErrorNumber" Nullable="true" />
+          <Property Type="String" Name="ErrorProcedure" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="ErrorMessage" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="sp_mc_select_persona4_Result">
+          <Property Type="Int32" Name="ErrorNumber" Nullable="true" />
+          <Property Type="String" Name="ErrorProcedure" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="ErrorMessage" Nullable="true" MaxLength="4000" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="MilenioCloudModelStoreContainer" CdmEntityContainer="MilenioCloudEntities">
+          <FunctionImportMapping FunctionImportName="sp_valida_articulos" FunctionName="MilenioCloudModel.Store.sp_valida_articulos" />
           <EntitySetMapping Name="Articulo">
             <EntityTypeMapping TypeName="MilenioCloudModel.Articulo">
               <MappingFragment StoreEntitySet="Articulo">
                 <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
                 <ScalarProperty Name="Created_At" ColumnName="Created_At" />
-                <ScalarProperty Name="Usuario_Id" ColumnName="Usuario_Id" />
-                <ScalarProperty Name="Subcategoria_Id" ColumnName="Subcategoria_Id" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="PrecioOut" ColumnName="PrecioOut" />
-                <ScalarProperty Name="PrecioIn" ColumnName="PrecioIn" />
-                <ScalarProperty Name="ValorUnitario" ColumnName="ValorUnitario" />
-                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Udm" ColumnName="Udm" />
+                <ScalarProperty Name="Talla" ColumnName="Talla" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Marca_Id" ColumnName="Marca_Id" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Codigo_Contable" ColumnName="Codigo_Contable" />
+                <ScalarProperty Name="Serial_Lote" ColumnName="Serial_Lote" />
                 <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+                <ScalarProperty Name="Subcategoria_Id" ColumnName="Subcategoria_Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1438,6 +1635,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Marca">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Marca">
+              <MappingFragment StoreEntitySet="Marca">
+                <ScalarProperty Name="Marca1" ColumnName="Marca" />
+                <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Municipio">
             <EntityTypeMapping TypeName="MilenioCloudModel.Municipio">
               <MappingFragment StoreEntitySet="Municipio">
@@ -1486,6 +1691,22 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Poblado_Id" ColumnName="Poblado_Id" />
                 <ScalarProperty Name="Municipio_Id" ColumnName="Municipio_Id" />
+                <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedor">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Proveedor">
+              <MappingFragment StoreEntitySet="Proveedor">
+                <ScalarProperty Name="Update_At" ColumnName="Update_At" />
+                <ScalarProperty Name="Created_At" ColumnName="Created_At" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Persona_Contacto" ColumnName="Persona_Contacto" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Nit" ColumnName="Nit" />
+                <ScalarProperty Name="Razon_Socal" ColumnName="Razon_Socal" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1556,6 +1777,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_validacion_articulos" FunctionName="MilenioCloudModel.Store.sp_validacion_articulos" />
+          <FunctionImportMapping FunctionImportName="sp_mc_select_persona" FunctionName="MilenioCloudModel.Store.sp_mc_select_persona">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MilenioCloudModel.sp_mc_select_persona_Result">
+                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
+                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_todos_articulos3" FunctionName="MilenioCloudModel.Store.sp_todos_articulos3" />
+          <FunctionImportMapping FunctionImportName="sp_mc_select_persona2" FunctionName="MilenioCloudModel.Store.sp_mc_select_persona2">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MilenioCloudModel.sp_mc_select_persona2_Result">
+                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
+                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_mc_select_persona4" FunctionName="MilenioCloudModel.Store.sp_mc_select_persona4">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MilenioCloudModel.sp_mc_select_persona4_Result">
+                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
+                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_valida_articulo" FunctionName="MilenioCloudModel.Store.sp_valida_articulo" />
         </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

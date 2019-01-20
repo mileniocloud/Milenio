@@ -10,6 +10,7 @@ namespace MilenioApi.Controllers
     {
         aUtilities ut = new aUtilities();
 
+        #region Categoria
         [AllowAnonymous]
         [Route("CreateCategoria")]
         public HttpResponseMessage CreateCategoria()
@@ -41,5 +42,17 @@ namespace MilenioApi.Controllers
             aArticulo a = new aArticulo();
             return ut.ReturnResponse(a.EditSubCategoria(HttpContext.Current.Request));
         }
+
+        #endregion
+
+        #region Articulo
+        [AllowAnonymous]
+        [Route("CreateProducto")]
+        public HttpResponseMessage CreateProducto()
+        {
+            aArticulo a = new aArticulo();
+            return ut.ReturnResponse(a.CreateProducto(HttpContext.Current.Request));
+        }
+        #endregion
     }
 }

@@ -275,6 +275,9 @@
     <Compile Include="DAO\Licencia.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAO\Marca.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAO\MilenioModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -299,7 +302,19 @@
     <Compile Include="DAO\Poblado.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAO\Proveedor.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAO\Rol.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\sp_mc_select_persona2_Result.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\sp_mc_select_persona4_Result.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\sp_mc_select_persona_Result.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Subcategoria.cs">

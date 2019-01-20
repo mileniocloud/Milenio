@@ -2,7 +2,6 @@
 using MilenioApi.DAO;
 using MilenioApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -16,6 +15,8 @@ namespace MilenioApi.Action
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
 
+
+        #region Categorias
         /// <summary>
         /// Metodo que permite crear una categoria
         /// </summary>
@@ -387,5 +388,138 @@ namespace MilenioApi.Action
                 return ret;
             }
         }
+
+        #endregion
+
+        public Basic CreateProducto(HttpRequest httpRequest)
+        {
+            Basic ret = new Basic();
+            try
+            {
+                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["Token"]));
+                if (cp != null)
+                {
+                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    {
+                        //se saca el id de la entidad del token
+                        string entidad = cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault();
+                        Guid entidad_id = Guid.Parse(entidad);
+
+                        int codigo = int.Parse(httpRequest.Form["Codigo"]);
+                        string nombre = Convert.ToString(httpRequest.Form["Nombre"]);
+                        string referencia = Convert.ToString(httpRequest.Form["Referencia"]);
+
+                        var ge = ent.sp_valida_articulos(codigo, nombre, referencia, entidad_id);
+
+
+                        //se saca el usiario que esta creando la persona del token
+                        Guid? user_id = null;
+                        string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                        if (!string.IsNullOrEmpty(usid))
+                            user_id = Guid.Parse(usid);
+
+                        String file = string.Empty;
+                        if (httpRequest.Files.Count > 0)
+                        {
+                            var foto = httpRequest.Files;
+                            Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
+                            file = Convert.ToBase64String(Content);
+                        }
+
+
+
+                        Guid SubCategoria = Guid.Parse(httpRequest.Form["Sub_Categoria"]);
+                        string SerialLote = Convert.ToString(httpRequest.Form["Serial_Lote"]);
+                        string CodContable = Convert.ToString(httpRequest.Form["CodContable"]);
+                        string Descripcion = Convert.ToString(httpRequest.Form["Descripcion"]);
+                        Guid Marca = Guid.Parse(httpRequest.Form["Marca"]);
+                        string Modelo = Convert.ToString(httpRequest.Form["Modelo"]);
+                        string Color = Convert.ToString(httpRequest.Form["Color"]);
+                        string Talla = Convert.ToString(httpRequest.Form["Talla"]);
+                        string Udm = Convert.ToString(httpRequest.Form["Udm"]);
+                        bool Estatus = bool.Parse(httpRequest.Form["Estatus"]);
+
+                        Articulo at = new Articulo();
+                        at.Codigo_Id = Guid.NewGuid();
+                        at.Codigo = codigo;
+                        at.Nombre = nombre;
+                        at.Subcategoria_Id = SubCategoria;
+                        at.Referencia = referencia;
+                        at.Serial_Lote = SerialLote;
+                        at.Codigo_Contable = CodContable;
+                        at.Descripcion = Descripcion;
+                        at.Marca_Id = Marca;
+                        at.Modelo = Modelo;
+                        at.Color = Color;
+                        at.Talla = Talla;
+                        at.Udm = Udm;
+                        at.Foto = file;
+                        at.Estado = Estatus;
+                        at.Created_At = DateTime.Now;
+                        at.Updated_At = DateTime.Now;
+                        at.Usuario_Update = user_id.Value;
+
+                        ent.Articulo.Add(at);
+                        ent.SaveChanges();
+
+                        //retorna exitoso
+                        ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                    }
+                }
+                else
+                {
+                    //token invalido
+                    ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+                }
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                //error general
+                ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+                return ret;
+            }
+        }
+
+        #region Producto
+
+
+
+        #endregion
+
+
+
+        #region codigo basico create
+        //public Basic CreateXXX(HttpRequest httpRequest)
+        //{
+        //    Basic ret = new Basic();
+        //    try
+        //    {
+        //        cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["Token"]));
+        //        if (cp != null)
+        //        {
+        //using (MilenioCloudEntities ent = new MilenioCloudEntities())
+        //           {
+        //            //retorna exitoso
+        // ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+        //}
+        //        }
+        //        else
+        //        {
+        //            //token invalido
+        //            ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+        //        }
+
+        //        return ret;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //error general
+        //        ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+        //        return ret;
+        //    }
+        //}
+        #endregion
     }
 }

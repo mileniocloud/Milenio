@@ -29,37 +29,49 @@ public partial class Articulo
 
     public System.Guid Codigo_Id { get; set; }
 
+    public int Codigo { get; set; }
+
     public string Nombre { get; set; }
-
-    public string Referencia { get; set; }
-
-    public string Descripcion { get; set; }
-
-    public string Marca { get; set; }
-
-    public int ValorUnitario { get; set; }
-
-    public int PrecioIn { get; set; }
-
-    public int PrecioOut { get; set; }
-
-    public Nullable<bool> Estado { get; set; }
 
     public System.Guid Subcategoria_Id { get; set; }
 
-    public System.Guid Usuario_Id { get; set; }
+    public string Referencia { get; set; }
+
+    public string Serial_Lote { get; set; }
+
+    public string Codigo_Contable { get; set; }
+
+    public string Descripcion { get; set; }
+
+    public Nullable<System.Guid> Marca_Id { get; set; }
+
+    public string Modelo { get; set; }
+
+    public string Color { get; set; }
+
+    public string Talla { get; set; }
+
+    public string Udm { get; set; }
+
+    public string Foto { get; set; }
+
+    public Nullable<bool> Estado { get; set; }
+
+    public System.Guid Usuario_Update { get; set; }
 
     public System.DateTime Created_At { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public System.DateTime Updated_At { get; set; }
 
 
+
+    public virtual Marca Marca { get; set; }
+
+    public virtual Subcategoria Subcategoria { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Imagen> Imagen { get; set; }
-
-    public virtual Subcategoria Subcategoria { get; set; }
 
 }
 

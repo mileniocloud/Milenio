@@ -174,7 +174,7 @@ namespace MilenioApi.Action
                 {
                     //error general
                     Basic b = new Basic();
-                    autil.MensajeRetorno(ref b, 4, ex.Message, null);
+                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
 
                     op.Codigo = b.Codigo;
                     op.custom = b.custom;

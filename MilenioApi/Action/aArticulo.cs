@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using System.Data.Entity.Core.Objects;
 
 namespace MilenioApi.Action
 {
@@ -409,61 +410,68 @@ namespace MilenioApi.Action
                         string nombre = Convert.ToString(httpRequest.Form["Nombre"]);
                         string referencia = Convert.ToString(httpRequest.Form["Referencia"]);
 
-                        var ge = ent.sp_valida_articulos(codigo, nombre, referencia, entidad_id);
+                        GenericError ge = ent.Val_articulo(codigo, nombre, referencia, entidad_id.ToString()).FirstOrDefault();
 
-
-                        //se saca el usiario que esta creando la persona del token
-                        Guid? user_id = null;
-                        string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
-                        if (!string.IsNullOrEmpty(usid))
-                            user_id = Guid.Parse(usid);
-
-                        String file = string.Empty;
-                        if (httpRequest.Files.Count > 0)
+                        if (ge == null)
                         {
-                            var foto = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
-                            file = Convert.ToBase64String(Content);
+                            //se saca el usiario que esta creando la persona del token
+                            Guid? user_id = null;
+                            string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                            if (!string.IsNullOrEmpty(usid))
+                                user_id = Guid.Parse(usid);
+
+                            String file = string.Empty;
+                            if (httpRequest.Files.Count > 0)
+                            {
+                                var foto = httpRequest.Files;
+                                Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
+                                file = Convert.ToBase64String(Content);
+                            }
+
+
+
+                            Guid SubCategoria = Guid.Parse(httpRequest.Form["Sub_Categoria"]);
+                            string SerialLote = Convert.ToString(httpRequest.Form["Serial_Lote"]);
+                            string CodContable = Convert.ToString(httpRequest.Form["CodContable"]);
+                            string Descripcion = Convert.ToString(httpRequest.Form["Descripcion"]);
+                            Guid Marca = Guid.Parse(httpRequest.Form["Marca"]);
+                            string Modelo = Convert.ToString(httpRequest.Form["Modelo"]);
+                            string Color = Convert.ToString(httpRequest.Form["Color"]);
+                            string Talla = Convert.ToString(httpRequest.Form["Talla"]);
+                            string Udm = Convert.ToString(httpRequest.Form["Udm"]);
+                            bool Estatus = bool.Parse(httpRequest.Form["Estatus"]);
+
+                            Articulo at = new Articulo();
+                            at.Codigo_Id = Guid.NewGuid();
+                            at.Codigo = codigo;
+                            at.Nombre = nombre;
+                            at.Subcategoria_Id = SubCategoria;
+                            at.Referencia = referencia;
+                            at.Serial_Lote = SerialLote;
+                            at.Codigo_Contable = CodContable;
+                            at.Descripcion = Descripcion;
+                            at.Marca_Id = Marca;
+                            at.Modelo = Modelo;
+                            at.Color = Color;
+                            at.Talla = Talla;
+                            at.Udm = Udm;
+                            at.Foto = file;
+                            at.Estado = Estatus;
+                            at.Created_At = DateTime.Now;
+                            at.Updated_At = DateTime.Now;
+                            at.Usuario_Update = user_id.Value;
+
+                            ent.Articulo.Add(at);
+                            ent.SaveChanges();
+
+                            //retorna exitoso
+                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
                         }
-
-
-
-                        Guid SubCategoria = Guid.Parse(httpRequest.Form["Sub_Categoria"]);
-                        string SerialLote = Convert.ToString(httpRequest.Form["Serial_Lote"]);
-                        string CodContable = Convert.ToString(httpRequest.Form["CodContable"]);
-                        string Descripcion = Convert.ToString(httpRequest.Form["Descripcion"]);
-                        Guid Marca = Guid.Parse(httpRequest.Form["Marca"]);
-                        string Modelo = Convert.ToString(httpRequest.Form["Modelo"]);
-                        string Color = Convert.ToString(httpRequest.Form["Color"]);
-                        string Talla = Convert.ToString(httpRequest.Form["Talla"]);
-                        string Udm = Convert.ToString(httpRequest.Form["Udm"]);
-                        bool Estatus = bool.Parse(httpRequest.Form["Estatus"]);
-
-                        Articulo at = new Articulo();
-                        at.Codigo_Id = Guid.NewGuid();
-                        at.Codigo = codigo;
-                        at.Nombre = nombre;
-                        at.Subcategoria_Id = SubCategoria;
-                        at.Referencia = referencia;
-                        at.Serial_Lote = SerialLote;
-                        at.Codigo_Contable = CodContable;
-                        at.Descripcion = Descripcion;
-                        at.Marca_Id = Marca;
-                        at.Modelo = Modelo;
-                        at.Color = Color;
-                        at.Talla = Talla;
-                        at.Udm = Udm;
-                        at.Foto = file;
-                        at.Estado = Estatus;
-                        at.Created_At = DateTime.Now;
-                        at.Updated_At = DateTime.Now;
-                        at.Usuario_Update = user_id.Value;
-
-                        ent.Articulo.Add(at);
-                        ent.SaveChanges();
-
-                        //retorna exitoso
-                        ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                        else
+                        {
+                            //retorna error validacion
+                            ret = autil.MensajeRetorno(ref ge);
+                        }
                     }
                 }
                 else

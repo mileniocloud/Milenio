@@ -26,6 +26,13 @@ namespace MilenioApi.Action
 
             return ret;
         }
+        public Basic MensajeRetorno(ref GenericError ge)
+        {
+            Basic ret = new Basic();
+            ret.Codigo = ge.Codigo;
+            ret.Message = ge.Message;
+            return ret;
+        }
 
         public string Sha(string pass)
         {

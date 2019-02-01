@@ -22,7 +22,7 @@ public partial class TipoIdentificacion
     public TipoIdentificacion()
     {
 
-        this.Persona = new HashSet<Persona>();
+        this.Profesional = new HashSet<Profesional>();
 
     }
 
@@ -39,7 +39,7 @@ public partial class TipoIdentificacion
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Persona> Persona { get; set; }
+    public virtual ICollection<Profesional> Profesional { get; set; }
 
 }
 

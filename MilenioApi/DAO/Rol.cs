@@ -22,12 +22,12 @@ public partial class Rol
     public Rol()
     {
 
-        this.Entidad_Persona_Rol = new HashSet<Entidad_Persona_Rol>();
+        this.Usuario = new HashSet<Usuario>();
 
     }
 
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Rol { get; set; }
 
     public string Nombre { get; set; }
 
@@ -43,7 +43,7 @@ public partial class Rol
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Entidad_Persona_Rol> Entidad_Persona_Rol { get; set; }
+    public virtual ICollection<Usuario> Usuario { get; set; }
 
 }
 

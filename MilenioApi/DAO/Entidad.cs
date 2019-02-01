@@ -22,22 +22,20 @@ public partial class Entidad
     public Entidad()
     {
 
-        this.Aula = new HashSet<Aula>();
-
-        this.Categoria = new HashSet<Categoria>();
-
-        this.Entidad1 = new HashSet<Entidad>();
-
-        this.Entidad_Persona_Rol = new HashSet<Entidad_Persona_Rol>();
+        this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
 
         this.Licencia = new HashSet<Licencia>();
 
+        this.Profesional = new HashSet<Profesional>();
+
         this.Telefono = new HashSet<Telefono>();
+
+        this.Usuario = new HashSet<Usuario>();
 
     }
 
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Entidad { get; set; }
 
     public int Nit { get; set; }
 
@@ -45,41 +43,23 @@ public partial class Entidad
 
     public int CodigoEntidad { get; set; }
 
-    public int CodigoDane { get; set; }
-
     public string Foto { get; set; }
 
     public System.DateTime FiniFiscal { get; set; }
 
     public System.DateTime FfinFiscal { get; set; }
 
-    public Nullable<System.Guid> Entidad_Padre { get; set; }
-
     public Nullable<System.Guid> Ubicacion_Id { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public Nullable<System.DateTime> Usuario_Update { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public Nullable<System.DateTime> Fecha_Update { get; set; }
 
 
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Aula> Aula { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Categoria> Categoria { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Entidad> Entidad1 { get; set; }
-
-    public virtual Entidad Entidad2 { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Entidad_Persona_Rol> Entidad_Persona_Rol { get; set; }
+    public virtual ICollection<Especialidad_Entidad> Especialidad_Entidad { get; set; }
 
     public virtual Ubicacion Ubicacion { get; set; }
 
@@ -89,7 +69,15 @@ public partial class Entidad
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
+    public virtual ICollection<Profesional> Profesional { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
     public virtual ICollection<Telefono> Telefono { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Usuario> Usuario { get; set; }
 
 }
 

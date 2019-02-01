@@ -17,9 +17,6 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
-using System.Data.Entity.Core.Objects;
-using System.Linq;
-
 
 public partial class MilenioCloudEntities : DbContext
 {
@@ -35,126 +32,41 @@ public partial class MilenioCloudEntities : DbContext
     }
 
 
-    public virtual DbSet<Articulo> Articulo { get; set; }
+    public virtual DbSet<CIE> CIE { get; set; }
 
-    public virtual DbSet<Aula> Aula { get; set; }
+    public virtual DbSet<Consultorio> Consultorio { get; set; }
 
-    public virtual DbSet<Categoria> Categoria { get; set; }
-
-    public virtual DbSet<Curso> Curso { get; set; }
+    public virtual DbSet<Cups> Cups { get; set; }
 
     public virtual DbSet<Departamento> Departamento { get; set; }
 
     public virtual DbSet<Entidad> Entidad { get; set; }
 
-    public virtual DbSet<Entidad_Persona_Rol> Entidad_Persona_Rol { get; set; }
+    public virtual DbSet<Especialidad> Especialidad { get; set; }
+
+    public virtual DbSet<Especialidad_Entidad> Especialidad_Entidad { get; set; }
 
     public virtual DbSet<GenericError> GenericError { get; set; }
 
-    public virtual DbSet<Imagen> Imagen { get; set; }
-
     public virtual DbSet<Licencia> Licencia { get; set; }
-
-    public virtual DbSet<Marca> Marca { get; set; }
 
     public virtual DbSet<Municipio> Municipio { get; set; }
 
-    public virtual DbSet<Persona> Persona { get; set; }
-
     public virtual DbSet<Poblado> Poblado { get; set; }
 
-    public virtual DbSet<Proveedor> Proveedor { get; set; }
+    public virtual DbSet<Profesional> Profesional { get; set; }
 
     public virtual DbSet<Rol> Rol { get; set; }
 
-    public virtual DbSet<Subcategoria> Subcategoria { get; set; }
-
     public virtual DbSet<Telefono> Telefono { get; set; }
+
+    public virtual DbSet<Tipo_Vinculacion> Tipo_Vinculacion { get; set; }
 
     public virtual DbSet<TipoIdentificacion> TipoIdentificacion { get; set; }
 
     public virtual DbSet<Ubicacion> Ubicacion { get; set; }
 
-
-    public virtual int sp_valida_articulo(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
-    {
-
-        var codigoParameter = codigo.HasValue ?
-            new ObjectParameter("codigo", codigo) :
-            new ObjectParameter("codigo", typeof(int));
-
-
-        var nombreParameter = nombre != null ?
-            new ObjectParameter("nombre", nombre) :
-            new ObjectParameter("nombre", typeof(string));
-
-
-        var referenciaParameter = referencia != null ?
-            new ObjectParameter("referencia", referencia) :
-            new ObjectParameter("referencia", typeof(string));
-
-
-        var entidad_idParameter = entidad_id != null ?
-            new ObjectParameter("entidad_id", entidad_id) :
-            new ObjectParameter("entidad_id", typeof(string));
-
-
-        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_valida_articulo", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
-    }
-
-
-    public virtual ObjectResult<GenericError> Val_articulo(Nullable<int> codigo, string nombre, string referencia, string entidad_id)
-    {
-
-        var codigoParameter = codigo.HasValue ?
-            new ObjectParameter("codigo", codigo) :
-            new ObjectParameter("codigo", typeof(int));
-
-
-        var nombreParameter = nombre != null ?
-            new ObjectParameter("nombre", nombre) :
-            new ObjectParameter("nombre", typeof(string));
-
-
-        var referenciaParameter = referencia != null ?
-            new ObjectParameter("referencia", referencia) :
-            new ObjectParameter("referencia", typeof(string));
-
-
-        var entidad_idParameter = entidad_id != null ?
-            new ObjectParameter("entidad_id", entidad_id) :
-            new ObjectParameter("entidad_id", typeof(string));
-
-
-        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenericError>("Val_articulo", codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
-    }
-
-
-    public virtual ObjectResult<GenericError> Val_articulo(Nullable<int> codigo, string nombre, string referencia, string entidad_id, MergeOption mergeOption)
-    {
-
-        var codigoParameter = codigo.HasValue ?
-            new ObjectParameter("codigo", codigo) :
-            new ObjectParameter("codigo", typeof(int));
-
-
-        var nombreParameter = nombre != null ?
-            new ObjectParameter("nombre", nombre) :
-            new ObjectParameter("nombre", typeof(string));
-
-
-        var referenciaParameter = referencia != null ?
-            new ObjectParameter("referencia", referencia) :
-            new ObjectParameter("referencia", typeof(string));
-
-
-        var entidad_idParameter = entidad_id != null ?
-            new ObjectParameter("entidad_id", entidad_id) :
-            new ObjectParameter("entidad_id", typeof(string));
-
-
-        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GenericError>("Val_articulo", mergeOption, codigoParameter, nombreParameter, referenciaParameter, entidad_idParameter);
-    }
+    public virtual DbSet<Usuario> Usuario { get; set; }
 
 }
 

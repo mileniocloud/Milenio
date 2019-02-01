@@ -24,8 +24,6 @@ public partial class Ubicacion
 
         this.Entidad = new HashSet<Entidad>();
 
-        this.Persona = new HashSet<Persona>();
-
     }
 
 
@@ -50,10 +48,6 @@ public partial class Ubicacion
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Entidad> Entidad { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Persona> Persona { get; set; }
 
     public virtual Poblado Poblado { get; set; }
 

@@ -199,7 +199,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action\aArticulo.cs" />
+    <Compile Include="Action\aProfesionalcs.cs" />
     <Compile Include="Action\aUtilities.cs" />
     <Compile Include="Action\aEntidad.cs" />
     <Compile Include="Action\aPersona.cs" />
@@ -238,23 +238,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ArticuloController.cs" />
     <Compile Include="Controllers\EntidadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PersonaController.cs" />
+    <Compile Include="Controllers\ProfesionalController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
-    <Compile Include="DAO\Articulo.cs">
+    <Compile Include="DAO\CIE.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Aula.cs">
+    <Compile Include="DAO\Consultorio.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Categoria.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\Curso.cs">
+    <Compile Include="DAO\Cups.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Departamento.cs">
@@ -263,19 +259,16 @@
     <Compile Include="DAO\Entidad.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Entidad_Persona_Rol.cs">
+    <Compile Include="DAO\Especialidad.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\Especialidad_Entidad.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\GenericError.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Imagen.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAO\Licencia.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\Marca.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\MilenioModel.Context.cs">
@@ -296,28 +289,13 @@
     <Compile Include="DAO\Municipio.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Persona.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAO\Poblado.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Proveedor.cs">
+    <Compile Include="DAO\Profesional.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Rol.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\sp_mc_select_persona2_Result.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\sp_mc_select_persona4_Result.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\sp_mc_select_persona_Result.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAO\Subcategoria.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Telefono.cs">
@@ -326,7 +304,13 @@
     <Compile Include="DAO\TipoIdentificacion.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAO\Tipo_Vinculacion.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAO\Ubicacion.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\Usuario.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
@@ -337,14 +321,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="JwtManager.cs" />
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\ComboModel.cs" />
     <Compile Include="Models\EntidadModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\oPersonaModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\ProfesionalModel.cs" />
     <Compile Include="Models\Return.cs" />
+    <Compile Include="Models\UsuarioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />

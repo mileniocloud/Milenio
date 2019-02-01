@@ -40,7 +40,7 @@ public partial class Telefono
 
     public virtual Entidad Entidad { get; set; }
 
-    public virtual Persona Persona { get; set; }
+    public virtual Profesional Profesional { get; set; }
 
 }
 

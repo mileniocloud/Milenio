@@ -111,7 +111,7 @@ namespace MilenioApi.Action
                         {
                             //cedula existe
                             return ret = autil.MensajeRetorno(ref ret, 5, string.Empty, null);
-                        }                        
+                        }
                     }
                     else
                     {
@@ -169,7 +169,7 @@ namespace MilenioApi.Action
 
                         string estadocivil = Convert.ToString(httpRequest.Form["estadocivil"]);
                         string tipo_sangre = Convert.ToString(httpRequest.Form["tiposangre"]);
-                        Guid ubicacion = Guid.Parse(httpRequest.Form["ubicacion"]);                        
+                        Guid ubicacion = Guid.Parse(httpRequest.Form["ubicacion"]);
                         DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
                         string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
                         Guid tipo_vinculacion = Guid.Parse(httpRequest.Form["tipovinculacion"]);
@@ -189,8 +189,8 @@ namespace MilenioApi.Action
                                 pr.Nombres = nombre;
                                 pr.Primer_Apellido = primer_apellido;
                                 pr.Segundo_Apellido = segundo_apellido;
-                                pr.TipoIdentificacion_Id = tipoidentificacion;                                
-                                
+                                pr.TipoIdentificacion_Id = tipoidentificacion;
+
                                 pr.Ubicacion_Id = ubicacion;
                                 pr.Sexo = sexo;
                                 pr.FNacimiento = fnacimiento;
@@ -237,11 +237,11 @@ namespace MilenioApi.Action
             }
         }
 
-       /// <summary>
-       /// Metodo para agregarle usuario al profesional
-       /// </summary>
-       /// <param name="httpRequest"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// Metodo para agregarle usuario al profesional
+        /// </summary>
+        /// <param name="httpRequest"></param>
+        /// <returns></returns>
         public Basic AddUser(HttpRequest httpRequest)
         {
             Basic ret = new Basic();
@@ -284,7 +284,7 @@ namespace MilenioApi.Action
 
         #region consultas
 
-        
+
 
         public List<Profesional> GetProfesionalesEntidad(HttpRequest httpRequest)
         {
@@ -298,6 +298,31 @@ namespace MilenioApi.Action
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         lp = ent.Profesional.Where(e => e.Id_Entidad == entidad).ToList();
+
+                        string nombre = Convert.ToString(httpRequest.Form["nombre"]);
+                        string primerapellido = Convert.ToString(httpRequest.Form["primerapellido"]);
+                        string segundoapellido = Convert.ToString(httpRequest.Form["segundoapellido"]);
+
+                        int nrocedula = 0;
+                        if (string.IsNullOrEmpty(httpRequest.Form["cedula"]))
+                            nrocedula = Convert.ToInt32(httpRequest.Form["cedula"]);
+
+                        string registroprofesional = Convert.ToString(httpRequest.Form["registroprofesional"]);
+
+                        if (!string.IsNullOrEmpty(nombre))
+                            lp = lp.Where(c => c.Nombres.Contains(nombre)).ToList();
+
+                        if (!string.IsNullOrEmpty(primerapellido))
+                            lp = lp.Where(c => c.Primer_Apellido.Contains(primerapellido)).ToList();
+
+                        if (!string.IsNullOrEmpty(segundoapellido))
+                            lp = lp.Where(c => c.Segundo_Apellido.Contains(segundoapellido)).ToList();
+
+                        if (!string.IsNullOrEmpty(registroprofesional))
+                            lp = lp.Where(c => c.Registro_Profesional.Contains(registroprofesional)).ToList();
+
+                        if (nrocedula != 0)
+                            lp = lp.Where(c => c.NumeroIdentificacion == nrocedula).ToList();
 
                         return lp;
                     }

@@ -7,21 +7,19 @@ namespace MilenioApi.Models
 {
     public class EntidadModel
     {
+        public Guid Id_Entidad { get; set; }
         public int Nit { get; set; }
-        public  Guid Id { get; set; }
         public string Nombre { get; set; }
-        public int CodigoEntidad { get; set; }
-        public int CodigoDane { get; set; }
-        public DateTime FinicioFiscal { get; set; }
-        public DateTime FfinFiscal { get; set; }
-        public Guid? EntidadPadre { get; set; }
-        public int UbicacionId { get; set; }
-
-        public int PobladoId { get; set; }
+        public string Organizacion { get; set; }
+        public Guid Id_Poblado { get; set; }
         public string Direccion { get; set; }
-        public string Latitud { get; set; }
-        public string Longitud { get; set; }
-        public string Token { get; set; }
+        public string Email { get; set; }
+        public string CodigoEntidad { get; set; }
+        public bool Atencion_Prioritaria { get; set; }
+        public bool Contribuyente { get; set; }
+        public string Foto { get; set; }
+        public string Hora_Desde { get; set; }
+        public string Hora_Hasta { get; set; }
 
     }
 }

@@ -5,6 +5,31 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MilenioCloudModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Actividad_Economica">
+          <Key>
+            <PropertyRef Name="Id_Actividad_Economica" />
+          </Key>
+          <Property Name="Id_Actividad_Economica" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="300" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Agenda_Profesional">
+          <Key>
+            <PropertyRef Name="Id_Agenda_Profesional" />
+          </Key>
+          <Property Name="Id_Agenda_Profesional" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Desde" Type="datetime" Nullable="false" />
+          <Property Name="Fecha_Hasta" Type="datetime" Nullable="false" />
+          <Property Name="Id_Consultorio" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Profesional" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
         <EntityType Name="CIE">
           <Key>
             <PropertyRef Name="Id_Cie" />
@@ -18,11 +43,14 @@
             <PropertyRef Name="Id_Consultorio" />
           </Key>
           <Property Name="Id_Consultorio" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Fecha_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Consultorio_Especialidad">
           <Key>
@@ -33,6 +61,11 @@
           <Property Name="Id_Consultorio" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Cups">
           <Key>
@@ -53,34 +86,71 @@
           <Property Name="Created_At" Type="datetime" />
           <Property Name="Updated_At" Type="datetime" />
         </EntityType>
+        <EntityType Name="Detalle_Agenda">
+          <Key>
+            <PropertyRef Name="Id_Detalle_Agenda" />
+          </Key>
+          <Property Name="Id_Detalle_Agenda" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Horario_Agenda" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Hora" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Entidad">
           <Key>
             <PropertyRef Name="Id_Entidad" />
           </Key>
           <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Nit" Type="int" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="CodigoEntidad" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Organizacion" Type="nvarchar" MaxLength="300" />
+          <Property Name="Id_Poblado" Type="uniqueidentifier" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="CodigoEntidad" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Atencion_Prioritaria" Type="bit" Nullable="false" />
+          <Property Name="Contribuyente" Type="bit" Nullable="false" />
           <Property Name="Foto" Type="nvarchar(max)" />
-          <Property Name="FiniFiscal" Type="datetime" Nullable="false" />
-          <Property Name="FfinFiscal" Type="datetime" Nullable="false" />
-          <Property Name="Ubicacion_Id" Type="uniqueidentifier" />
-          <Property Name="Usuario_Update" Type="datetime" />
+          <Property Name="Hora_Desde" Type="nvarchar" MaxLength="10" />
+          <Property Name="Hora_Hasta" Type="nvarchar" MaxLength="10" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" />
           <Property Name="Fecha_Update" Type="datetime" />
+          <Property Name="Fecha_Create" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Entidad_Usuario">
+          <Key>
+            <PropertyRef Name="Id_Entidad" />
+            <PropertyRef Name="Id_Usuario" />
+          </Key>
+          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Usuario" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Especialidad">
           <Key>
             <PropertyRef Name="Id_Especialidad" />
           </Key>
           <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Codigo" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="NombreServicio" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="CodigoClase" Type="int" Nullable="false" />
-          <Property Name="NombreClase" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="CodigoSubclase" Type="int" />
-          <Property Name="NombreSubclase" Type="nvarchar" MaxLength="100" />
-          <Property Name="CodigoSubclase2" Type="int" />
-          <Property Name="NombreSubclase2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Especialidad_Cup_Entidad">
+          <Key>
+            <PropertyRef Name="Id_Especialidad" />
+            <PropertyRef Name="Id_Cups" />
+            <PropertyRef Name="Id_Entidad" />
+          </Key>
+          <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Cups" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Especialidad_Entidad">
           <Key>
@@ -89,8 +159,13 @@
           </Key>
           <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="Especialidad_Prefesional">
+        <EntityType Name="Especialidad_Profesional">
           <Key>
             <PropertyRef Name="Id_Profesional" />
             <PropertyRef Name="Id_Especialidad" />
@@ -99,6 +174,11 @@
           <Property Name="Id_Profesional" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Especialidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="GenericError">
           <Key>
@@ -107,6 +187,21 @@
           <Property Name="codigo_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Codigo" Type="nvarchar" MaxLength="4" />
           <Property Name="Message" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Horario_Agenda">
+          <Key>
+            <PropertyRef Name="Id_Horario_Agenda" />
+          </Key>
+          <Property Name="Id_Horario_Agenda" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Agenda_Profesional" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Hora_Desde" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Hora_Hasta" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Dia" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Duracion" Type="int" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Licencia">
           <Key>
@@ -123,6 +218,18 @@
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="IsTest" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Medicamentos_Esenciales">
+          <Key>
+            <PropertyRef Name="Id_Medicamento" />
+          </Key>
+          <Property Name="Id_Medicamento" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Principio_Activo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Forma" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Concentracion" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Presentacion" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Municipio">
           <Key>
             <PropertyRef Name="Dane_Id" />
@@ -133,6 +240,14 @@
           <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Created_At" Type="datetime" />
           <Property Name="Updated_At" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Ocupacion">
+          <Key>
+            <PropertyRef Name="Id_Ocupacion" />
+          </Key>
+          <Property Name="Id_Ocupacion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="300" Nullable="false" />
         </EntityType>
         <EntityType Name="Poblado">
           <Key>
@@ -151,27 +266,13 @@
             <PropertyRef Name="Id_Profesional" />
           </Key>
           <Property Name="Id_Profesional" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Id_Usuario" Type="uniqueidentifier" />
-          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="TipoIdentificacion_Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="NumeroIdentificacion" Type="int" Nullable="false" />
-          <Property Name="Nombres" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="Primer_Apellido" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Segundo_Apellido" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Registro_Profesional" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Sexo" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="FNacimiento" Type="datetime" Nullable="false" />
-          <Property Name="Foto" Type="nvarchar(max)" />
-          <Property Name="Estado_Civil" Type="nvarchar" MaxLength="50" />
-          <Property Name="TipoSangre" Type="varchar" MaxLength="100" />
-          <Property Name="Ubicacion_Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Fecha_Contratacion" Type="datetime" Nullable="false" />
-          <Property Name="Observaciones" Type="nvarchar" MaxLength="500" />
-          <Property Name="Id_Tipo_Vinculacion" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Estado" Type="bit" Nullable="false" />
-          <Property Name="Created_At" Type="datetime" />
-          <Property Name="Updated_At" Type="datetime" />
+          <Property Name="Id_Usuario" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Tipo_Profesional" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Registro_Profesional" Type="nvarchar" MaxLength="50" />
+          <Property Name="Created_At" Type="datetime" Nullable="false" />
+          <Property Name="Updated_At" Type="datetime" Nullable="false" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -188,9 +289,26 @@
           <Key>
             <PropertyRef Name="Id_Rol" />
             <PropertyRef Name="Id_Usuario" />
+            <PropertyRef Name="Id_Entidad" />
           </Key>
           <Property Name="Id_Rol" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Usuario" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Estado" Type="bit" Nullable="false" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
+          <Property Name="Usuario_Update" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Telefono">
           <Key>
@@ -206,21 +324,29 @@
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="Tipo_Identificacion">
+          <Key>
+            <PropertyRef Name="Id_Tipo_Identificacion" />
+          </Key>
+          <Property Name="Id_Tipo_Identificacion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Created_At" Type="datetime" Nullable="false" />
+          <Property Name="Updated_At" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tipo_Profesional">
+          <Key>
+            <PropertyRef Name="Id_Tipo_Profesional" />
+          </Key>
+          <Property Name="Id_Tipo_Profesional" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Presta_Servicio" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Tipo_Vinculacion">
           <Key>
             <PropertyRef Name="Id_Tipo_Vinculacion" />
           </Key>
           <Property Name="Id_Tipo_Vinculacion" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TipoIdentificacion">
-          <Key>
-            <PropertyRef Name="Codigo_Id" />
-          </Key>
-          <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Created_At" Type="datetime" Nullable="false" />
-          <Property Name="Updated_At" Type="datetime" />
         </EntityType>
         <EntityType Name="Ubicacion">
           <Key>
@@ -229,8 +355,6 @@
           <Property Name="Codigo_Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Poblado_Id" Type="int" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Latitud" Type="varchar" MaxLength="50" />
-          <Property Name="Longitud" Type="varchar" MaxLength="50" />
           <Property Name="Created_At" Type="datetime" />
           <Property Name="Updated_At" Type="datetime" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
@@ -240,15 +364,65 @@
             <PropertyRef Name="Id_Usuario" />
           </Key>
           <Property Name="Id_Usuario" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Tipo_Identificacion" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Numero_Identificacion" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Nombres" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Primer_Apellido" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Segundo_Apellido" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sexo" Type="varchar" MaxLength="20" />
+          <Property Name="Fecha_Nacimiento" Type="datetime" />
+          <Property Name="Foto" Type="nvarchar(max)" />
+          <Property Name="Estado_Civil" Type="nvarchar" MaxLength="50" />
+          <Property Name="TipoSangre" Type="varchar" MaxLength="100" />
+          <Property Name="Poblado_Id" Type="int" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="200" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="15" />
+          <Property Name="Fecha_Contratacion" Type="datetime" Nullable="false" />
+          <Property Name="Observaciones" Type="nvarchar" MaxLength="500" />
+          <Property Name="Id_Tipo_Vinculacion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Presta_Servicio" Type="bit" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="Estdo" Type="bit" Nullable="false" />
-          <Property Name="Cambiar_Clave" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Acepta_ABEAS" Type="bit" Nullable="false" />
+          <Property Name="Foto_ABEAS" Type="nvarchar(max)" />
+          <Property Name="Usuario_Create" Type="uniqueidentifier" />
+          <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
           <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Agenda_Profesional_Consultorio_Especialidad">
+          <End Role="Consultorio_Especialidad" Type="Self.Consultorio_Especialidad" Multiplicity="1" />
+          <End Role="Agenda_Profesional" Type="Self.Agenda_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Consultorio_Especialidad">
+              <PropertyRef Name="Id_Consultorio" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Consultorio" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Agenda_Profesional_Especialidad_Profesional">
+          <End Role="Especialidad_Profesional" Type="Self.Especialidad_Profesional" Multiplicity="1" />
+          <End Role="Agenda_Profesional" Type="Self.Agenda_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Profesional">
+              <PropertyRef Name="Id_Profesional" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Profesional" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Consultorio_Especialidad_Consultorio">
           <End Role="Consultorio" Type="Self.Consultorio" Multiplicity="1" />
           <End Role="Consultorio_Especialidad" Type="Self.Consultorio_Especialidad" Multiplicity="*" />
@@ -270,6 +444,68 @@
               <PropertyRef Name="Id_Entidad" />
             </Principal>
             <Dependent Role="Consultorio_Especialidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_Agenda_Horario_Agenda">
+          <End Role="Horario_Agenda" Type="Self.Horario_Agenda" Multiplicity="1" />
+          <End Role="Detalle_Agenda" Type="Self.Detalle_Agenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Horario_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Principal>
+            <Dependent Role="Detalle_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Usuario_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Entidad_Usuario" Type="Self.Entidad_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Entidad_Usuario">
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Usuario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Entidad_Usuario" Type="Self.Entidad_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Id_Usuario" />
+            </Principal>
+            <Dependent Role="Entidad_Usuario">
+              <PropertyRef Name="Id_Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Cups">
+          <End Role="Cups" Type="Self.Cups" Multiplicity="1" />
+          <End Role="Especialidad_Cup_Entidad" Type="Self.Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cups">
+              <PropertyRef Name="Id_Cups" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Cups" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
+          <End Role="Especialidad_Entidad" Type="Self.Especialidad_Entidad" Multiplicity="1" />
+          <End Role="Especialidad_Cup_Entidad" Type="Self.Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
               <PropertyRef Name="Id_Especialidad" />
               <PropertyRef Name="Id_Entidad" />
             </Dependent>
@@ -301,13 +537,13 @@
         </Association>
         <Association Name="FK_Especialidad_Prefesional_Especialidad_Entidad">
           <End Role="Especialidad_Entidad" Type="Self.Especialidad_Entidad" Multiplicity="1" />
-          <End Role="Especialidad_Prefesional" Type="Self.Especialidad_Prefesional" Multiplicity="*" />
+          <End Role="Especialidad_Profesional" Type="Self.Especialidad_Profesional" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Especialidad_Entidad">
               <PropertyRef Name="Id_Especialidad" />
               <PropertyRef Name="Id_Entidad" />
             </Principal>
-            <Dependent Role="Especialidad_Prefesional">
+            <Dependent Role="Especialidad_Profesional">
               <PropertyRef Name="Id_Especialidad" />
               <PropertyRef Name="Id_Entidad" />
             </Dependent>
@@ -315,27 +551,25 @@
         </Association>
         <Association Name="FK_Especialidad_Prefesional_Profesional">
           <End Role="Profesional" Type="Self.Profesional" Multiplicity="1" />
-          <End Role="Especialidad_Prefesional" Type="Self.Especialidad_Prefesional" Multiplicity="*" />
+          <End Role="Especialidad_Profesional" Type="Self.Especialidad_Profesional" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Profesional">
               <PropertyRef Name="Id_Profesional" />
             </Principal>
-            <Dependent Role="Especialidad_Prefesional">
+            <Dependent Role="Especialidad_Profesional">
               <PropertyRef Name="Id_Profesional" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_EUbicacion">
-          <End Role="Ubicacion" Type="Self.Ubicacion" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Entidad" Type="Self.Entidad" Multiplicity="*" />
+        <Association Name="FK_Horario_Agenda_Agenda_Profesional">
+          <End Role="Agenda_Profesional" Type="Self.Agenda_Profesional" Multiplicity="1" />
+          <End Role="Horario_Agenda" Type="Self.Horario_Agenda" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ubicacion">
-              <PropertyRef Name="Codigo_Id" />
+            <Principal Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Agenda_Profesional" />
             </Principal>
-            <Dependent Role="Entidad">
-              <PropertyRef Name="Ubicacion_Id" />
+            <Dependent Role="Horario_Agenda">
+              <PropertyRef Name="Id_Agenda_Profesional" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -381,50 +615,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Profesional_Entidad">
-          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+        <Association Name="FK_Profesional_Tipo_Profesional">
+          <End Role="Tipo_Profesional" Type="Self.Tipo_Profesional" Multiplicity="1" />
           <End Role="Profesional" Type="Self.Profesional" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Id_Entidad" />
+            <Principal Role="Tipo_Profesional">
+              <PropertyRef Name="Id_Tipo_Profesional" />
             </Principal>
             <Dependent Role="Profesional">
-              <PropertyRef Name="Id_Entidad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Profesional_Tipo_Vinculacion">
-          <End Role="Tipo_Vinculacion" Type="Self.Tipo_Vinculacion" Multiplicity="1" />
-          <End Role="Profesional" Type="Self.Profesional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tipo_Vinculacion">
-              <PropertyRef Name="Id_Tipo_Vinculacion" />
-            </Principal>
-            <Dependent Role="Profesional">
-              <PropertyRef Name="Id_Tipo_Vinculacion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Profesional_TipoIdentificacion">
-          <End Role="TipoIdentificacion" Type="Self.TipoIdentificacion" Multiplicity="1" />
-          <End Role="Profesional" Type="Self.Profesional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoIdentificacion">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Profesional">
-              <PropertyRef Name="TipoIdentificacion_Id" />
+              <PropertyRef Name="Id_Tipo_Profesional" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Profesional_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Profesional" Type="Self.Profesional" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
               <PropertyRef Name="Id_Usuario" />
             </Principal>
             <Dependent Role="Profesional">
+              <PropertyRef Name="Id_Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rol_Usuario_Entidad_Usuario">
+          <End Role="Entidad_Usuario" Type="Self.Entidad_Usuario" Multiplicity="1" />
+          <End Role="Rol_Usuario" Type="Self.Rol_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad_Usuario">
+              <PropertyRef Name="Id_Entidad" />
+              <PropertyRef Name="Id_Usuario" />
+            </Principal>
+            <Dependent Role="Rol_Usuario">
+              <PropertyRef Name="Id_Entidad" />
               <PropertyRef Name="Id_Usuario" />
             </Dependent>
           </ReferentialConstraint>
@@ -438,18 +662,6 @@
             </Principal>
             <Dependent Role="Rol_Usuario">
               <PropertyRef Name="Id_Rol" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rol_Usuario_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
-          <End Role="Rol_Usuario" Type="Self.Rol_Usuario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="Id_Usuario" />
-            </Principal>
-            <Dependent Role="Rol_Usuario">
-              <PropertyRef Name="Id_Usuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -493,40 +705,58 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usuario_Entidad1">
-          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+        <Association Name="FK_Usuario_Poblado">
+          <End Role="Poblado" Type="Self.Poblado" Multiplicity="0..1" />
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Id_Entidad" />
+            <Principal Role="Poblado">
+              <PropertyRef Name="Poblado_Id" />
             </Principal>
             <Dependent Role="Usuario">
-              <PropertyRef Name="Id_Entidad" />
+              <PropertyRef Name="Poblado_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MilenioCloudModelStoreContainer">
+          <EntitySet Name="Actividad_Economica" EntityType="Self.Actividad_Economica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Agenda_Profesional" EntityType="Self.Agenda_Profesional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIE" EntityType="Self.CIE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Consultorio" EntityType="Self.Consultorio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Consultorio_Especialidad" EntityType="Self.Consultorio_Especialidad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cups" EntityType="Self.Cups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle_Agenda" EntityType="Self.Detalle_Agenda" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Entidad" EntityType="Self.Entidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Entidad_Usuario" EntityType="Self.Entidad_Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Especialidad" EntityType="Self.Especialidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Especialidad_Cup_Entidad" EntityType="Self.Especialidad_Cup_Entidad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Especialidad_Entidad" EntityType="Self.Especialidad_Entidad" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Especialidad_Prefesional" EntityType="Self.Especialidad_Prefesional" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Especialidad_Profesional" EntityType="Self.Especialidad_Profesional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GenericError" EntityType="Self.GenericError" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Horario_Agenda" EntityType="Self.Horario_Agenda" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Licencia" EntityType="Self.Licencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medicamentos_Esenciales" EntityType="Self.Medicamentos_Esenciales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ocupacion" EntityType="Self.Ocupacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Poblado" EntityType="Self.Poblado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Profesional" EntityType="Self.Profesional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol_Usuario" EntityType="Self.Rol_Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Telefono" EntityType="Self.Telefono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo_Identificacion" EntityType="Self.Tipo_Identificacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo_Profesional" EntityType="Self.Tipo_Profesional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Vinculacion" EntityType="Self.Tipo_Vinculacion" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TipoIdentificacion" EntityType="Self.TipoIdentificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Agenda_Profesional_Consultorio_Especialidad" Association="Self.FK_Agenda_Profesional_Consultorio_Especialidad">
+            <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Agenda_Profesional_Especialidad_Profesional" Association="Self.FK_Agenda_Profesional_Especialidad_Profesional">
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+          </AssociationSet>
           <AssociationSet Name="FK_Consultorio_Especialidad_Consultorio" Association="Self.FK_Consultorio_Especialidad_Consultorio">
             <End Role="Consultorio" EntitySet="Consultorio" />
             <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
@@ -534,6 +764,26 @@
           <AssociationSet Name="FK_Consultorio_Especialidad_Especialidad_Entidad" Association="Self.FK_Consultorio_Especialidad_Especialidad_Entidad">
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
             <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_Agenda_Horario_Agenda" Association="Self.FK_Detalle_Agenda_Horario_Agenda">
+            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
+            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Usuario_Entidad" Association="Self.FK_Entidad_Usuario_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Usuario_Usuario" Association="Self.FK_Entidad_Usuario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Cups" Association="Self.FK_Especialidad_Cup_Entidad_Cups">
+            <End Role="Cups" EntitySet="Cups" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad" Association="Self.FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
+            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Entidad_Entidad" Association="Self.FK_Especialidad_Entidad_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
@@ -545,15 +795,15 @@
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Prefesional_Especialidad_Entidad" Association="Self.FK_Especialidad_Prefesional_Especialidad_Entidad">
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
-            <End Role="Especialidad_Prefesional" EntitySet="Especialidad_Prefesional" />
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Prefesional_Profesional" Association="Self.FK_Especialidad_Prefesional_Profesional">
             <End Role="Profesional" EntitySet="Profesional" />
-            <End Role="Especialidad_Prefesional" EntitySet="Especialidad_Prefesional" />
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
           </AssociationSet>
-          <AssociationSet Name="FK_EUbicacion" Association="Self.FK_EUbicacion">
-            <End Role="Ubicacion" EntitySet="Ubicacion" />
-            <End Role="Entidad" EntitySet="Entidad" />
+          <AssociationSet Name="FK_Horario_Agenda_Agenda_Profesional" Association="Self.FK_Horario_Agenda_Agenda_Profesional">
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
           </AssociationSet>
           <AssociationSet Name="FK_LEntidad" Association="Self.FK_LEntidad">
             <End Role="Entidad" EntitySet="Entidad" />
@@ -567,28 +817,20 @@
             <End Role="Municipio" EntitySet="Municipio" />
             <End Role="Poblado" EntitySet="Poblado" />
           </AssociationSet>
-          <AssociationSet Name="FK_Profesional_Entidad" Association="Self.FK_Profesional_Entidad">
-            <End Role="Entidad" EntitySet="Entidad" />
-            <End Role="Profesional" EntitySet="Profesional" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Profesional_Tipo_Vinculacion" Association="Self.FK_Profesional_Tipo_Vinculacion">
-            <End Role="Tipo_Vinculacion" EntitySet="Tipo_Vinculacion" />
-            <End Role="Profesional" EntitySet="Profesional" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Profesional_TipoIdentificacion" Association="Self.FK_Profesional_TipoIdentificacion">
-            <End Role="TipoIdentificacion" EntitySet="TipoIdentificacion" />
+          <AssociationSet Name="FK_Profesional_Tipo_Profesional" Association="Self.FK_Profesional_Tipo_Profesional">
+            <End Role="Tipo_Profesional" EntitySet="Tipo_Profesional" />
             <End Role="Profesional" EntitySet="Profesional" />
           </AssociationSet>
           <AssociationSet Name="FK_Profesional_Usuario" Association="Self.FK_Profesional_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Profesional" EntitySet="Profesional" />
           </AssociationSet>
-          <AssociationSet Name="FK_Rol_Usuario_Rol" Association="Self.FK_Rol_Usuario_Rol">
-            <End Role="Rol" EntitySet="Rol" />
+          <AssociationSet Name="FK_Rol_Usuario_Entidad_Usuario" Association="Self.FK_Rol_Usuario_Entidad_Usuario">
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
             <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
           </AssociationSet>
-          <AssociationSet Name="FK_Rol_Usuario_Usuario" Association="Self.FK_Rol_Usuario_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
+          <AssociationSet Name="FK_Rol_Usuario_Rol" Association="Self.FK_Rol_Usuario_Rol">
+            <End Role="Rol" EntitySet="Rol" />
             <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
           </AssociationSet>
           <AssociationSet Name="FK_Telefono_Persona" Association="Self.FK_Telefono_Persona">
@@ -603,8 +845,8 @@
             <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Ubicacion" EntitySet="Ubicacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Entidad1" Association="Self.FK_Usuario_Entidad1">
-            <End Role="Entidad" EntitySet="Entidad" />
+          <AssociationSet Name="FK_Usuario_Poblado" Association="Self.FK_Usuario_Poblado">
+            <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
@@ -613,55 +855,108 @@
     <edmx:ConceptualModels>
       <Schema Namespace="MilenioCloudModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="MilenioCloudEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Actividad_Economica" EntityType="MilenioCloudModel.Actividad_Economica" />
+          <EntitySet Name="Agenda_Profesional" EntityType="MilenioCloudModel.Agenda_Profesional" />
           <EntitySet Name="CIE" EntityType="MilenioCloudModel.CIE" />
           <EntitySet Name="Consultorio" EntityType="MilenioCloudModel.Consultorio" />
+          <EntitySet Name="Consultorio_Especialidad" EntityType="MilenioCloudModel.Consultorio_Especialidad" />
           <EntitySet Name="Cups" EntityType="MilenioCloudModel.Cups" />
           <EntitySet Name="Departamento" EntityType="MilenioCloudModel.Departamento" />
+          <EntitySet Name="Detalle_Agenda" EntityType="MilenioCloudModel.Detalle_Agenda" />
           <EntitySet Name="Entidad" EntityType="MilenioCloudModel.Entidad" />
+          <EntitySet Name="Entidad_Usuario" EntityType="MilenioCloudModel.Entidad_Usuario" />
           <EntitySet Name="Especialidad" EntityType="MilenioCloudModel.Especialidad" />
+          <EntitySet Name="Especialidad_Cup_Entidad" EntityType="MilenioCloudModel.Especialidad_Cup_Entidad" />
           <EntitySet Name="Especialidad_Entidad" EntityType="MilenioCloudModel.Especialidad_Entidad" />
+          <EntitySet Name="Especialidad_Profesional" EntityType="MilenioCloudModel.Especialidad_Profesional" />
           <EntitySet Name="GenericError" EntityType="MilenioCloudModel.GenericError" />
+          <EntitySet Name="Horario_Agenda" EntityType="MilenioCloudModel.Horario_Agenda" />
           <EntitySet Name="Licencia" EntityType="MilenioCloudModel.Licencia" />
+          <EntitySet Name="Medicamentos_Esenciales" EntityType="MilenioCloudModel.Medicamentos_Esenciales" />
           <EntitySet Name="Municipio" EntityType="MilenioCloudModel.Municipio" />
+          <EntitySet Name="Ocupacion" EntityType="MilenioCloudModel.Ocupacion" />
           <EntitySet Name="Poblado" EntityType="MilenioCloudModel.Poblado" />
           <EntitySet Name="Profesional" EntityType="MilenioCloudModel.Profesional" />
           <EntitySet Name="Rol" EntityType="MilenioCloudModel.Rol" />
+          <EntitySet Name="Rol_Usuario" EntityType="MilenioCloudModel.Rol_Usuario" />
+          <EntitySet Name="sysdiagrams" EntityType="MilenioCloudModel.sysdiagrams" />
           <EntitySet Name="Telefono" EntityType="MilenioCloudModel.Telefono" />
+          <EntitySet Name="Tipo_Identificacion" EntityType="MilenioCloudModel.Tipo_Identificacion" />
+          <EntitySet Name="Tipo_Profesional" EntityType="MilenioCloudModel.Tipo_Profesional" />
           <EntitySet Name="Tipo_Vinculacion" EntityType="MilenioCloudModel.Tipo_Vinculacion" />
-          <EntitySet Name="TipoIdentificacion" EntityType="MilenioCloudModel.TipoIdentificacion" />
           <EntitySet Name="Ubicacion" EntityType="MilenioCloudModel.Ubicacion" />
           <EntitySet Name="Usuario" EntityType="MilenioCloudModel.Usuario" />
+          <AssociationSet Name="FK_Agenda_Profesional_Consultorio_Especialidad" Association="MilenioCloudModel.FK_Agenda_Profesional_Consultorio_Especialidad">
+            <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Agenda_Profesional_Especialidad_Profesional" Association="MilenioCloudModel.FK_Agenda_Profesional_Especialidad_Profesional">
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Horario_Agenda_Agenda_Profesional" Association="MilenioCloudModel.FK_Horario_Agenda_Agenda_Profesional">
+            <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
+            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consultorio_Especialidad_Consultorio" Association="MilenioCloudModel.FK_Consultorio_Especialidad_Consultorio">
+            <End Role="Consultorio" EntitySet="Consultorio" />
+            <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consultorio_Especialidad_Especialidad_Entidad" Association="MilenioCloudModel.FK_Consultorio_Especialidad_Especialidad_Entidad">
+            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
+            <End Role="Consultorio_Especialidad" EntitySet="Consultorio_Especialidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Cups" Association="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Cups">
+            <End Role="Cups" EntitySet="Cups" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
           <AssociationSet Name="FK_MDepartamento" Association="MilenioCloudModel.FK_MDepartamento">
             <End Role="Departamento" EntitySet="Departamento" />
             <End Role="Municipio" EntitySet="Municipio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_Agenda_Horario_Agenda" Association="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda">
+            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
+            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Usuario_Entidad" Association="MilenioCloudModel.FK_Entidad_Usuario_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Entidad_Entidad" Association="MilenioCloudModel.FK_Especialidad_Entidad_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
           </AssociationSet>
-          <AssociationSet Name="FK_EUbicacion" Association="MilenioCloudModel.FK_EUbicacion">
-            <End Role="Ubicacion" EntitySet="Ubicacion" />
-            <End Role="Entidad" EntitySet="Entidad" />
-          </AssociationSet>
           <AssociationSet Name="FK_LEntidad" Association="MilenioCloudModel.FK_LEntidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Licencia" EntitySet="Licencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Profesional_Entidad" Association="MilenioCloudModel.FK_Profesional_Entidad">
-            <End Role="Entidad" EntitySet="Entidad" />
-            <End Role="Profesional" EntitySet="Profesional" />
           </AssociationSet>
           <AssociationSet Name="FK_TEntidad" Association="MilenioCloudModel.FK_TEntidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
-          <AssociationSet Name="FK_Usuario_Entidad1" Association="MilenioCloudModel.FK_Usuario_Entidad1">
-            <End Role="Entidad" EntitySet="Entidad" />
+          <AssociationSet Name="FK_Entidad_Usuario_Usuario" Association="MilenioCloudModel.FK_Entidad_Usuario_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rol_Usuario_Entidad_Usuario" Association="MilenioCloudModel.FK_Rol_Usuario_Entidad_Usuario">
+            <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
+            <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Entidad_Especialidad" Association="MilenioCloudModel.FK_Especialidad_Entidad_Especialidad">
             <End Role="Especialidad" EntitySet="Especialidad" />
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad" Association="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
+            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Prefesional_Especialidad_Entidad" Association="MilenioCloudModel.FK_Especialidad_Prefesional_Especialidad_Entidad">
+            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Prefesional_Profesional" Association="MilenioCloudModel.FK_Especialidad_Prefesional_Profesional">
+            <End Role="Profesional" EntitySet="Profesional" />
+            <End Role="Especialidad_Profesional" EntitySet="Especialidad_Profesional" />
           </AssociationSet>
           <AssociationSet Name="FK_PMunicipio" Association="MilenioCloudModel.FK_PMunicipio">
             <End Role="Municipio" EntitySet="Municipio" />
@@ -671,12 +966,12 @@
             <End Role="Poblado" EntitySet="Poblado" />
             <End Role="Ubicacion" EntitySet="Ubicacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Profesional_Tipo_Vinculacion" Association="MilenioCloudModel.FK_Profesional_Tipo_Vinculacion">
-            <End Role="Tipo_Vinculacion" EntitySet="Tipo_Vinculacion" />
-            <End Role="Profesional" EntitySet="Profesional" />
+          <AssociationSet Name="FK_Usuario_Poblado" Association="MilenioCloudModel.FK_Usuario_Poblado">
+            <End Role="Poblado" EntitySet="Poblado" />
+            <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
-          <AssociationSet Name="FK_Profesional_TipoIdentificacion" Association="MilenioCloudModel.FK_Profesional_TipoIdentificacion">
-            <End Role="TipoIdentificacion" EntitySet="TipoIdentificacion" />
+          <AssociationSet Name="FK_Profesional_Tipo_Profesional" Association="MilenioCloudModel.FK_Profesional_Tipo_Profesional">
+            <End Role="Tipo_Profesional" EntitySet="Tipo_Profesional" />
             <End Role="Profesional" EntitySet="Profesional" />
           </AssociationSet>
           <AssociationSet Name="FK_Profesional_Usuario" Association="MilenioCloudModel.FK_Profesional_Usuario">
@@ -687,19 +982,39 @@
             <End Role="Profesional" EntitySet="Profesional" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
-          <AssociationSet Name="Consultorio_Especialidad" Association="MilenioCloudModel.Consultorio_Especialidad">
-            <End Role="Consultorio" EntitySet="Consultorio" />
-            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
-          </AssociationSet>
-          <AssociationSet Name="Especialidad_Prefesional" Association="MilenioCloudModel.Especialidad_Prefesional">
-            <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
-            <End Role="Profesional" EntitySet="Profesional" />
-          </AssociationSet>
-          <AssociationSet Name="Rol_Usuario" Association="MilenioCloudModel.Rol_Usuario">
+          <AssociationSet Name="FK_Rol_Usuario_Rol" Association="MilenioCloudModel.FK_Rol_Usuario_Rol">
             <End Role="Rol" EntitySet="Rol" />
-            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Actividad_Economica">
+          <Key>
+            <PropertyRef Name="Id_Actividad_Economica" />
+          </Key>
+          <Property Name="Id_Actividad_Economica" Type="Guid" Nullable="false" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Agenda_Profesional">
+          <Key>
+            <PropertyRef Name="Id_Agenda_Profesional" />
+          </Key>
+          <Property Name="Id_Agenda_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Desde" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fecha_Hasta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Id_Consultorio" Type="Guid" Nullable="false" />
+          <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Consultorio_Especialidad" Relationship="MilenioCloudModel.FK_Agenda_Profesional_Consultorio_Especialidad" FromRole="Agenda_Profesional" ToRole="Consultorio_Especialidad" />
+          <NavigationProperty Name="Especialidad_Profesional" Relationship="MilenioCloudModel.FK_Agenda_Profesional_Especialidad_Profesional" FromRole="Agenda_Profesional" ToRole="Especialidad_Profesional" />
+          <NavigationProperty Name="Horario_Agenda" Relationship="MilenioCloudModel.FK_Horario_Agenda_Agenda_Profesional" FromRole="Agenda_Profesional" ToRole="Horario_Agenda" />
+        </EntityType>
         <EntityType Name="CIE">
           <Key>
             <PropertyRef Name="Id_Cie" />
@@ -713,12 +1028,33 @@
             <PropertyRef Name="Id_Consultorio" />
           </Key>
           <Property Name="Id_Consultorio" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
-          <Property Name="Fecha_Update" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.Consultorio_Especialidad" FromRole="Consultorio" ToRole="Especialidad_Entidad" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Consultorio_Especialidad" Relationship="MilenioCloudModel.FK_Consultorio_Especialidad_Consultorio" FromRole="Consultorio" ToRole="Consultorio_Especialidad" />
+        </EntityType>
+        <EntityType Name="Consultorio_Especialidad">
+          <Key>
+            <PropertyRef Name="Id_Consultorio" />
+            <PropertyRef Name="Id_Especialidad" />
+            <PropertyRef Name="Id_Entidad" />
+          </Key>
+          <Property Name="Id_Consultorio" Type="Guid" Nullable="false" />
+          <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Agenda_Profesional" Relationship="MilenioCloudModel.FK_Agenda_Profesional_Consultorio_Especialidad" FromRole="Consultorio_Especialidad" ToRole="Agenda_Profesional" />
+          <NavigationProperty Name="Consultorio" Relationship="MilenioCloudModel.FK_Consultorio_Especialidad_Consultorio" FromRole="Consultorio_Especialidad" ToRole="Consultorio" />
+          <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Consultorio_Especialidad_Especialidad_Entidad" FromRole="Consultorio_Especialidad" ToRole="Especialidad_Entidad" />
         </EntityType>
         <EntityType Name="Cups">
           <Key>
@@ -728,6 +1064,7 @@
           <Property Name="Codigo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Observacion" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Especialidad_Cup_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Cups" FromRole="Cups" ToRole="Especialidad_Cup_Entidad" />
         </EntityType>
         <EntityType Name="Departamento">
           <Key>
@@ -740,41 +1077,82 @@
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_MDepartamento" FromRole="Departamento" ToRole="Municipio" />
         </EntityType>
+        <EntityType Name="Detalle_Agenda">
+          <Key>
+            <PropertyRef Name="Id_Detalle_Agenda" />
+          </Key>
+          <Property Name="Id_Detalle_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Hora" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Horario_Agenda" Relationship="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" FromRole="Detalle_Agenda" ToRole="Horario_Agenda" />
+        </EntityType>
         <EntityType Name="Entidad">
           <Key>
             <PropertyRef Name="Id_Entidad" />
           </Key>
           <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
           <Property Name="Nit" Type="Int32" Nullable="false" />
-          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="CodigoEntidad" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Organizacion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Id_Poblado" Type="Guid" />
+          <Property Name="Direccion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoEntidad" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Atencion_Prioritaria" Type="Boolean" Nullable="false" />
+          <Property Name="Contribuyente" Type="Boolean" Nullable="false" />
           <Property Name="Foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FiniFiscal" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FfinFiscal" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Ubicacion_Id" Type="Guid" />
-          <Property Name="Usuario_Update" Type="DateTime" Precision="3" />
+          <Property Name="Hora_Desde" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Hora_Hasta" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Usuario_Update" Type="Guid" />
           <Property Name="Fecha_Update" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Create" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Entidad_Usuario" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Entidad" FromRole="Entidad" ToRole="Entidad_Usuario" />
           <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Entidad" FromRole="Entidad" ToRole="Especialidad_Entidad" />
-          <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_EUbicacion" FromRole="Entidad" ToRole="Ubicacion" />
           <NavigationProperty Name="Licencia" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Entidad" ToRole="Licencia" />
-          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Profesional_Entidad" FromRole="Entidad" ToRole="Profesional" />
           <NavigationProperty Name="Telefono" Relationship="MilenioCloudModel.FK_TEntidad" FromRole="Entidad" ToRole="Telefono" />
-          <NavigationProperty Name="Usuario" Relationship="MilenioCloudModel.FK_Usuario_Entidad1" FromRole="Entidad" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Entidad_Usuario">
+          <Key>
+            <PropertyRef Name="Id_Entidad" />
+            <PropertyRef Name="Id_Usuario" />
+          </Key>
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Usuario" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Entidad" FromRole="Entidad_Usuario" ToRole="Entidad" />
+          <NavigationProperty Name="Usuario" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Usuario" FromRole="Entidad_Usuario" ToRole="Usuario" />
+          <NavigationProperty Name="Rol_Usuario" Relationship="MilenioCloudModel.FK_Rol_Usuario_Entidad_Usuario" FromRole="Entidad_Usuario" ToRole="Rol_Usuario" />
         </EntityType>
         <EntityType Name="Especialidad">
           <Key>
             <PropertyRef Name="Id_Especialidad" />
           </Key>
           <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
-          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NombreServicio" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoClase" Type="Int32" Nullable="false" />
-          <Property Name="NombreClase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoSubclase" Type="Int32" />
-          <Property Name="NombreSubclase" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoSubclase2" Type="Int32" />
-          <Property Name="NombreSubclase2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Especialidad" FromRole="Especialidad" ToRole="Especialidad_Entidad" />
+        </EntityType>
+        <EntityType Name="Especialidad_Cup_Entidad">
+          <Key>
+            <PropertyRef Name="Id_Especialidad" />
+            <PropertyRef Name="Id_Cups" />
+            <PropertyRef Name="Id_Entidad" />
+          </Key>
+          <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Cups" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Cups" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Cups" FromRole="Especialidad_Cup_Entidad" ToRole="Cups" />
+          <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad_Entidad" FromRole="Especialidad_Cup_Entidad" ToRole="Especialidad_Entidad" />
         </EntityType>
         <EntityType Name="Especialidad_Entidad">
           <Key>
@@ -783,10 +1161,34 @@
           </Key>
           <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
           <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Consultorio_Especialidad" Relationship="MilenioCloudModel.FK_Consultorio_Especialidad_Especialidad_Entidad" FromRole="Especialidad_Entidad" ToRole="Consultorio_Especialidad" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Entidad" FromRole="Especialidad_Entidad" ToRole="Entidad" />
           <NavigationProperty Name="Especialidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Especialidad" FromRole="Especialidad_Entidad" ToRole="Especialidad" />
-          <NavigationProperty Name="Consultorio" Relationship="MilenioCloudModel.Consultorio_Especialidad" FromRole="Especialidad_Entidad" ToRole="Consultorio" />
-          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.Especialidad_Prefesional" FromRole="Especialidad_Entidad" ToRole="Profesional" />
+          <NavigationProperty Name="Especialidad_Cup_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad_Entidad" FromRole="Especialidad_Entidad" ToRole="Especialidad_Cup_Entidad" />
+          <NavigationProperty Name="Especialidad_Profesional" Relationship="MilenioCloudModel.FK_Especialidad_Prefesional_Especialidad_Entidad" FromRole="Especialidad_Entidad" ToRole="Especialidad_Profesional" />
+        </EntityType>
+        <EntityType Name="Especialidad_Profesional">
+          <Key>
+            <PropertyRef Name="Id_Profesional" />
+            <PropertyRef Name="Id_Especialidad" />
+            <PropertyRef Name="Id_Entidad" />
+          </Key>
+          <Property Name="Id_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Agenda_Profesional" Relationship="MilenioCloudModel.FK_Agenda_Profesional_Especialidad_Profesional" FromRole="Especialidad_Profesional" ToRole="Agenda_Profesional" />
+          <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Prefesional_Especialidad_Entidad" FromRole="Especialidad_Profesional" ToRole="Especialidad_Entidad" />
+          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Especialidad_Prefesional_Profesional" FromRole="Especialidad_Profesional" ToRole="Profesional" />
         </EntityType>
         <EntityType Name="GenericError">
           <Key>
@@ -795,6 +1197,23 @@
           <Property Name="codigo_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Codigo" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Horario_Agenda">
+          <Key>
+            <PropertyRef Name="Id_Horario_Agenda" />
+          </Key>
+          <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Agenda_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Hora_Desde" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Hora_Hasta" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Dia" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Duracion" Type="Int32" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Agenda_Profesional" Relationship="MilenioCloudModel.FK_Horario_Agenda_Agenda_Profesional" FromRole="Horario_Agenda" ToRole="Agenda_Profesional" />
+          <NavigationProperty Name="Detalle_Agenda" Relationship="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" FromRole="Horario_Agenda" ToRole="Detalle_Agenda" />
         </EntityType>
         <EntityType Name="Licencia">
           <Key>
@@ -812,6 +1231,18 @@
           <Property Name="IsTest" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Licencia" ToRole="Entidad" />
         </EntityType>
+        <EntityType Name="Medicamentos_Esenciales">
+          <Key>
+            <PropertyRef Name="Id_Medicamento" />
+          </Key>
+          <Property Name="Id_Medicamento" Type="Guid" Nullable="false" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Principio_Activo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Forma" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Concentracion" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Presentacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Municipio">
           <Key>
             <PropertyRef Name="Dane_Id" />
@@ -824,6 +1255,14 @@
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Departamento" Relationship="MilenioCloudModel.FK_MDepartamento" FromRole="Municipio" ToRole="Departamento" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_PMunicipio" FromRole="Municipio" ToRole="Poblado" />
+        </EntityType>
+        <EntityType Name="Ocupacion">
+          <Key>
+            <PropertyRef Name="Id_Ocupacion" />
+          </Key>
+          <Property Name="Id_Ocupacion" Type="Guid" Nullable="false" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Poblado">
           <Key>
@@ -838,39 +1277,24 @@
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_PMunicipio" FromRole="Poblado" ToRole="Municipio" />
           <NavigationProperty Name="Ubicacion" Relationship="MilenioCloudModel.FK_UPoblado" FromRole="Poblado" ToRole="Ubicacion" />
+          <NavigationProperty Name="Usuario" Relationship="MilenioCloudModel.FK_Usuario_Poblado" FromRole="Poblado" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Profesional">
           <Key>
             <PropertyRef Name="Id_Profesional" />
           </Key>
           <Property Name="Id_Profesional" Type="Guid" Nullable="false" />
-          <Property Name="Id_Usuario" Type="Guid" />
-          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
-          <Property Name="TipoIdentificacion_Id" Type="Guid" Nullable="false" />
-          <Property Name="NumeroIdentificacion" Type="Int32" Nullable="false" />
-          <Property Name="Nombres" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Primer_Apellido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Segundo_Apellido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Registro_Profesional" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Sexo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="FNacimiento" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Estado_Civil" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TipoSangre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Ubicacion_Id" Type="Guid" Nullable="false" />
-          <Property Name="Fecha_Contratacion" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Observaciones" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Id_Tipo_Vinculacion" Type="Guid" Nullable="false" />
-          <Property Name="Estado" Type="Boolean" Nullable="false" />
-          <Property Name="Created_At" Type="DateTime" Precision="3" />
-          <Property Name="Updated_At" Type="DateTime" Precision="3" />
+          <Property Name="Id_Usuario" Type="Guid" Nullable="false" />
+          <Property Name="Id_Tipo_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Registro_Profesional" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
-          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Profesional_Entidad" FromRole="Profesional" ToRole="Entidad" />
-          <NavigationProperty Name="Tipo_Vinculacion" Relationship="MilenioCloudModel.FK_Profesional_Tipo_Vinculacion" FromRole="Profesional" ToRole="Tipo_Vinculacion" />
-          <NavigationProperty Name="TipoIdentificacion" Relationship="MilenioCloudModel.FK_Profesional_TipoIdentificacion" FromRole="Profesional" ToRole="TipoIdentificacion" />
+          <Property Name="Usuario_Create" Type="Guid" />
+          <NavigationProperty Name="Especialidad_Profesional" Relationship="MilenioCloudModel.FK_Especialidad_Prefesional_Profesional" FromRole="Profesional" ToRole="Especialidad_Profesional" />
+          <NavigationProperty Name="Tipo_Profesional" Relationship="MilenioCloudModel.FK_Profesional_Tipo_Profesional" FromRole="Profesional" ToRole="Tipo_Profesional" />
           <NavigationProperty Name="Usuario" Relationship="MilenioCloudModel.FK_Profesional_Usuario" FromRole="Profesional" ToRole="Usuario" />
           <NavigationProperty Name="Telefono" Relationship="MilenioCloudModel.FK_Telefono_Persona" FromRole="Profesional" ToRole="Telefono" />
-          <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.Especialidad_Prefesional" FromRole="Profesional" ToRole="Especialidad_Entidad" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -882,7 +1306,34 @@
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Created_At" Type="DateTime" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Usuario" Relationship="MilenioCloudModel.Rol_Usuario" FromRole="Rol" ToRole="Usuario" />
+          <NavigationProperty Name="Rol_Usuario" Relationship="MilenioCloudModel.FK_Rol_Usuario_Rol" FromRole="Rol" ToRole="Rol_Usuario" />
+        </EntityType>
+        <EntityType Name="Rol_Usuario">
+          <Key>
+            <PropertyRef Name="Id_Rol" />
+            <PropertyRef Name="Id_Usuario" />
+            <PropertyRef Name="Id_Entidad" />
+          </Key>
+          <Property Name="Id_Rol" Type="Guid" Nullable="false" />
+          <Property Name="Id_Usuario" Type="Guid" Nullable="false" />
+          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Estado" Type="Boolean" Nullable="false" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Entidad_Usuario" Relationship="MilenioCloudModel.FK_Rol_Usuario_Entidad_Usuario" FromRole="Rol_Usuario" ToRole="Entidad_Usuario" />
+          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.FK_Rol_Usuario_Rol" FromRole="Rol_Usuario" ToRole="Rol" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Telefono">
           <Key>
@@ -900,23 +1351,30 @@
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_TEntidad" FromRole="Telefono" ToRole="Entidad" />
           <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Telefono_Persona" FromRole="Telefono" ToRole="Profesional" />
         </EntityType>
+        <EntityType Name="Tipo_Identificacion">
+          <Key>
+            <PropertyRef Name="Id_Tipo_Identificacion" />
+          </Key>
+          <Property Name="Id_Tipo_Identificacion" Type="Guid" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Updated_At" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Tipo_Profesional">
+          <Key>
+            <PropertyRef Name="Id_Tipo_Profesional" />
+          </Key>
+          <Property Name="Id_Tipo_Profesional" Type="Guid" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Presta_Servicio" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Profesional_Tipo_Profesional" FromRole="Tipo_Profesional" ToRole="Profesional" />
+        </EntityType>
         <EntityType Name="Tipo_Vinculacion">
           <Key>
             <PropertyRef Name="Id_Tipo_Vinculacion" />
           </Key>
           <Property Name="Id_Tipo_Vinculacion" Type="Guid" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Profesional_Tipo_Vinculacion" FromRole="Tipo_Vinculacion" ToRole="Profesional" />
-        </EntityType>
-        <EntityType Name="TipoIdentificacion">
-          <Key>
-            <PropertyRef Name="Codigo_Id" />
-          </Key>
-          <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
-          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Created_At" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Updated_At" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Profesional_TipoIdentificacion" FromRole="TipoIdentificacion" ToRole="Profesional" />
         </EntityType>
         <EntityType Name="Ubicacion">
           <Key>
@@ -925,12 +1383,9 @@
           <Property Name="Codigo_Id" Type="Guid" Nullable="false" />
           <Property Name="Poblado_Id" Type="Int32" Nullable="false" />
           <Property Name="Direccion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Created_At" Type="DateTime" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
-          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_EUbicacion" FromRole="Ubicacion" ToRole="Entidad" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_UPoblado" FromRole="Ubicacion" ToRole="Poblado" />
         </EntityType>
         <EntityType Name="Usuario">
@@ -938,18 +1393,118 @@
             <PropertyRef Name="Id_Usuario" />
           </Key>
           <Property Name="Id_Usuario" Type="Guid" Nullable="false" />
-          <Property Name="Id_Entidad" Type="Guid" Nullable="false" />
+          <Property Name="Id_Tipo_Identificacion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Numero_Identificacion" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Nombres" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Primer_Apellido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Segundo_Apellido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sexo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" Precision="3" />
+          <Property Name="Foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Estado_Civil" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TipoSangre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Poblado_Id" Type="Int32" />
+          <Property Name="Direccion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha_Contratacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Observaciones" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Id_Tipo_Vinculacion" Type="Guid" Nullable="false" />
+          <Property Name="Presta_Servicio" Type="Boolean" Nullable="false" />
           <Property Name="Login" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Estdo" Type="Boolean" Nullable="false" />
-          <Property Name="Cambiar_Clave" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Acepta_ABEAS" Type="Boolean" Nullable="false" />
+          <Property Name="Foto_ABEAS" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Usuario_Create" Type="Guid" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Usuario_Update" Type="Guid" />
           <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Usuario_Entidad1" FromRole="Usuario" ToRole="Entidad" />
+          <NavigationProperty Name="Entidad_Usuario" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Usuario" FromRole="Usuario" ToRole="Entidad_Usuario" />
+          <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_Usuario_Poblado" FromRole="Usuario" ToRole="Poblado" />
           <NavigationProperty Name="Profesional" Relationship="MilenioCloudModel.FK_Profesional_Usuario" FromRole="Usuario" ToRole="Profesional" />
-          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.Rol_Usuario" FromRole="Usuario" ToRole="Rol" />
         </EntityType>
+        <Association Name="FK_Agenda_Profesional_Consultorio_Especialidad">
+          <End Type="MilenioCloudModel.Consultorio_Especialidad" Role="Consultorio_Especialidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Agenda_Profesional" Role="Agenda_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Consultorio_Especialidad">
+              <PropertyRef Name="Id_Consultorio" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Consultorio" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Agenda_Profesional_Especialidad_Profesional">
+          <End Type="MilenioCloudModel.Especialidad_Profesional" Role="Especialidad_Profesional" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Agenda_Profesional" Role="Agenda_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Profesional">
+              <PropertyRef Name="Id_Profesional" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Profesional" />
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Horario_Agenda_Agenda_Profesional">
+          <End Type="MilenioCloudModel.Agenda_Profesional" Role="Agenda_Profesional" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Horario_Agenda" Role="Horario_Agenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Agenda_Profesional">
+              <PropertyRef Name="Id_Agenda_Profesional" />
+            </Principal>
+            <Dependent Role="Horario_Agenda">
+              <PropertyRef Name="Id_Agenda_Profesional" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consultorio_Especialidad_Consultorio">
+          <End Type="MilenioCloudModel.Consultorio" Role="Consultorio" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Consultorio_Especialidad" Role="Consultorio_Especialidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Consultorio">
+              <PropertyRef Name="Id_Consultorio" />
+            </Principal>
+            <Dependent Role="Consultorio_Especialidad">
+              <PropertyRef Name="Id_Consultorio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consultorio_Especialidad_Especialidad_Entidad">
+          <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Consultorio_Especialidad" Role="Consultorio_Especialidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Consultorio_Especialidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Cups">
+          <End Type="MilenioCloudModel.Cups" Role="Cups" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Cup_Entidad" Role="Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cups">
+              <PropertyRef Name="Id_Cups" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Cups" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MDepartamento">
           <End Type="MilenioCloudModel.Departamento" Role="Departamento" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -964,6 +1519,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Detalle_Agenda_Horario_Agenda">
+          <End Type="MilenioCloudModel.Horario_Agenda" Role="Horario_Agenda" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Detalle_Agenda" Role="Detalle_Agenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Horario_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Principal>
+            <Dependent Role="Detalle_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Usuario_Entidad">
+          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Entidad_Usuario" Role="Entidad_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Entidad_Usuario">
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Especialidad_Entidad_Entidad">
           <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
           <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="*" />
@@ -973,20 +1552,6 @@
             </Principal>
             <Dependent Role="Especialidad_Entidad">
               <PropertyRef Name="Id_Entidad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EUbicacion">
-          <End Type="MilenioCloudModel.Ubicacion" Role="Ubicacion" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ubicacion">
-              <PropertyRef Name="Codigo_Id" />
-            </Principal>
-            <Dependent Role="Entidad">
-              <PropertyRef Name="Ubicacion_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1004,18 +1569,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Profesional_Entidad">
-          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Id_Entidad" />
-            </Principal>
-            <Dependent Role="Profesional">
-              <PropertyRef Name="Id_Entidad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TEntidad">
           <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1030,15 +1583,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usuario_Entidad1">
-          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="*" />
+        <Association Name="FK_Entidad_Usuario_Usuario">
+          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Entidad_Usuario" Role="Entidad_Usuario" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Entidad">
-              <PropertyRef Name="Id_Entidad" />
+            <Principal Role="Usuario">
+              <PropertyRef Name="Id_Usuario" />
             </Principal>
-            <Dependent Role="Usuario">
+            <Dependent Role="Entidad_Usuario">
+              <PropertyRef Name="Id_Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rol_Usuario_Entidad_Usuario">
+          <End Type="MilenioCloudModel.Entidad_Usuario" Role="Entidad_Usuario" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Rol_Usuario" Role="Rol_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad_Usuario">
               <PropertyRef Name="Id_Entidad" />
+              <PropertyRef Name="Id_Usuario" />
+            </Principal>
+            <Dependent Role="Rol_Usuario">
+              <PropertyRef Name="Id_Entidad" />
+              <PropertyRef Name="Id_Usuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1051,6 +1618,46 @@
             </Principal>
             <Dependent Role="Especialidad_Entidad">
               <PropertyRef Name="Id_Especialidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
+          <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Cup_Entidad" Role="Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Prefesional_Especialidad_Entidad">
+          <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Profesional" Role="Especialidad_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Profesional">
+              <PropertyRef Name="Id_Especialidad" />
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Prefesional_Profesional">
+          <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Profesional" Role="Especialidad_Profesional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesional">
+              <PropertyRef Name="Id_Profesional" />
+            </Principal>
+            <Dependent Role="Especialidad_Profesional">
+              <PropertyRef Name="Id_Profesional" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1082,32 +1689,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Profesional_Tipo_Vinculacion">
-          <End Type="MilenioCloudModel.Tipo_Vinculacion" Role="Tipo_Vinculacion" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="*" />
+        <Association Name="FK_Usuario_Poblado">
+          <End Type="MilenioCloudModel.Poblado" Role="Poblado" Multiplicity="0..1" />
+          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tipo_Vinculacion">
-              <PropertyRef Name="Id_Tipo_Vinculacion" />
+            <Principal Role="Poblado">
+              <PropertyRef Name="Poblado_Id" />
             </Principal>
-            <Dependent Role="Profesional">
-              <PropertyRef Name="Id_Tipo_Vinculacion" />
+            <Dependent Role="Usuario">
+              <PropertyRef Name="Poblado_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Profesional_TipoIdentificacion">
-          <End Type="MilenioCloudModel.TipoIdentificacion" Role="TipoIdentificacion" Multiplicity="1" />
+        <Association Name="FK_Profesional_Tipo_Profesional">
+          <End Type="MilenioCloudModel.Tipo_Profesional" Role="Tipo_Profesional" Multiplicity="1" />
           <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TipoIdentificacion">
-              <PropertyRef Name="Codigo_Id" />
+            <Principal Role="Tipo_Profesional">
+              <PropertyRef Name="Id_Tipo_Profesional" />
             </Principal>
             <Dependent Role="Profesional">
-              <PropertyRef Name="TipoIdentificacion_Id" />
+              <PropertyRef Name="Id_Tipo_Profesional" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Profesional_Usuario">
-          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="1" />
           <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -1130,17 +1737,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Consultorio_Especialidad">
-          <End Type="MilenioCloudModel.Consultorio" Role="Consultorio" Multiplicity="*" />
-          <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="*" />
-        </Association>
-        <Association Name="Especialidad_Prefesional">
-          <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="*" />
-          <End Type="MilenioCloudModel.Profesional" Role="Profesional" Multiplicity="*" />
-        </Association>
-        <Association Name="Rol_Usuario">
-          <End Type="MilenioCloudModel.Rol" Role="Rol" Multiplicity="*" />
-          <End Type="MilenioCloudModel.Usuario" Role="Usuario" Multiplicity="*" />
+        <Association Name="FK_Rol_Usuario_Rol">
+          <End Type="MilenioCloudModel.Rol" Role="Rol" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Rol_Usuario" Role="Rol_Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="Id_Rol" />
+            </Principal>
+            <Dependent Role="Rol_Usuario">
+              <PropertyRef Name="Id_Rol" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -1148,6 +1755,33 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="MilenioCloudModelStoreContainer" CdmEntityContainer="MilenioCloudEntities">
+          <EntitySetMapping Name="Actividad_Economica">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Actividad_Economica">
+              <MappingFragment StoreEntitySet="Actividad_Economica">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Id_Actividad_Economica" ColumnName="Id_Actividad_Economica" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Agenda_Profesional">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Agenda_Profesional">
+              <MappingFragment StoreEntitySet="Agenda_Profesional">
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Profesional" ColumnName="Id_Profesional" />
+                <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
+                <ScalarProperty Name="Id_Consultorio" ColumnName="Id_Consultorio" />
+                <ScalarProperty Name="Fecha_Hasta" ColumnName="Fecha_Hasta" />
+                <ScalarProperty Name="Fecha_Desde" ColumnName="Fecha_Desde" />
+                <ScalarProperty Name="Id_Agenda_Profesional" ColumnName="Id_Agenda_Profesional" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CIE">
             <EntityTypeMapping TypeName="MilenioCloudModel.CIE">
               <MappingFragment StoreEntitySet="CIE">
@@ -1162,9 +1796,26 @@
               <MappingFragment StoreEntitySet="Consultorio">
                 <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Consultorio" ColumnName="Id_Consultorio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Consultorio_Especialidad">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Consultorio_Especialidad">
+              <MappingFragment StoreEntitySet="Consultorio_Especialidad">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
                 <ScalarProperty Name="Id_Consultorio" ColumnName="Id_Consultorio" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1190,18 +1841,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Detalle_Agenda">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Detalle_Agenda">
+              <MappingFragment StoreEntitySet="Detalle_Agenda">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
+                <ScalarProperty Name="Id_Detalle_Agenda" ColumnName="Id_Detalle_Agenda" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Entidad">
             <EntityTypeMapping TypeName="MilenioCloudModel.Entidad">
               <MappingFragment StoreEntitySet="Entidad">
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
                 <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
-                <ScalarProperty Name="Ubicacion_Id" ColumnName="Ubicacion_Id" />
-                <ScalarProperty Name="FfinFiscal" ColumnName="FfinFiscal" />
-                <ScalarProperty Name="FiniFiscal" ColumnName="FiniFiscal" />
+                <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
+                <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
                 <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Contribuyente" ColumnName="Contribuyente" />
+                <ScalarProperty Name="Atencion_Prioritaria" ColumnName="Atencion_Prioritaria" />
                 <ScalarProperty Name="CodigoEntidad" ColumnName="CodigoEntidad" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Id_Poblado" ColumnName="Id_Poblado" />
+                <ScalarProperty Name="Organizacion" ColumnName="Organizacion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Nit" ColumnName="Nit" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entidad_Usuario">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Entidad_Usuario">
+              <MappingFragment StoreEntitySet="Entidad_Usuario">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
                 <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1209,14 +1889,22 @@
           <EntitySetMapping Name="Especialidad">
             <EntityTypeMapping TypeName="MilenioCloudModel.Especialidad">
               <MappingFragment StoreEntitySet="Especialidad">
-                <ScalarProperty Name="NombreSubclase2" ColumnName="NombreSubclase2" />
-                <ScalarProperty Name="CodigoSubclase2" ColumnName="CodigoSubclase2" />
-                <ScalarProperty Name="NombreSubclase" ColumnName="NombreSubclase" />
-                <ScalarProperty Name="CodigoSubclase" ColumnName="CodigoSubclase" />
-                <ScalarProperty Name="NombreClase" ColumnName="NombreClase" />
-                <ScalarProperty Name="CodigoClase" ColumnName="CodigoClase" />
-                <ScalarProperty Name="NombreServicio" ColumnName="NombreServicio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Especialidad_Cup_Entidad">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Especialidad_Cup_Entidad">
+              <MappingFragment StoreEntitySet="Especialidad_Cup_Entidad">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Cups" ColumnName="Id_Cups" />
                 <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1224,8 +1912,27 @@
           <EntitySetMapping Name="Especialidad_Entidad">
             <EntityTypeMapping TypeName="MilenioCloudModel.Especialidad_Entidad">
               <MappingFragment StoreEntitySet="Especialidad_Entidad">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
                 <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Especialidad_Profesional">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Especialidad_Profesional">
+              <MappingFragment StoreEntitySet="Especialidad_Profesional">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
+                <ScalarProperty Name="Id_Profesional" ColumnName="Id_Profesional" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1235,6 +1942,22 @@
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="codigo_id" ColumnName="codigo_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Horario_Agenda">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Horario_Agenda">
+              <MappingFragment StoreEntitySet="Horario_Agenda">
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Duracion" ColumnName="Duracion" />
+                <ScalarProperty Name="Dia" ColumnName="Dia" />
+                <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
+                <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
+                <ScalarProperty Name="Id_Agenda_Profesional" ColumnName="Id_Agenda_Profesional" />
+                <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1254,6 +1977,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Medicamentos_Esenciales">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Medicamentos_Esenciales">
+              <MappingFragment StoreEntitySet="Medicamentos_Esenciales">
+                <ScalarProperty Name="Presentacion" ColumnName="Presentacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Concentracion" ColumnName="Concentracion" />
+                <ScalarProperty Name="Forma" ColumnName="Forma" />
+                <ScalarProperty Name="Principio_Activo" ColumnName="Principio_Activo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Id_Medicamento" ColumnName="Id_Medicamento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Municipio">
             <EntityTypeMapping TypeName="MilenioCloudModel.Municipio">
               <MappingFragment StoreEntitySet="Municipio">
@@ -1263,6 +1999,15 @@
                 <ScalarProperty Name="Dane_Id" ColumnName="Dane_Id" />
                 <ScalarProperty Name="Departamento_Id" ColumnName="Departamento_Id" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ocupacion">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Ocupacion">
+              <MappingFragment StoreEntitySet="Ocupacion">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Id_Ocupacion" ColumnName="Id_Ocupacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1282,26 +2027,12 @@
           <EntitySetMapping Name="Profesional">
             <EntityTypeMapping TypeName="MilenioCloudModel.Profesional">
               <MappingFragment StoreEntitySet="Profesional">
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
                 <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
                 <ScalarProperty Name="Created_At" ColumnName="Created_At" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="Id_Tipo_Vinculacion" ColumnName="Id_Tipo_Vinculacion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Fecha_Contratacion" ColumnName="Fecha_Contratacion" />
-                <ScalarProperty Name="Ubicacion_Id" ColumnName="Ubicacion_Id" />
-                <ScalarProperty Name="TipoSangre" ColumnName="TipoSangre" />
-                <ScalarProperty Name="Estado_Civil" ColumnName="Estado_Civil" />
-                <ScalarProperty Name="Foto" ColumnName="Foto" />
-                <ScalarProperty Name="FNacimiento" ColumnName="FNacimiento" />
-                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
                 <ScalarProperty Name="Registro_Profesional" ColumnName="Registro_Profesional" />
-                <ScalarProperty Name="Segundo_Apellido" ColumnName="Segundo_Apellido" />
-                <ScalarProperty Name="Primer_Apellido" ColumnName="Primer_Apellido" />
-                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
-                <ScalarProperty Name="NumeroIdentificacion" ColumnName="NumeroIdentificacion" />
-                <ScalarProperty Name="TipoIdentificacion_Id" ColumnName="TipoIdentificacion_Id" />
-                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Tipo_Profesional" ColumnName="Id_Tipo_Profesional" />
                 <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
                 <ScalarProperty Name="Id_Profesional" ColumnName="Id_Profesional" />
               </MappingFragment>
@@ -1316,6 +2047,31 @@
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Id_Rol" ColumnName="Id_Rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rol_Usuario">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Rol_Usuario">
+              <MappingFragment StoreEntitySet="Rol_Usuario">
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+                <ScalarProperty Name="Id_Rol" ColumnName="Id_Rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="MilenioCloudModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1334,21 +2090,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Identificacion">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Tipo_Identificacion">
+              <MappingFragment StoreEntitySet="Tipo_Identificacion">
+                <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
+                <ScalarProperty Name="Created_At" ColumnName="Created_At" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id_Tipo_Identificacion" ColumnName="Id_Tipo_Identificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Profesional">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Tipo_Profesional">
+              <MappingFragment StoreEntitySet="Tipo_Profesional">
+                <ScalarProperty Name="Presta_Servicio" ColumnName="Presta_Servicio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id_Tipo_Profesional" ColumnName="Id_Tipo_Profesional" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tipo_Vinculacion">
             <EntityTypeMapping TypeName="MilenioCloudModel.Tipo_Vinculacion">
               <MappingFragment StoreEntitySet="Tipo_Vinculacion">
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Id_Tipo_Vinculacion" ColumnName="Id_Tipo_Vinculacion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TipoIdentificacion">
-            <EntityTypeMapping TypeName="MilenioCloudModel.TipoIdentificacion">
-              <MappingFragment StoreEntitySet="TipoIdentificacion">
-                <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
-                <ScalarProperty Name="Created_At" ColumnName="Created_At" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1358,8 +2123,6 @@
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
                 <ScalarProperty Name="Updated_At" ColumnName="Updated_At" />
                 <ScalarProperty Name="Created_At" ColumnName="Created_At" />
-                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
-                <ScalarProperty Name="Latitud" ColumnName="Latitud" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
                 <ScalarProperty Name="Poblado_Id" ColumnName="Poblado_Id" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
@@ -1371,42 +2134,34 @@
               <MappingFragment StoreEntitySet="Usuario">
                 <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
-                <ScalarProperty Name="Cambiar_Clave" ColumnName="Cambiar_Clave" />
-                <ScalarProperty Name="Estdo" ColumnName="Estdo" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Foto_ABEAS" ColumnName="Foto_ABEAS" />
+                <ScalarProperty Name="Acepta_ABEAS" ColumnName="Acepta_ABEAS" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
+                <ScalarProperty Name="Presta_Servicio" ColumnName="Presta_Servicio" />
+                <ScalarProperty Name="Id_Tipo_Vinculacion" ColumnName="Id_Tipo_Vinculacion" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Fecha_Contratacion" ColumnName="Fecha_Contratacion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Poblado_Id" ColumnName="Poblado_Id" />
+                <ScalarProperty Name="TipoSangre" ColumnName="TipoSangre" />
+                <ScalarProperty Name="Estado_Civil" ColumnName="Estado_Civil" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="Segundo_Apellido" ColumnName="Segundo_Apellido" />
+                <ScalarProperty Name="Primer_Apellido" ColumnName="Primer_Apellido" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Numero_Identificacion" ColumnName="Numero_Identificacion" />
+                <ScalarProperty Name="Id_Tipo_Identificacion" ColumnName="Id_Tipo_Identificacion" />
                 <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Consultorio_Especialidad" TypeName="MilenioCloudModel.Consultorio_Especialidad" StoreEntitySet="Consultorio_Especialidad">
-            <EndProperty Name="Especialidad_Entidad">
-              <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
-              <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
-            </EndProperty>
-            <EndProperty Name="Consultorio">
-              <ScalarProperty Name="Id_Consultorio" ColumnName="Id_Consultorio" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Especialidad_Prefesional" TypeName="MilenioCloudModel.Especialidad_Prefesional" StoreEntitySet="Especialidad_Prefesional">
-            <EndProperty Name="Profesional">
-              <ScalarProperty Name="Id_Profesional" ColumnName="Id_Profesional" />
-            </EndProperty>
-            <EndProperty Name="Especialidad_Entidad">
-              <ScalarProperty Name="Id_Entidad" ColumnName="Id_Entidad" />
-              <ScalarProperty Name="Id_Especialidad" ColumnName="Id_Especialidad" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Rol_Usuario" TypeName="MilenioCloudModel.Rol_Usuario" StoreEntitySet="Rol_Usuario">
-            <EndProperty Name="Usuario">
-              <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
-            </EndProperty>
-            <EndProperty Name="Rol">
-              <ScalarProperty Name="Id_Rol" ColumnName="Id_Rol" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

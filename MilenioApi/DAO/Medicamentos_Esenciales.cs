@@ -15,24 +15,22 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Ubicacion
+public partial class Medicamentos_Esenciales
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Medicamento { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public string Codigo { get; set; }
 
-    public string Direccion { get; set; }
+    public string Principio_Activo { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public string Forma { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public int Concentracion { get; set; }
 
-    public Nullable<System.Guid> Usuario_Update { get; set; }
+    public string Nombre { get; set; }
 
-
-
-    public virtual Poblado Poblado { get; set; }
+    public string Presentacion { get; set; }
 
 }
 

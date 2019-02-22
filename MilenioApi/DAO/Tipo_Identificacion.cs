@@ -15,35 +15,16 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Rol
+public partial class Tipo_Identificacion
 {
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Rol()
-    {
-
-        this.Rol_Usuario = new HashSet<Rol_Usuario>();
-
-    }
-
-
-    public System.Guid Id_Rol { get; set; }
+    public System.Guid Id_Tipo_Identificacion { get; set; }
 
     public string Nombre { get; set; }
 
-    public Nullable<bool> Estado { get; set; }
-
-    public string Descripcion { get; set; }
-
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public System.DateTime Created_At { get; set; }
 
     public Nullable<System.DateTime> Updated_At { get; set; }
-
-
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Rol_Usuario> Rol_Usuario { get; set; }
 
 }
 

@@ -19,7 +19,7 @@ namespace MilenioApi.Action
                                    select g).SingleOrDefault();
 
                 ret.Codigo = ge.Codigo;
-                ret.Message = ge.Message;
+                ret.Message = ge.Message + "-" + custom;
                 ret.custom = custom;
                 ret.id = id;
             }

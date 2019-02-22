@@ -8,6 +8,6 @@ namespace MilenioApi.Models
     public class ComboModel: Basic
     {
         public Guid Id { get; set; }
-        public string Value { get; set; }
+        
     }
 }

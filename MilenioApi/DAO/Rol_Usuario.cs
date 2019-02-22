@@ -15,24 +15,30 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Ubicacion
+public partial class Rol_Usuario
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Rol { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public System.Guid Id_Usuario { get; set; }
 
-    public string Direccion { get; set; }
+    public System.Guid Id_Entidad { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public bool Estado { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public System.Guid Usuario_Create { get; set; }
 
-    public Nullable<System.Guid> Usuario_Update { get; set; }
+    public System.DateTime Fecha_Create { get; set; }
+
+    public System.Guid Usuario_Update { get; set; }
+
+    public System.DateTime Fecha_Update { get; set; }
 
 
 
-    public virtual Poblado Poblado { get; set; }
+    public virtual Entidad_Usuario Entidad_Usuario { get; set; }
+
+    public virtual Rol Rol { get; set; }
 
 }
 

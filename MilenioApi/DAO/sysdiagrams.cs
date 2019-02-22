@@ -15,24 +15,18 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Ubicacion
+public partial class sysdiagrams
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public string name { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public int principal_id { get; set; }
 
-    public string Direccion { get; set; }
+    public int diagram_id { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public Nullable<int> version { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
-
-    public Nullable<System.Guid> Usuario_Update { get; set; }
-
-
-
-    public virtual Poblado Poblado { get; set; }
+    public byte[] definition { get; set; }
 
 }
 

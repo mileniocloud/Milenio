@@ -19,6 +19,7 @@ namespace MilenioApi.Models
         public string Value { get; set; }
         public bool Estado { get; set; }
         public int codigoint { get; set; }
+        public string codigostring { get; set; }
 
     }
     public enum messagetype

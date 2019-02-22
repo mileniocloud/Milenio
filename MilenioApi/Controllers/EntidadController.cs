@@ -9,52 +9,50 @@ namespace MilenioApi.Controllers
     public class EntidadController : ApiController
     {
         aUtilities ut = new aUtilities();
+
+        [HttpPost]
         [AllowAnonymous]
-        [Route("Espcinsert")]
-        public void Espcinsert()
+        [Route("GetEntidades")]
+        public HttpResponseMessage GetEntidades()
         {
-            aEntidad e = new aEntidad();
-            e.Espcinsert();
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.GetEntidades(HttpContext.Current.Request));
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("CreateEntidad")]
+        public HttpResponseMessage CreateEntidad()
+        {
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.CreateEntidad(HttpContext.Current.Request));
+        }
 
-        //[AllowAnonymous]
-        //[Route("CreateEntidad")]
-        //public HttpResponseMessage CreateEntidad()
-        //{
-        //    aEntidad e = new aEntidad();
-        //    return ut.ReturnResponse(e.CreateEntidad(HttpContext.Current.Request));
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("EditEntidad")]
+        public HttpResponseMessage EditEntidad()
+        {
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.EditEntidad(HttpContext.Current.Request));
+        }
 
-        //[AllowAnonymous]
-        //[Route("EditEntidad")]
-        //public HttpResponseMessage EditEntidad()
-        //{
-        //    aEntidad e = new aEntidad();
-        //    return ut.ReturnResponse(e.EditEntidad(HttpContext.Current.Request));
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("CreateEspecialidadEntidad")]
+        public HttpResponseMessage CreateEspecialidadEntidad()
+        {
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.CreateEspecialidadEntidad(HttpContext.Current.Request));
+        }
 
-        //[AllowAnonymous]
-        //[Route("CreateAula")]
-        //public HttpResponseMessage CreateAula()
-        //{
-        //    aEntidad e = new aEntidad();
-        //    return ut.ReturnResponse(e.CreateAula(HttpContext.Current.Request));
-        //}
-        //[AllowAnonymous]
-        //[Route("EditAula")]
-        //public HttpResponseMessage EditAula()
-        //{
-        //    aEntidad e = new aEntidad();
-        //    return ut.ReturnResponse(e.EditAula(HttpContext.Current.Request));
-        //}
-
-        //[AllowAnonymous]
-        //[Route("GetAula")]
-        //public HttpResponseMessage GetAula()
-        //{
-        //    aEntidad e = new aEntidad();
-        //    return ut.ReturnResponse(e.GetAula(HttpContext.Current.Request));
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("EditEspecialidadEntidad")]
+        public HttpResponseMessage EditEspecialidadEntidad()
+        {
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.EditEspecialidadEntidad(HttpContext.Current.Request));
+        }
     }
 }

@@ -15,24 +15,20 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Ubicacion
+public partial class Detalle_Agenda
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Detalle_Agenda { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public System.Guid Id_Horario_Agenda { get; set; }
 
-    public string Direccion { get; set; }
+    public System.TimeSpan Hora { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
-
-    public Nullable<System.DateTime> Updated_At { get; set; }
-
-    public Nullable<System.Guid> Usuario_Update { get; set; }
+    public System.DateTime Fecha { get; set; }
 
 
 
-    public virtual Poblado Poblado { get; set; }
+    public virtual Horario_Agenda Horario_Agenda { get; set; }
 
 }
 

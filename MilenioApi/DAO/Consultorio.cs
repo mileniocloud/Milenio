@@ -22,12 +22,14 @@ public partial class Consultorio
     public Consultorio()
     {
 
-        this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
+        this.Consultorio_Especialidad = new HashSet<Consultorio_Especialidad>();
 
     }
 
 
     public System.Guid Id_Consultorio { get; set; }
+
+    public System.Guid Id_Entidad { get; set; }
 
     public string Nombre { get; set; }
 
@@ -35,15 +37,19 @@ public partial class Consultorio
 
     public bool Estado { get; set; }
 
+    public System.Guid Usuario_Create { get; set; }
+
+    public System.DateTime Fecha_Create { get; set; }
+
     public System.Guid Usuario_Update { get; set; }
 
-    public System.Guid Fecha_Update { get; set; }
+    public System.DateTime Fecha_Update { get; set; }
 
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Especialidad_Entidad> Especialidad_Entidad { get; set; }
+    public virtual ICollection<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
 
 }
 

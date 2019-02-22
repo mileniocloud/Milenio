@@ -11,5 +11,6 @@ namespace MilenioApi.Models
         public string Login { get; set; }
         public string Email { get; set; }
         public List<ComboModel> Roles = new List<ComboModel>();
+        public List<ComboModel> Entidades = new List<ComboModel>();
     }
 }

@@ -32,25 +32,45 @@ public partial class MilenioCloudEntities : DbContext
     }
 
 
+    public virtual DbSet<Actividad_Economica> Actividad_Economica { get; set; }
+
+    public virtual DbSet<Agenda_Profesional> Agenda_Profesional { get; set; }
+
     public virtual DbSet<CIE> CIE { get; set; }
 
     public virtual DbSet<Consultorio> Consultorio { get; set; }
+
+    public virtual DbSet<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
 
     public virtual DbSet<Cups> Cups { get; set; }
 
     public virtual DbSet<Departamento> Departamento { get; set; }
 
+    public virtual DbSet<Detalle_Agenda> Detalle_Agenda { get; set; }
+
     public virtual DbSet<Entidad> Entidad { get; set; }
+
+    public virtual DbSet<Entidad_Usuario> Entidad_Usuario { get; set; }
 
     public virtual DbSet<Especialidad> Especialidad { get; set; }
 
+    public virtual DbSet<Especialidad_Cup_Entidad> Especialidad_Cup_Entidad { get; set; }
+
     public virtual DbSet<Especialidad_Entidad> Especialidad_Entidad { get; set; }
+
+    public virtual DbSet<Especialidad_Profesional> Especialidad_Profesional { get; set; }
 
     public virtual DbSet<GenericError> GenericError { get; set; }
 
+    public virtual DbSet<Horario_Agenda> Horario_Agenda { get; set; }
+
     public virtual DbSet<Licencia> Licencia { get; set; }
 
+    public virtual DbSet<Medicamentos_Esenciales> Medicamentos_Esenciales { get; set; }
+
     public virtual DbSet<Municipio> Municipio { get; set; }
+
+    public virtual DbSet<Ocupacion> Ocupacion { get; set; }
 
     public virtual DbSet<Poblado> Poblado { get; set; }
 
@@ -58,11 +78,17 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Rol> Rol { get; set; }
 
+    public virtual DbSet<Rol_Usuario> Rol_Usuario { get; set; }
+
+    public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+
     public virtual DbSet<Telefono> Telefono { get; set; }
 
-    public virtual DbSet<Tipo_Vinculacion> Tipo_Vinculacion { get; set; }
+    public virtual DbSet<Tipo_Identificacion> Tipo_Identificacion { get; set; }
 
-    public virtual DbSet<TipoIdentificacion> TipoIdentificacion { get; set; }
+    public virtual DbSet<Tipo_Profesional> Tipo_Profesional { get; set; }
+
+    public virtual DbSet<Tipo_Vinculacion> Tipo_Vinculacion { get; set; }
 
     public virtual DbSet<Ubicacion> Ubicacion { get; set; }
 

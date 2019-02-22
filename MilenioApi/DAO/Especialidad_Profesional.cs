@@ -15,45 +15,43 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Poblado
+public partial class Especialidad_Profesional
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Poblado()
+    public Especialidad_Profesional()
     {
 
-        this.Ubicacion = new HashSet<Ubicacion>();
-
-        this.Usuario = new HashSet<Usuario>();
+        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
 
     }
 
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Profesional { get; set; }
 
-    public int Municipio_Id { get; set; }
+    public System.Guid Id_Especialidad { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public System.Guid Id_Entidad { get; set; }
 
-    public string Nombre { get; set; }
+    public bool Estado { get; set; }
 
-    public string Tipo { get; set; }
+    public System.Guid Usuario_Create { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public System.DateTime Fecha_Create { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public System.Guid Usuario_Update { get; set; }
+
+    public System.DateTime Fecha_Update { get; set; }
 
 
-
-    public virtual Municipio Municipio { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Ubicacion> Ubicacion { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Usuario> Usuario { get; set; }
+    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
+
+    public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
+
+    public virtual Profesional Profesional { get; set; }
 
 }
 

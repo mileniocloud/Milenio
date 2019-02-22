@@ -10,16 +10,28 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using MilenioApi.Providers;
 using MilenioApi.Models;
+using System.Web.Http;
+using Swashbuckle.Application;
 
 namespace MilenioApi
 {
     public partial class Startup
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static string PublicClientId { get; private set; }
 
         // Para obtener más información sobre cómo configurar la autenticación, visite https://go.microsoft.com/fwlink/?LinkId=301864
+        /// <summary>
+        /// configure auth
+        /// </summary>
+        /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure el contexto de base de datos y el administrador de usuarios para usar una única instancia por solicitud
@@ -46,24 +58,7 @@ namespace MilenioApi
             // Permitir que la aplicación use tokens portadores para autenticar usuarios
             app.UseOAuthBearerTokens(OAuthOptions);
 
-            // Quitar los comentarios de las siguientes líneas para habilitar el inicio de sesión con proveedores de inicio de sesión de terceros
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //    consumerKey: "",
-            //    consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
-
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
         }
     }
 }

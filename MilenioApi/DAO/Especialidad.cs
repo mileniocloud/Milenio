@@ -31,19 +31,7 @@ public partial class Especialidad
 
     public string Codigo { get; set; }
 
-    public string NombreServicio { get; set; }
-
-    public int CodigoClase { get; set; }
-
-    public string NombreClase { get; set; }
-
-    public Nullable<int> CodigoSubclase { get; set; }
-
-    public string NombreSubclase { get; set; }
-
-    public Nullable<int> CodigoSubclase2 { get; set; }
-
-    public string NombreSubclase2 { get; set; }
+    public string Nombre { get; set; }
 
 
 

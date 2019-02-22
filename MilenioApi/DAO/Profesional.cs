@@ -22,74 +22,42 @@ public partial class Profesional
     public Profesional()
     {
 
-        this.Telefono = new HashSet<Telefono>();
+        this.Especialidad_Profesional = new HashSet<Especialidad_Profesional>();
 
-        this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
+        this.Telefono = new HashSet<Telefono>();
 
     }
 
 
     public System.Guid Id_Profesional { get; set; }
 
-    public Nullable<System.Guid> Id_Usuario { get; set; }
+    public System.Guid Id_Usuario { get; set; }
 
-    public System.Guid Id_Entidad { get; set; }
-
-    public System.Guid TipoIdentificacion_Id { get; set; }
-
-    public int NumeroIdentificacion { get; set; }
-
-    public string Nombres { get; set; }
-
-    public string Primer_Apellido { get; set; }
-
-    public string Segundo_Apellido { get; set; }
+    public System.Guid Id_Tipo_Profesional { get; set; }
 
     public string Registro_Profesional { get; set; }
 
-    public string Sexo { get; set; }
+    public System.DateTime Created_At { get; set; }
 
-    public System.DateTime FNacimiento { get; set; }
-
-    public string Foto { get; set; }
-
-    public string Estado_Civil { get; set; }
-
-    public string TipoSangre { get; set; }
-
-    public System.Guid Ubicacion_Id { get; set; }
-
-    public System.DateTime Fecha_Contratacion { get; set; }
-
-    public string Observaciones { get; set; }
-
-    public System.Guid Id_Tipo_Vinculacion { get; set; }
-
-    public bool Estado { get; set; }
-
-    public Nullable<System.DateTime> Created_At { get; set; }
-
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public System.DateTime Updated_At { get; set; }
 
     public Nullable<System.Guid> Usuario_Update { get; set; }
 
+    public Nullable<System.Guid> Usuario_Create { get; set; }
 
 
-    public virtual Entidad Entidad { get; set; }
 
-    public virtual Tipo_Vinculacion Tipo_Vinculacion { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual TipoIdentificacion TipoIdentificacion { get; set; }
+    public virtual ICollection<Especialidad_Profesional> Especialidad_Profesional { get; set; }
+
+    public virtual Tipo_Profesional Tipo_Profesional { get; set; }
 
     public virtual Usuario Usuario { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Telefono> Telefono { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Especialidad_Entidad> Especialidad_Entidad { get; set; }
 
 }
 

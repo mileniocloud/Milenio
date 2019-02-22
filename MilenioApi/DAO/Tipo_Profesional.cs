@@ -15,45 +15,29 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Poblado
+public partial class Tipo_Profesional
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Poblado()
+    public Tipo_Profesional()
     {
 
-        this.Ubicacion = new HashSet<Ubicacion>();
-
-        this.Usuario = new HashSet<Usuario>();
+        this.Profesional = new HashSet<Profesional>();
 
     }
 
 
-    public System.Guid Codigo_Id { get; set; }
-
-    public int Municipio_Id { get; set; }
-
-    public int Poblado_Id { get; set; }
+    public System.Guid Id_Tipo_Profesional { get; set; }
 
     public string Nombre { get; set; }
 
-    public string Tipo { get; set; }
-
-    public Nullable<System.DateTime> Created_At { get; set; }
-
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public bool Presta_Servicio { get; set; }
 
 
-
-    public virtual Municipio Municipio { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Ubicacion> Ubicacion { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Usuario> Usuario { get; set; }
+    public virtual ICollection<Profesional> Profesional { get; set; }
 
 }
 

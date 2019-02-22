@@ -15,24 +15,30 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Ubicacion
+public partial class Especialidad_Cup_Entidad
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Especialidad { get; set; }
 
-    public int Poblado_Id { get; set; }
+    public System.Guid Id_Cups { get; set; }
 
-    public string Direccion { get; set; }
+    public System.Guid Id_Entidad { get; set; }
 
-    public Nullable<System.DateTime> Created_At { get; set; }
+    public bool Estado { get; set; }
 
-    public Nullable<System.DateTime> Updated_At { get; set; }
+    public System.Guid Usuario_Create { get; set; }
 
-    public Nullable<System.Guid> Usuario_Update { get; set; }
+    public System.DateTime Fecha_Create { get; set; }
+
+    public System.Guid Usuario_Update { get; set; }
+
+    public System.DateTime Fecha_Update { get; set; }
 
 
 
-    public virtual Poblado Poblado { get; set; }
+    public virtual Cups Cups { get; set; }
+
+    public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
 
 }
 

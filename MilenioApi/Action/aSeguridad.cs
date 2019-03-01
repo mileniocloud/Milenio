@@ -36,20 +36,34 @@ namespace MilenioApi.Action
 
                     if (p != null)
                     {
-                        op.Id_User = p.Id_Usuario;
-                        op.Login = p.Login;
-                        op.Email = p.Email;
+                        //validamos si tiene una session abierta
+                        if (!p.isloged)
+                        {
+                            op.Id_User = p.Id_Usuario;
+                            op.Login = p.Login;
+                            op.Email = p.Email;
 
-                        List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true)
-                                                .Select(t => new ComboModel
-                                                {
-                                                    Id = t.Id_Entidad,
-                                                    Value = t.Entidad.Nombre
-                                                }).ToList());
+                            List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true)
+                                                    .Select(t => new ComboModel
+                                                    {
+                                                        Id = t.Id_Entidad,
+                                                        Value = t.Entidad.Nombre
+                                                    }).ToList());
 
-                        op.Entidades = entidades.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
-                        op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null);
+                            op.Entidades = entidades.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
+                            op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null);
+                        }
+                        else
+                        {
+                            //si entra aqui es porque ya tiene una session abierta
+                            Basic b = new Basic();
+                            autil.MensajeRetorno(ref b, 31, string.Empty, null);
 
+                            op.Response_Code = b.Response_Code;
+                            op.custom = b.custom;
+                            op.Message = b.Message;
+                            return op;
+                        }
                     }
                     else
                     {
@@ -57,7 +71,7 @@ namespace MilenioApi.Action
                         Basic b = new Basic();
                         autil.MensajeRetorno(ref b, 8, string.Empty, null);
 
-                        op.Codigo = b.Codigo;
+                        op.Response_Code = b.Response_Code;
                         op.custom = b.custom;
                         op.Message = b.Message;
                         return op;
@@ -69,7 +83,7 @@ namespace MilenioApi.Action
                     Basic b = new Basic();
                     autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
 
-                    op.Codigo = b.Codigo;
+                    op.Response_Code = b.Response_Code;
                     op.custom = b.custom;
                     op.Message = b.Message;
 
@@ -80,6 +94,43 @@ namespace MilenioApi.Action
             }
         }
 
+        public Basic LogOff(HttpRequest httpRequest)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                Basic b = new Basic();
+                try
+                {
+                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    if (cp != null)
+                    {
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                        Usuario us = ent.Usuario.Where(u => u.Id_Usuario == usuario).SingleOrDefault();
+
+                        if (us != null)
+                        {
+                            us.isloged = false;
+                            ent.SaveChanges();
+                            b = autil.MensajeRetorno(ref b, 30, string.Empty, null);
+                            return b;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //error general
+
+                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
+                    b.Response_Code = b.Response_Code;
+                    b.custom = b.custom;
+                    b.Message = b.Message;
+
+                    return b;
+                }
+
+                return b;
+            }
+        }
         public LoginModel LoginEntidad(HttpRequest httpRequest)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -120,6 +171,11 @@ namespace MilenioApi.Action
                             op.Roles = roles.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
                             op.Entidades = entidades.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
                             op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, entidad);
+
+                            //aqui seteamos que el usuario ya esta logueado
+                            p.isloged = true;
+                            ent.SaveChanges();
+
                         }
                         else
                         {
@@ -127,7 +183,7 @@ namespace MilenioApi.Action
                             Basic b = new Basic();
                             autil.MensajeRetorno(ref b, 13, string.Empty, null);
 
-                            op.Codigo = b.Codigo;
+                            op.Response_Code = b.Response_Code;
                             op.custom = b.custom;
                             op.Message = b.Message;
                             return op;
@@ -139,7 +195,7 @@ namespace MilenioApi.Action
                         Basic b = new Basic();
                         autil.MensajeRetorno(ref b, 8, string.Empty, null);
 
-                        op.Codigo = b.Codigo;
+                        op.Response_Code = b.Response_Code;
                         op.custom = b.custom;
                         op.Message = b.Message;
                         return op;
@@ -151,7 +207,7 @@ namespace MilenioApi.Action
                     Basic b = new Basic();
                     autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
 
-                    op.Codigo = b.Codigo;
+                    op.Response_Code = b.Response_Code;
                     op.custom = b.custom;
                     op.Message = b.Message;
 
@@ -405,7 +461,7 @@ namespace MilenioApi.Action
                         pasos = pasos + "-8-";
                         DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
                         string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
-                        Guid tipo_vinculacion = Guid.Parse(httpRequest.Form["tipovinculacion"]);
+                        string tipo_vinculacion = Convert.ToString(httpRequest.Form["tipovinculacion"]);
                         string direccion = Convert.ToString(httpRequest.Form["direccion"]);
                         string telefono = Convert.ToString(httpRequest.Form["telefono"]);
                         pasos = pasos + "-9-";
@@ -424,23 +480,20 @@ namespace MilenioApi.Action
                         pasos = pasos + "-11-";
                         password = autil.Sha(password);
                         pasos = pasos + "-12-";
-                        List<Usuario> lus = ent.Usuario.ToList();
 
-                        int lexist = lus.Where(t => t.Login == login).Count();
-
-                        if (lexist == 0)
+                        //consulta login
+                        if (ent.Usuario.Where(u => u.Login == login).Count() == 0)
                         {
-                            int idexist = lus.Where(t => t.Numero_Identificacion == identificacion).Count();
-
-                            if (idexist == 0)
+                            //consulta por cedula
+                            if (ent.Usuario.Where(u => u.Numero_Identificacion == identificacion).Count() == 0)
                             {
-                                int emexist = lus.Where(t => t.Email == email).Count();
-
-                                if (emexist == 0)
+                                //consulta por email
+                                if (ent.Usuario.Where(u => u.Email == email).Count() == 0)
                                 {
+                                    //consulta por registro profesional
                                     int regxist = 0;
                                     if (!string.IsNullOrEmpty(registroprofesional))
-                                        regxist = ent.Profesional.Where(r => r.Registro_Profesional == registroprofesional).Count();
+                                        regxist = ent.Usuario.Where(r => r.Registro_Profesional == registroprofesional).Count();
 
                                     if (regxist == 0)
                                     {
@@ -462,9 +515,11 @@ namespace MilenioApi.Action
                                         us.Estado_Civil = estadocivil;
                                         us.TipoSangre = tipo_sangre;
                                         us.Fecha_Contratacion = fcontratacion;
-                                        us.Id_Tipo_Vinculacion = tipo_vinculacion;
+                                        us.Tipo_Vinculacion = tipo_vinculacion;
                                         us.Observaciones = observaciones;
                                         us.Presta_Servicio = presta_servicio;
+                                        us.Id_Tipo_Profesional = tipoprofesional.Value;
+                                        us.Registro_Profesional = registroprofesional;
 
                                         us.Acepta_ABEAS = abeas;
                                         us.Foto_ABEAS = fotoabeas;
@@ -491,21 +546,31 @@ namespace MilenioApi.Action
                                         us.Usuario_Update = usuario;
                                         ent.Usuario.Add(us);
                                         pasos = pasos + "-15-";
-                                        if (tipoprofesional != null)
+
+                                        ///seccion para obtener los roles que le estan agregando al usuario
+                                        string roles;
+                                        if (!string.IsNullOrEmpty(httpRequest.Form["roles"]))
                                         {
-                                            pasos = pasos + "-16-";
-                                            Profesional pf = new Profesional();
-                                            pf.Id_Profesional = Guid.NewGuid();
-                                            pf.Id_Usuario = id_usuario;
-                                            pf.Id_Tipo_Profesional = tipoprofesional.Value;
-                                            pf.Registro_Profesional = registroprofesional;
-                                            pf.Created_At = DateTime.Now;
-                                            pf.Updated_At = DateTime.Now;
-                                            pf.Usuario_Create = usuario;
-                                            pf.Usuario_Update = usuario;
-                                            ent.Profesional.Add(pf);
+                                            roles = Convert.ToString(httpRequest.Form["roles"]);
+                                            string[] rolesArray = roles.Split(',');
+                                            List<Rol_Usuario> lru = new List<Rol_Usuario>();
+                                            foreach (var r in rolesArray)
+                                            {
+                                                //agregando la lista de usuarios
+                                                Rol_Usuario ru = new Rol_Usuario();
+                                                ru.Id_Entidad = entidad;
+                                                ru.Id_Usuario = id_usuario;
+                                                ru.Id_Rol = Guid.Parse(r);
+                                                lru.Add(ru);
+                                            }
+
+                                            if (lru.Count > 0)
+                                            {
+                                                //si hay roles que agregar, los agrega
+                                                ent.Rol_Usuario.AddRange(lru);
+                                            }
                                         }
-                                        pasos = pasos + "-17-";
+
                                         ///salvando todos los cambios
                                         ent.SaveChanges();
                                         //se genera el codigo del mensaje de retorno exitoso
@@ -615,6 +680,7 @@ namespace MilenioApi.Action
         public Basic EditUser(HttpRequest httpRequest)
         {
             Basic ret = new Basic();
+            string pasos = "0";
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
@@ -622,26 +688,34 @@ namespace MilenioApi.Action
                     cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
                     if (cp != null)
                     {
+                        pasos = pasos + "-1-";
                         Guid entidad;
                         if (!string.IsNullOrEmpty(httpRequest.Form["entidadid"]))
                             entidad = Guid.Parse(httpRequest.Form["entidadid"]);
                         else
                             entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-
+                        pasos = pasos + "-2-";
                         Guid? usuario = null;
                         if (!string.IsNullOrEmpty(httpRequest.Form["usuarioid"]))
                             usuario = Guid.Parse(httpRequest.Form["usuarioid"]);
                         else
                             usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
+                        pasos = pasos + "-3-";
                         Guid id_user = Guid.Parse(httpRequest.Form["iduser"]);
+                        pasos = pasos + "-31-";
                         string nombre = Convert.ToString(httpRequest.Form["nombre"]);
+                        pasos = pasos + "-32-";
                         string primer_apellido = Convert.ToString(httpRequest.Form["primerapellido"]);
+                        pasos = pasos + "-33-";
                         string segundo_apellido = Convert.ToString(httpRequest.Form["segundoapellido"]);
+                        pasos = pasos + "-34-";
                         string sexo = Convert.ToString(httpRequest.Form["sexo"]);
+                        pasos = pasos + "-35-";
                         DateTime fnacimiento = Convert.ToDateTime(httpRequest.Form["fechanacimiento"]);
+                        pasos = pasos + "-36-";
                         bool presta_servicio = Convert.ToBoolean(int.Parse(httpRequest.Form["prestaservicio"]));
-
+                        pasos = pasos + "-4-";
                         ///FOTO
                         ///
                         String foto = string.Empty;
@@ -660,25 +734,32 @@ namespace MilenioApi.Action
                             Byte[] Content = new BinaryReader(_fotoabeas[1].InputStream).ReadBytes(_fotoabeas[1].ContentLength);
                             fotoabeas = Convert.ToBase64String(Content);
                         }
-
+                        pasos = pasos + "-5-";
                         string estadocivil = Convert.ToString(httpRequest.Form["estadocivil"]);
+                        pasos = pasos + "-51-";
                         string tipo_sangre = Convert.ToString(httpRequest.Form["tiposangre"]);
+                        pasos = pasos + "-52-";
                         int? poblado_id = null;
                         if (!string.IsNullOrEmpty(httpRequest.Form["barrio"]))
                             poblado_id = int.Parse(httpRequest.Form["barrio"]);
-                        DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
-                        string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
-                        Guid tipo_vinculacion = Guid.Parse(httpRequest.Form["tipovinculacion"]);
-                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
 
+                        pasos = pasos + "-53-";
+                        DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
+                        pasos = pasos + "-54-";
+                        string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
+                        pasos = pasos + "-55-";
+                        string tipo_vinculacion = Convert.ToString(httpRequest.Form["tipovinculacion"]);
+                        pasos = pasos + "-56-";
+                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
+                        pasos = pasos + "-6-";
                         string login = Convert.ToString(httpRequest.Form["user"]);
                         string email = Convert.ToString(httpRequest.Form["email"]);
-
+                        pasos = pasos + "-7-";
                         bool abeas = Convert.ToBoolean(int.Parse(httpRequest.Form["abeas"]));
 
                         Guid? tipoprofesional = Guid.Parse(httpRequest.Form["tipoprofesional"]);
                         string registroprofesional = Convert.ToString(httpRequest.Form["registroprofesional"]);
-
+                        pasos = pasos + "-8-";
                         List<Usuario> lus = ent.Usuario.ToList();
 
                         int lexist = lus.Where(t => t.Login == login && t.Id_Usuario != id_user).Count();
@@ -691,10 +772,11 @@ namespace MilenioApi.Action
                             {
                                 int regxist = 0;
                                 if (!string.IsNullOrEmpty(registroprofesional))
-                                    regxist = ent.Profesional.Where(r => r.Registro_Profesional == registroprofesional && r.Usuario.Id_Usuario != id_user).Count();
+                                    regxist = lus.Where(r => r.Registro_Profesional == registroprofesional && r.Id_Usuario != id_user).Count();
 
                                 if (regxist == 0)
                                 {
+                                    pasos = pasos + "-9-";
                                     Guid id_usuario = Guid.NewGuid();
 
                                     Usuario us = ent.Usuario.Where(u => u.Id_Usuario == id_user).SingleOrDefault();
@@ -709,12 +791,14 @@ namespace MilenioApi.Action
                                     us.Estado_Civil = estadocivil;
                                     us.TipoSangre = tipo_sangre;
                                     us.Fecha_Contratacion = fcontratacion;
-                                    us.Id_Tipo_Vinculacion = tipo_vinculacion;
+                                    us.Tipo_Vinculacion = tipo_vinculacion;
                                     us.Observaciones = observaciones;
 
                                     us.Acepta_ABEAS = abeas;
                                     us.Foto_ABEAS = fotoabeas;
                                     us.Presta_Servicio = presta_servicio;
+                                    us.Id_Tipo_Profesional = tipoprofesional.Value;
+                                    us.Registro_Profesional = registroprofesional;
 
                                     us.Login = login;
                                     us.Email = email;
@@ -723,17 +807,9 @@ namespace MilenioApi.Action
                                     us.Usuario_Create = usuario;
                                     us.Fecha_Update = DateTime.Now;
                                     us.Usuario_Update = usuario;
-
-                                    if (tipoprofesional != null)
-                                    {
-                                        Profesional pf = ent.Profesional.Where(p => p.Id_Usuario == us.Id_Usuario).SingleOrDefault();
-                                        pf.Id_Tipo_Profesional = tipoprofesional.Value;
-                                        pf.Registro_Profesional = registroprofesional;
-                                        pf.Updated_At = DateTime.Now;
-                                        pf.Usuario_Update = usuario;
-                                    }
-
+                                    pasos = pasos + "-10-";
                                     ent.SaveChanges();
+                                    pasos = pasos + "-11-";
                                     //se genera el codigo del mensaje de retorno exitoso
                                     ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
                                 }
@@ -766,7 +842,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message + " " + ex.InnerException + "/" + pasos, null);
                     return ret;
                 }
             }
@@ -832,9 +908,9 @@ namespace MilenioApi.Action
         /// </summary>
         /// <param name="httpRequest"></param>
         /// <returns></returns>
-        public List<UsuarioModel> GetUsuariosEdit(HttpRequest httpRequest)
+        public UsuarioModel GetUsuariosEdit(HttpRequest httpRequest)
         {
-            List<UsuarioModel> um = new List<UsuarioModel>();
+            UsuarioModel um = new UsuarioModel();
             try
             {
                 cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
@@ -845,33 +921,52 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid idusuario = Guid.Parse(httpRequest.Form["idusuario"]);
 
-                        List<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad && t.Id_Usuario == idusuario)
-                                           .Select(u => u.Usuario).ToList();
+                        Usuario us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad && t.Id_Usuario == idusuario)
+                                           .Select(u => u.Usuario).SingleOrDefault();
 
-                        foreach (var i in us)
+                        if (us != null)
                         {
-                            UsuarioModel usm = new UsuarioModel();
-                            Copier.CopyPropertiesTo(i, usm);
-                            usm.Id_Municipio = i.Poblado.Municipio_Id;
-                            usm.Id_Departamento = i.Poblado.Municipio.Departamento.Dane_Id;
-                            if (i.Presta_Servicio)
-                                usm.Presta_Servicio_Int = 1;
+                            Copier.CopyPropertiesTo(us, um);
+                            um.Id_Municipio = us.Poblado.Municipio_Id;
+                            um.Id_Departamento = us.Poblado.Municipio.Departamento.Dane_Id;
+
+                            foreach (var u in ent.Rol_Usuario.Where(r => r.Id_Entidad == entidad && r.Id_Usuario == idusuario))
+                            {
+                                ComboModel cm = new ComboModel();
+                                cm.id = u.Id_Rol;
+                                cm.Value = u.Rol.Nombre;
+                                um.Roles.Add(cm);
+                            }
+
+                            if (us.Entidad_Usuario.Where(t => t.Id_Usuario == us.Id_Usuario && t.Id_Entidad == entidad).Select(t => t.Estado).SingleOrDefault())
+                                um.Estado = 1;
                             else
-                                usm.Presta_Servicio_Int = 0;
+                                um.Estado = 0;
 
-                            if (i.Acepta_ABEAS)
-                                usm.Acepta_ABEAS_Int = 1;
+                            if (us.Presta_Servicio)
+                                um.Presta_Servicio_Int = 1;
                             else
-                                usm.Acepta_ABEAS_Int = 0;
+                                um.Presta_Servicio_Int = 0;
 
-                            um.Add(usm);
-                        }                        
+                            if (us.Acepta_ABEAS)
+                                um.Acepta_ABEAS_Int = 1;
+                            else
+                                um.Acepta_ABEAS_Int = 0;
+                        }
 
-                        return um.OrderBy(o=> o.Nombres).ToList();
+                        return um;
                     }
                 }
                 else
+                {
+                    //TOKEN INVALIDO
+                    UsuarioModel u = new UsuarioModel();
+                    Basic rep = new Basic();
+                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
+                    u.Response_Code = rep.Response_Code;
+                    u.Message = rep.Message;
                     return um;
+                }
 
             }
             catch (Exception ex)
@@ -880,8 +975,9 @@ namespace MilenioApi.Action
             }
         }
 
-        public List<UsuarioModel> GetUsuarios(HttpRequest httpRequest)
+        public Return GetUsuarios(HttpRequest httpRequest)
         {
+            Return ret = new Return();
             List<UsuarioModel> um = new List<UsuarioModel>();
             try
             {
@@ -941,12 +1037,19 @@ namespace MilenioApi.Action
                             us = us.Where(c => c.Email.Contains(email));
                         }
 
-                        int pageSize = Convert.ToInt32(httpRequest.Form["pageSize"]);
-                        int startingPageIndex = Convert.ToInt32(httpRequest.Form["startingPageIndex"]);
+                        ///consulta por fecha contratacion
+                        if (!string.IsNullOrEmpty(httpRequest.Form["fechacontratacion"]))
+                        {
+                            DateTime fecha = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
+                            us = us.Where(c => c.Fecha_Contratacion == fecha);
+                        }
+
+                        //int pageSize = Convert.ToInt32(httpRequest.Form["pageSize"]);
+                        //int startingPageIndex = Convert.ToInt32(httpRequest.Form["startingPageIndex"]);
 
 
                         //IQueryable<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad).Select(u => u.Usuario);
-                        um = us.Select(u => new UsuarioModel                        
+                        um = us.Select(u => new UsuarioModel
                         {
                             Id_Usuario = u.Id_Usuario,
                             Nombres = u.Nombres,
@@ -955,13 +1058,27 @@ namespace MilenioApi.Action
                             Login = u.Login,
                             Fecha_Contratacion = u.Fecha_Contratacion,
                             Email = u.Email
-                        }).OrderBy(o=> o.Nombres).Skip(startingPageIndex * pageSize).Take(pageSize).ToList();
+                        }).ToList();
+                        //.OrderBy(o=> o.Nombres).Skip(startingPageIndex * pageSize).Take(pageSize).ToList();
 
-                        return um;
+                        ret.count = um.Count();
+                        ret.listresponse.AddRange(um);
+                        return ret;
                     }
                 }
                 else
-                    return um;
+                {
+                    //TOKEN INVALIDO
+                    //UsuarioModel u = new UsuarioModel();
+                    Basic rep = new Basic();
+                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
+                    Copier.CopyPropertiesTo(rep, ret);
+                    ret.count = 0;
+                    //u.Response_Code = rep.Response_Code;
+                    //u.Message = rep.Message;
+                    //um.Add(u);
+                    return ret;
+                }
 
             }
             catch (Exception ex)
@@ -1043,19 +1160,19 @@ namespace MilenioApi.Action
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        Guid idprofesional = Guid.Parse(httpRequest.Form["idprofesional"]);
+                        Guid idusuario = Guid.Parse(httpRequest.Form["idusuario"]);
                         Guid idespecialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
 
                         Especialidad_Profesional ep = ent.Especialidad_Profesional
                                                       .Where(e => e.Id_Entidad == entidad
                                                       && e.Id_Especialidad == idespecialidad
-                                                      && e.Id_Profesional == idprofesional).SingleOrDefault();
+                                                      && e.Id_Usuario == idusuario).SingleOrDefault();
 
                         if (ep == null)
                         {
                             ep = new Especialidad_Profesional();
                             ep.Id_Entidad = entidad;
-                            ep.Id_Profesional = idprofesional;
+                            ep.Id_Usuario = idusuario;
                             ep.Id_Especialidad = idespecialidad;
                             ep.Estado = true;
                             ep.Fecha_Create = DateTime.Now;
@@ -1102,19 +1219,19 @@ namespace MilenioApi.Action
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        Guid idprofesional = Guid.Parse(httpRequest.Form["idprofesional"]);
+                        Guid idusuario = Guid.Parse(httpRequest.Form["idusuario"]);
                         Guid idespecialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
                         bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
 
                         Especialidad_Profesional ep = ent.Especialidad_Profesional
                                                       .Where(e => e.Id_Entidad == entidad
                                                       && e.Id_Especialidad == idespecialidad
-                                                      && e.Id_Profesional == idprofesional).SingleOrDefault();
+                                                      && e.Id_Usuario == idusuario).SingleOrDefault();
 
                         if (ep != null)
                         {
                             ep.Id_Entidad = entidad;
-                            ep.Id_Profesional = idprofesional;
+                            ep.Id_Usuario = idusuario;
                             ep.Id_Especialidad = idespecialidad;
                             ep.Estado = estado;
                             ep.Fecha_Update = DateTime.Now;

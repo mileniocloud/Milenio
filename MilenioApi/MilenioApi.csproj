@@ -385,13 +385,13 @@
     <Compile Include="DAO\Poblado.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Profesional.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAO\Rol.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Rol_Usuario.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\Rol_Vista_Entidad.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\sysdiagrams.cs">
@@ -413,6 +413,9 @@
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAO\Usuario.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAO\Vistas.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />

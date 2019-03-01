@@ -11,7 +11,7 @@ namespace MilenioApi.Models
         public int Nit { get; set; }
         public string Nombre { get; set; }
         public string Organizacion { get; set; }
-        public Guid Id_Poblado { get; set; }
+        public int Poblado_Id { get; set; }
         public string Direccion { get; set; }
         public string Email { get; set; }
         public string CodigoEntidad { get; set; }
@@ -20,6 +20,13 @@ namespace MilenioApi.Models
         public string Foto { get; set; }
         public string Hora_Desde { get; set; }
         public string Hora_Hasta { get; set; }
+
+
+        public int Id_Municipio { get; set; }
+        public int Id_Departamento { get; set; }
+
+        public string Response_Code { get; set; }
+        public string Message { get; set; }
 
     }
 }

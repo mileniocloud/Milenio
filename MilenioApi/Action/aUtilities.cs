@@ -18,8 +18,8 @@ namespace MilenioApi.Action
                                    where g.codigo_id == idmensje
                                    select g).SingleOrDefault();
 
-                ret.Codigo = ge.Codigo;
-                ret.Message = ge.Message + "-" + custom;
+                ret.Response_Code = ge.Codigo;
+                ret.Message = ge.Message + " " + custom;
                 ret.custom = custom;
                 ret.id = id;
             }

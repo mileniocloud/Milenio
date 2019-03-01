@@ -36,91 +36,102 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-
-                    int Nit = Convert.ToInt32(httpRequest.Form["Nit"]);
-
-                    //validamos que ese nit ya exista
-                    int vNit = ent.Entidad.Where(t => t.Nit == Nit).Count();
-                    if (vNit == 0)
+                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    if (cp != null)
                     {
-                        ///FOTO
-                        String file = string.Empty;
-                        if (httpRequest.Files.Count > 0)
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        int Nit = Convert.ToInt32(httpRequest.Form["Nit"]);
+
+                        //validamos que ese nit ya exista
+                        int vNit = ent.Entidad.Where(t => t.Nit == Nit).Count();
+                        if (vNit == 0)
                         {
-                            var foto = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
-                            file = Convert.ToBase64String(Content);
+                            ///FOTO
+                            String file = string.Empty;
+                            if (httpRequest.Files.Count > 0)
+                            {
+                                var foto = httpRequest.Files;
+                                Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
+                                file = Convert.ToBase64String(Content);
+                            }
+
+                            string Nombre = Convert.ToString(httpRequest.Form["nombre"]);
+                            string organizacion = Convert.ToString(httpRequest.Form["organizacion"]);
+                            int id_Poblado = Convert.ToInt32(httpRequest.Form["idpoblado"]);
+                            string direccion = Convert.ToString(httpRequest.Form["direccion"]);
+                            string email = Convert.ToString(httpRequest.Form["email"]);
+                            string codentidad = Convert.ToString(httpRequest.Form["codentidad"]);
+                            bool atencionprioritaria = Convert.ToBoolean(int.Parse(httpRequest.Form["atencionprioritaria"]));
+                            bool contribuyente = Convert.ToBoolean(int.Parse(httpRequest.Form["contribuyente"]));
+                            string horadesde = Convert.ToString(httpRequest.Form["horadesde"]);
+                            string horahasta = Convert.ToString(httpRequest.Form["horahasta"]);
+
+                            Entidad et = new Entidad();
+                            Guid identidad = Guid.NewGuid();
+                            et.Id_Entidad = identidad;
+                            et.Nit = Nit;
+                            et.Nombre = Nombre;
+                            et.Organizacion = organizacion;
+                            et.Poblado_Id = id_Poblado;
+                            et.Direccion = direccion;
+                            et.Email = email;
+                            et.CodigoEntidad = codentidad;
+                            et.Atencion_Prioritaria = atencionprioritaria;
+                            et.Contribuyente = contribuyente;
+                            et.Hora_Desde = horadesde;
+                            et.Hora_Hasta = horahasta;
+                            et.Fecha_Create = DateTime.Now;
+                            et.Fecha_Update = DateTime.Now;
+                            et.Foto = file;
+
+                            ent.Entidad.Add(et);
+                            //se envia a crear todo
+
+                            //se consulta en el webconfig el usuario SA y el rol SA
+                            Guid sauser = Guid.Parse(ConfigurationManager.AppSettings["idsuperuser"]);
+                            Guid sarol = Guid.Parse(ConfigurationManager.AppSettings["idrolsuperuser"]);
+
+                            //se agrega el usuario SA a la entidad
+                            Entidad_Usuario eu = new Entidad_Usuario();
+                            eu.Id_Entidad = identidad;
+                            eu.Id_Usuario = sauser;
+                            eu.Estado = true;
+                            eu.Usuario_Create = usuario;
+                            eu.Usuario_Update = usuario;
+                            eu.Fecha_Create = DateTime.Now;
+                            eu.Fecha_Update = DateTime.Now;
+                            ent.Entidad_Usuario.Add(eu);
+
+                            ///se agrega el rol SA a ese usuario para esa entidad
+                            Rol_Usuario ru = new Rol_Usuario();
+                            ru.Id_Rol = sarol;
+                            ru.Id_Usuario = sauser;
+                            ru.Id_Entidad = identidad;
+                            ru.Estado = true;
+                            ru.Usuario_Create = usuario;
+                            ru.Usuario_Update = usuario;
+                            ru.Fecha_Create = DateTime.Now;
+                            ru.Fecha_Update = DateTime.Now;
+                            ent.Rol_Usuario.Add(ru);
+
+                            //se guarda todo
+                            ent.SaveChanges();
+                            //se genera el codigo del mensaje de retorno exitoso
+                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                        }
+                        else
+                        {
+                            //Nit EXISTE
+                            ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
                         }
 
-                        string Nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        string organizacion = Convert.ToString(httpRequest.Form["organizacion"]);
-                        Guid id_Poblado = Guid.Parse(httpRequest.Form["idpoblado"]);
-                        string direccion = Convert.ToString(httpRequest.Form["direccion"]);
-                        string email = Convert.ToString(httpRequest.Form["email"]);
-                        string codentidad = Convert.ToString(httpRequest.Form["codentidad"]);
-                        bool atencionprioritaria = Convert.ToBoolean(int.Parse(httpRequest.Form["atencionprioritaria"]));
-                        bool contribuyente = Convert.ToBoolean(int.Parse(httpRequest.Form["contribuyente"]));
-                        string horadesde = Convert.ToString(httpRequest.Form["horadesde"]);
-                        string horahasta = Convert.ToString(httpRequest.Form["horahasta"]);
-
-                        Entidad et = new Entidad();
-                        Guid identidad = Guid.NewGuid();
-                        et.Id_Entidad = identidad;
-                        et.Nit = Nit;
-                        et.Nombre = Nombre;
-                        et.Organizacion = organizacion;
-                        et.Id_Poblado = id_Poblado;
-                        et.Direccion = direccion;
-                        et.Email = email;
-                        et.CodigoEntidad = codentidad;
-                        et.Atencion_Prioritaria = atencionprioritaria;
-                        et.Contribuyente = contribuyente;
-                        et.Hora_Desde = horadesde;
-                        et.Hora_Hasta = horahasta;
-                        et.Fecha_Create = DateTime.Now;
-                        et.Fecha_Update = DateTime.Now;
-                        et.Foto = file;
-
-                        ent.Entidad.Add(et);
-                        //se envia a crear todo
-
-                        //se consulta en el webconfig el usuario SA y el rol SA
-                        Guid sauser = Guid.Parse(ConfigurationManager.AppSettings["idsuperuser"]);
-                        Guid sarol = Guid.Parse(ConfigurationManager.AppSettings["idrolsuperuser"]);
-
-                        //se agrega el usuario SA a la entidad
-                        Entidad_Usuario eu = new Entidad_Usuario();
-                        eu.Id_Entidad = identidad;
-                        eu.Id_Usuario = sauser;
-                        eu.Estado = true;
-                        eu.Usuario_Create = usuario;
-                        eu.Usuario_Update = usuario;
-                        eu.Fecha_Create = DateTime.Now;
-                        eu.Fecha_Update = DateTime.Now;
-                        ent.Entidad_Usuario.Add(eu);
-
-                        ///se agrega el rol SA a ese usuario para esa entidad
-                        Rol_Usuario ru = new Rol_Usuario();
-                        ru.Id_Rol = sarol;
-                        ru.Id_Usuario = sauser;
-                        ru.Id_Entidad = identidad;
-                        ru.Estado = true;
-                        ru.Usuario_Create = usuario;
-                        ru.Usuario_Update = usuario;
-                        ru.Fecha_Create = DateTime.Now;
-                        ru.Fecha_Update = DateTime.Now;
-                        ent.Rol_Usuario.Add(ru);
-
-                        //se guarda todo
-                        ent.SaveChanges();
-                        //se genera el codigo del mensaje de retorno exitoso
-                        ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
                     }
                     else
                     {
-                        //Nit EXISTE
-                        ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
+                        //token invalido
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+                        return ret;
                     }
                 }
                 return ret;
@@ -145,59 +156,68 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-
-                    int Nit = Convert.ToInt32(httpRequest.Form["Nit"]);
-                    Guid identidad = Guid.Parse(httpRequest.Form["identidad"]);
-
-                    //validamos que ese nit ya exista
-                    int vNit = ent.Entidad.Where(t => t.Nit == Nit && t.Id_Entidad != identidad).Count();
-                    if (vNit == 0)
+                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    if (cp != null)
                     {
-                        ///FOTO
-                        String file = string.Empty;
-                        if (httpRequest.Files.Count > 0)
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        int Nit = Convert.ToInt32(httpRequest.Form["Nit"]);
+                        Guid identidad = Guid.Parse(httpRequest.Form["identidad"]);
+
+                        //validamos que ese nit ya exista
+                        int vNit = ent.Entidad.Where(t => t.Nit == Nit && t.Id_Entidad != identidad).Count();
+                        if (vNit == 0)
                         {
-                            var foto = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
-                            file = Convert.ToBase64String(Content);
+                            string Nombre = Convert.ToString(httpRequest.Form["nombre"]);
+                            string organizacion = Convert.ToString(httpRequest.Form["organizacion"]);
+                            int id_Poblado = Convert.ToInt32(httpRequest.Form["idpoblado"]);
+                            string direccion = Convert.ToString(httpRequest.Form["direccion"]);
+                            string email = Convert.ToString(httpRequest.Form["email"]);
+                            string codentidad = Convert.ToString(httpRequest.Form["codentidad"]);
+                            bool atencionprioritaria = Convert.ToBoolean(int.Parse(httpRequest.Form["atencionprioritaria"]));
+                            bool contribuyente = Convert.ToBoolean(int.Parse(httpRequest.Form["contribuyente"]));
+                            string horadesde = Convert.ToString(httpRequest.Form["horadesde"]);
+                            string horahasta = Convert.ToString(httpRequest.Form["horahasta"]);
+
+                            Entidad et = ent.Entidad.Where(e => e.Id_Entidad == identidad).SingleOrDefault();
+                            et.Nit = Nit;
+                            et.Nombre = Nombre;
+                            et.Organizacion = organizacion;
+                            et.Poblado_Id = id_Poblado;
+                            et.Direccion = direccion;
+                            et.Email = email;
+                            et.CodigoEntidad = codentidad;
+                            et.Atencion_Prioritaria = atencionprioritaria;
+                            et.Contribuyente = contribuyente;
+                            et.Hora_Desde = horadesde;
+                            et.Hora_Hasta = horahasta;
+                            et.Fecha_Update = DateTime.Now;
+
+                            String file = string.Empty;
+                            if (httpRequest.Files.Count > 0)
+                            {
+                                var foto = httpRequest.Files;
+                                Byte[] Content = new BinaryReader(foto[0].InputStream).ReadBytes(foto[0].ContentLength);
+                                file = Convert.ToBase64String(Content);
+                                et.Foto = file;
+                            }
+
+                            //se envia a editar todo
+                            ent.SaveChanges();
+                            //se genera el codigo del mensaje de retorno exitoso
+                            ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
                         }
-
-                        string Nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        string organizacion = Convert.ToString(httpRequest.Form["organizacion"]);
-                        Guid id_Poblado = Guid.Parse(httpRequest.Form["idpoblado"]);
-                        string direccion = Convert.ToString(httpRequest.Form["direccion"]);
-                        string email = Convert.ToString(httpRequest.Form["email"]);
-                        string codentidad = Convert.ToString(httpRequest.Form["codentidad"]);
-                        bool atencionprioritaria = Convert.ToBoolean(int.Parse(httpRequest.Form["atencionprioritaria"]));
-                        bool contribuyente = Convert.ToBoolean(int.Parse(httpRequest.Form["contribuyente"]));
-                        string horadesde = Convert.ToString(httpRequest.Form["horadesde"]);
-                        string horahasta = Convert.ToString(httpRequest.Form["horahasta"]);
-
-                        Entidad et = ent.Entidad.Where(e => e.Id_Entidad == identidad).SingleOrDefault();
-                        et.Nit = Nit;
-                        et.Nombre = Nombre;
-                        et.Organizacion = organizacion;
-                        et.Id_Poblado = id_Poblado;
-                        et.Direccion = direccion;
-                        et.Email = email;
-                        et.CodigoEntidad = codentidad;
-                        et.Atencion_Prioritaria = atencionprioritaria;
-                        et.Contribuyente = contribuyente;
-                        et.Hora_Desde = horadesde;
-                        et.Hora_Hasta = horahasta;
-                        et.Fecha_Update = DateTime.Now;
-                        et.Foto = file;
-
-                        //se envia a editar todo
-                        ent.SaveChanges();
-                        //se genera el codigo del mensaje de retorno exitoso
-                        ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
+                        else
+                        {
+                            //Nit EXISTE
+                            ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
+                        }
                     }
                     else
                     {
-                        //Nit EXISTE
-                        ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
+                        //token invalido
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+                        return ret;
                     }
                 }
                 return ret;
@@ -221,26 +241,39 @@ namespace MilenioApi.Action
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
                         IQueryable<Entidad> et = ent.Entidad;
+                        //consulta por nit
+                        if (!string.IsNullOrEmpty(httpRequest.Form["Nit"]))
+                        {
+                            int nit = Convert.ToInt32(httpRequest.Form["Nit"]);
+                            et = et.Where(c => c.Nit == nit);
+                        }
 
                         //consulta por nombre
                         if (!string.IsNullOrEmpty(httpRequest.Form["nombre"]))
                         {
                             string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                            et = et.Where(c => c.Nombre == nombre);
+                            et = et.Where(c => c.Nombre.Contains(nombre));
                         }
 
-                        //consulta por nit
-                        if (!string.IsNullOrEmpty(httpRequest.Form["nombre"]))
+                        //consulta por organizacion
+                        if (!string.IsNullOrEmpty(httpRequest.Form["organizacion"]))
                         {
-                            int nit = Convert.ToInt32(httpRequest.Form["nit"]);
-                            et = et.Where(c => c.Nit == nit);
+                            string organizacion = Convert.ToString(httpRequest.Form["organizacion"]);
+                            et = et.Where(c => c.Organizacion.Contains(organizacion));
                         }
 
                         //consulta por cofigo entidad
                         if (!string.IsNullOrEmpty(httpRequest.Form["codigoentidad"]))
                         {
                             string codigoentidad = Convert.ToString(httpRequest.Form["codigoentidad"]);
-                            et = et.Where(c => c.CodigoEntidad == codigoentidad);
+                            et = et.Where(c => c.CodigoEntidad.Contains(codigoentidad));
+                        }
+
+                        //consulta por cofigo email
+                        if (!string.IsNullOrEmpty(httpRequest.Form["email"]))
+                        {
+                            string email = Convert.ToString(httpRequest.Form["email"]);
+                            et = et.Where(c => c.Email.Contains(email));
                         }
 
                         ret = et.Select(u => new EntidadModel
@@ -251,15 +284,25 @@ namespace MilenioApi.Action
                             Organizacion = u.Organizacion,
                             Email = u.Email,
                             CodigoEntidad = u.CodigoEntidad
-                            
+
                         }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
-                        
+
 
                         return ret;
                     }
                 }
                 else
+                {
+                    //TOKEN INVALIDO
+                    EntidadModel u = new EntidadModel();
+                    Basic rep = new Basic();
+                    //token invalido
+                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
+                    u.Response_Code = rep.Response_Code;
+                    u.Message = rep.Message;
+                    ret.Add(u);
                     return ret;
+                }
             }
 
             catch (Exception ex)
@@ -268,7 +311,7 @@ namespace MilenioApi.Action
             }
         }
 
-        public List<EntidadModel> GetEntidadesFiltro(HttpRequest httpRequest)
+        public List<EntidadModel> GetEntidadesEdit(HttpRequest httpRequest)
         {
             List<EntidadModel> ret = new List<EntidadModel>();
             try
@@ -280,30 +323,18 @@ namespace MilenioApi.Action
                     {
                         IQueryable<Entidad> et = ent.Entidad;
 
-                        //consulta por nombre
-                        if (!string.IsNullOrEmpty(httpRequest.Form["nombre"]))
-                        {
-                            string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                            et = et.Where(c => c.Nombre == nombre);
-                        }
-
-                        //consulta por nit
-                        if (!string.IsNullOrEmpty(httpRequest.Form["nombre"]))
-                        {
-                            int nit = Convert.ToInt32(httpRequest.Form["nit"]);
-                            et = et.Where(c => c.Nit == nit);
-                        }
-
                         //consulta por cofigo entidad
-                        if (!string.IsNullOrEmpty(httpRequest.Form["codigoentidad"]))
+                        if (!string.IsNullOrEmpty(httpRequest.Form["identidad"]))
                         {
-                            string codigoentidad = Convert.ToString(httpRequest.Form["codigoentidad"]);
-                            et = et.Where(c => c.CodigoEntidad == codigoentidad);
+                            Guid codigoentidad = Guid.Parse(httpRequest.Form["identidad"]);
+                            et = et.Where(c => c.Id_Entidad == codigoentidad);
                         }
 
                         foreach (var i in et.ToList())
                         {
                             EntidadModel em = new EntidadModel();
+                            em.Id_Municipio = i.Poblado.Municipio_Id;
+                            em.Id_Departamento = i.Poblado.Municipio.Departamento_Id;
                             Copier.CopyPropertiesTo(i, em);
                             ret.Add(em);
                         }
@@ -312,7 +343,17 @@ namespace MilenioApi.Action
                     }
                 }
                 else
+                {
+                    //TOKEN INVALIDO
+                    EntidadModel u = new EntidadModel();
+                    Basic rep = new Basic();
+                    //token invalido
+                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
+                    u.Response_Code = rep.Response_Code;
+                    u.Message = rep.Message;
+                    ret.Add(u);
                     return ret;
+                }
             }
 
             catch (Exception ex)

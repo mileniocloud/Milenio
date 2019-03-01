@@ -26,6 +26,20 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.Login(HttpContext.Current.Request));
         }
 
+
+        /// <summary>
+        /// metodo para desloguear un usuario
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("LogOff")]
+        public HttpResponseMessage LogOff()
+        {
+            aSeguridad s = new aSeguridad();
+            return ut.ReturnResponse(s.LogOff(HttpContext.Current.Request));
+        }
+
         /// <summary>
         /// Metodo para loguear con la entidad seleccionada
         /// </summary>

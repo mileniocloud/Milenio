@@ -24,7 +24,7 @@ public partial class Usuario
 
         this.Entidad_Usuario = new HashSet<Entidad_Usuario>();
 
-        this.Profesional = new HashSet<Profesional>();
+        this.Especialidad_Profesional = new HashSet<Especialidad_Profesional>();
 
     }
 
@@ -61,7 +61,7 @@ public partial class Usuario
 
     public string Observaciones { get; set; }
 
-    public System.Guid Id_Tipo_Vinculacion { get; set; }
+    public string Tipo_Vinculacion { get; set; }
 
     public bool Presta_Servicio { get; set; }
 
@@ -75,6 +75,10 @@ public partial class Usuario
 
     public string Foto_ABEAS { get; set; }
 
+    public Nullable<System.Guid> Id_Tipo_Profesional { get; set; }
+
+    public string Registro_Profesional { get; set; }
+
     public Nullable<System.Guid> Usuario_Create { get; set; }
 
     public System.DateTime Fecha_Create { get; set; }
@@ -83,17 +87,21 @@ public partial class Usuario
 
     public System.DateTime Fecha_Update { get; set; }
 
+    public bool isloged { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Entidad_Usuario> Entidad_Usuario { get; set; }
 
-    public virtual Poblado Poblado { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Profesional> Profesional { get; set; }
+    public virtual ICollection<Especialidad_Profesional> Especialidad_Profesional { get; set; }
+
+    public virtual Poblado Poblado { get; set; }
+
+    public virtual Tipo_Profesional Tipo_Profesional { get; set; }
 
 }
 

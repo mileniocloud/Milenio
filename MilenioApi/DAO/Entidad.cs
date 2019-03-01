@@ -28,6 +28,8 @@ public partial class Entidad
 
         this.Licencia = new HashSet<Licencia>();
 
+        this.Rol_Vista_Entidad = new HashSet<Rol_Vista_Entidad>();
+
         this.Telefono = new HashSet<Telefono>();
 
     }
@@ -41,9 +43,9 @@ public partial class Entidad
 
     public string Organizacion { get; set; }
 
-    public Nullable<System.Guid> Id_Poblado { get; set; }
-
     public string Direccion { get; set; }
+
+    public Nullable<int> Poblado_Id { get; set; }
 
     public string Email { get; set; }
 
@@ -67,6 +69,8 @@ public partial class Entidad
 
 
 
+    public virtual Poblado Poblado { get; set; }
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Entidad_Usuario> Entidad_Usuario { get; set; }
@@ -78,6 +82,10 @@ public partial class Entidad
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Licencia> Licencia { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

@@ -24,16 +24,26 @@ namespace MilenioApi.Models
         public string Telefono { get; set; }
         public DateTime Fecha_Contratacion { get; set; }
         public string Observaciones { get; set; }
-        public Guid Id_Tipo_Vinculacion { get; set; }
+        public string Tipo_Vinculacion { get; set; }
         public bool Presta_Servicio { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
         public bool Acepta_ABEAS { get; set; }
         public String Foto_ABEAS { get; set; }
 
+        public List<ComboModel> Roles = new List<ComboModel>();
+
+        public int Estado { get; set; }
+
         public int Presta_Servicio_Int { get; set; }
         public int Acepta_ABEAS_Int { get; set; }
         public int Id_Municipio { get; set; }
         public int Id_Departamento { get; set; }
+
+        public Guid Id_Tipo_Profesional { get; set; }
+        public string Registro_Profesional { get; set; }
+
+        public string Response_Code { get; set; }
+        public string Message { get; set; }
     }
 }

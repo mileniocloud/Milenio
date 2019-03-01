@@ -22,6 +22,8 @@ public partial class Poblado
     public Poblado()
     {
 
+        this.Entidad = new HashSet<Entidad>();
+
         this.Ubicacion = new HashSet<Ubicacion>();
 
         this.Usuario = new HashSet<Usuario>();
@@ -44,6 +46,10 @@ public partial class Poblado
     public Nullable<System.DateTime> Updated_At { get; set; }
 
 
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Entidad> Entidad { get; set; }
 
     public virtual Municipio Municipio { get; set; }
 

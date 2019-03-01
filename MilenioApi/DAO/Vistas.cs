@@ -15,29 +15,31 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Tipo_Profesional
+public partial class Vistas
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Tipo_Profesional()
+    public Vistas()
     {
 
-        this.Usuario = new HashSet<Usuario>();
+        this.Rol_Vista_Entidad = new HashSet<Rol_Vista_Entidad>();
 
     }
 
 
-    public System.Guid Id_Tipo_Profesional { get; set; }
+    public System.Guid Id_Vista { get; set; }
 
     public string Nombre { get; set; }
 
-    public bool Presta_Servicio { get; set; }
+    public string Permiso { get; set; }
+
+    public string Ruta { get; set; }
 
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Usuario> Usuario { get; set; }
+    public virtual ICollection<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
 
 }
 

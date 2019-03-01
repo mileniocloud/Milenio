@@ -27,7 +27,7 @@ public partial class Especialidad_Profesional
     }
 
 
-    public System.Guid Id_Profesional { get; set; }
+    public System.Guid Id_Usuario { get; set; }
 
     public System.Guid Id_Especialidad { get; set; }
 
@@ -51,7 +51,7 @@ public partial class Especialidad_Profesional
 
     public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
 
-    public virtual Profesional Profesional { get; set; }
+    public virtual Usuario Usuario { get; set; }
 
 }
 

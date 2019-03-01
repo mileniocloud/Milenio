@@ -15,30 +15,24 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Telefono
+public partial class Rol_Vista_Entidad
 {
 
-    public System.Guid Codigo_Id { get; set; }
+    public System.Guid Id_Rol { get; set; }
 
-    public Nullable<System.Guid> Persona_Id { get; set; }
+    public System.Guid Id_Vista { get; set; }
 
-    public Nullable<System.Guid> Entidad_Id { get; set; }
+    public System.Guid Id_Entidad { get; set; }
 
-    public int Numero { get; set; }
-
-    public string Descripcion { get; set; }
-
-    public string Tipo { get; set; }
-
-    public Nullable<System.DateTime> Created_At { get; set; }
-
-    public Nullable<System.DateTime> Updated_At { get; set; }
-
-    public Nullable<System.Guid> Usuario_Update { get; set; }
+    public bool Autorizado { get; set; }
 
 
 
     public virtual Entidad Entidad { get; set; }
+
+    public virtual Rol Rol { get; set; }
+
+    public virtual Vistas Vistas { get; set; }
 
 }
 

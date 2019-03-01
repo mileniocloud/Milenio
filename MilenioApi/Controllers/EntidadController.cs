@@ -21,6 +21,15 @@ namespace MilenioApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("GetEntidadesEdit")]
+        public HttpResponseMessage GetEntidadesEdit()
+        {
+            aEntidad s = new aEntidad();
+            return ut.ReturnResponse(s.GetEntidadesEdit(HttpContext.Current.Request));
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         [Route("CreateEntidad")]
         public HttpResponseMessage CreateEntidad()
         {

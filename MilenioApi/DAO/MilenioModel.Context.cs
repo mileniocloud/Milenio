@@ -17,6 +17,9 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
+using System.Data.Entity.Core.Objects;
+using System.Linq;
+
 
 public partial class MilenioCloudEntities : DbContext
 {
@@ -74,11 +77,11 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Poblado> Poblado { get; set; }
 
-    public virtual DbSet<Profesional> Profesional { get; set; }
-
     public virtual DbSet<Rol> Rol { get; set; }
 
     public virtual DbSet<Rol_Usuario> Rol_Usuario { get; set; }
+
+    public virtual DbSet<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
 
     public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
 
@@ -93,6 +96,35 @@ public partial class MilenioCloudEntities : DbContext
     public virtual DbSet<Ubicacion> Ubicacion { get; set; }
 
     public virtual DbSet<Usuario> Usuario { get; set; }
+
+    public virtual DbSet<Vistas> Vistas { get; set; }
+
+
+    public virtual int Validate_Create_User(string login, string identificacion, string email, string registroprofesional)
+    {
+
+        var loginParameter = login != null ?
+            new ObjectParameter("login", login) :
+            new ObjectParameter("login", typeof(string));
+
+
+        var identificacionParameter = identificacion != null ?
+            new ObjectParameter("identificacion", identificacion) :
+            new ObjectParameter("identificacion", typeof(string));
+
+
+        var emailParameter = email != null ?
+            new ObjectParameter("email", email) :
+            new ObjectParameter("email", typeof(string));
+
+
+        var registroprofesionalParameter = registroprofesional != null ?
+            new ObjectParameter("registroprofesional", registroprofesional) :
+            new ObjectParameter("registroprofesional", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Validate_Create_User", loginParameter, identificacionParameter, emailParameter, registroprofesionalParameter);
+    }
 
 }
 

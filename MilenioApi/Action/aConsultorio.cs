@@ -4,6 +4,7 @@ using MilenioApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Web;
 
@@ -15,113 +16,129 @@ namespace MilenioApi.Action
         aUtilities autil = new aUtilities();
         #region CRUD
         ClaimsPrincipal cp = new ClaimsPrincipal();
-        /// <summary>
-        /// Metodo para crear consultorios
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public Basic CreateConsultorio(HttpRequest httpRequest)
+
+        public object CreateConsultorio(ConsultorioModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(model.token);
                     if (cp != null)
                     {
-                        Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
-                        Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
-                        string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        string descripcion = Convert.ToString(httpRequest.Form["descripcion"]);
-                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-
-                        Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == nombre).SingleOrDefault();
-
-                        if (c == null)
+                        Response b = new Response();
+                        List<ErrorFields> rel = autil.ValidateObject(model);
+                        if (rel.Count == 0)
                         {
-                            c = new Consultorio();
-                            c.Id_Consultorio = Guid.NewGuid();
-                            c.Id_Entidad = entidad;
-                            c.Nombre = nombre;
-                            c.Descripcion = descripcion;
-                            c.Fecha_Create = DateTime.Now;
-                            c.Fecha_Update = DateTime.Now;
-                            c.Usuario_Create = usuario;
-                            c.Usuario_Update = usuario;
+                            //con estas dos lineas se saca el id del usuario y el id de la entidad del token
+                            Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
+                            Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
+                            ////
+                                                       
+                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                            //Y SE COPIA AL OBJETO USER
+                            Consultorio cl = new Consultorio();
+                            Copier.CopyPropertiesTo(model, cl);
+                            //
+                            //VALIDAMOS SI EL CONSULTORIO YA EXISTE
+                            Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
 
-                            ent.Consultorio.Add(c);
-                            ent.SaveChanges();
-                            //se genera el codigo del mensaje de retorno exitoso
-                            return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
-                        }
-                        else
-                        {
-                            //consultorio existe
-                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
-                        }
-                    }
-                    else
-                    {
-                        //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
-                    return ret;
-                }
-            }
-        }
-        /// <summary>
-        /// metodo para editar consultorios
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public Basic EditConsultorio(HttpRequest httpRequest)
-        {
-            Basic ret = new Basic();
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                try
-                {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
-                    if (cp != null)
-                    {
-                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        string descripcion = Convert.ToString(httpRequest.Form["descripcion"]);
-                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-                        Guid idconsultorio = Guid.Parse(httpRequest.Form["idconsultorio"]);
-
-                        List<Consultorio> lc = ent.Consultorio.Where(t => t.Id_Entidad == entidad).ToList();
-
-                        if (lc.Count != 0)
-                        {
-                            int nombexiste = lc.Where(r => r.Nombre == nombre && r.Id_Consultorio != idconsultorio).Count();
-                            if (nombexiste == 0)
+                            if (c == null)
                             {
-                                Consultorio c = lc.Where(f => f.Id_Consultorio == idconsultorio).SingleOrDefault();
-                                c.Nombre = nombre;
-                                c.Descripcion = descripcion;
-                                c.Fecha_Update = DateTime.Now;
-                                c.Usuario_Update = usuario;
+                                cl.Fecha_Create = DateTime.Now;
+                                cl.Fecha_Update = DateTime.Now;
+                                cl.Usuario_Create = usuario;
+                                cl.Usuario_Update = usuario;
 
+                                ent.Consultorio.Add(cl);
                                 ent.SaveChanges();
                                 //se genera el codigo del mensaje de retorno exitoso
-                                ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
+                                return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                             }
                             else
                             {
                                 //consultorio existe
-                                ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
+                                return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                             }
                         }
+                        else
+                        {
+                            //fallo campos requeridos
+                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        }
+                    }
+                    else
+                    {
+                        //token invalido
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
                         return ret;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //error general
+                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.BadRequest);
+                    return ret;
+                }
+            }
+        }
+
+        public object EditConsultorio(ConsultorioModel model)
+        {
+            Response ret = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    if (cp != null)
+                    {
+                        Response b = new Response();
+                        List<ErrorFields> rel = autil.ValidateObject(model);
+                        if (rel.Count == 0)
+                        {
+                            Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                            Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                            //Y SE COPIA AL OBJETO USER
+                            Consultorio cl = new Consultorio();
+                            Copier.CopyPropertiesTo(model, cl);
+                            //
+
+                            List<Consultorio> lc = ent.Consultorio.Where(t => t.Id_Entidad == entidad).ToList();
+
+                            if (lc.Count != 0)
+                            {
+                                //VALIDAMOS QUE NO EXISTA UN CONSULTORIO CON EL MISMO NOMBRE EN LA ENTIDAD
+                                int nombexiste = lc.Where(r => r.Nombre == model.Nombre && r.Id_Consultorio != model.Id_Consultorio).Count();
+                                if (nombexiste == 0)
+                                {
+                                    Consultorio c = lc.Where(f => f.Id_Consultorio == model.Id_Consultorio).SingleOrDefault();
+                                    c.Nombre = model.Nombre;
+                                    c.Descripcion = model.Descripcion;
+                                    c.Estado = model.Estado;
+                                    c.Fecha_Update = DateTime.Now;
+                                    c.Usuario_Update = usuario;
+
+                                    ent.SaveChanges();
+                                    //se genera el codigo del mensaje de retorno exitoso
+                                    ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
+                                }
+                                else
+                                {
+                                    //consultorio existe
+                                    ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
+                                }
+                            }
+                            return ret;
+                        }
+                        else
+                        {
+                            //fallo campos requeridos
+                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
+                        }
                     }
                     else
                     {
@@ -138,20 +155,17 @@ namespace MilenioApi.Action
                 }
             }
         }
-        /// <summary>
-        /// Metodo para consultar los consultorios
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public List<ConsultorioModel> GetConsultorio(HttpRequest httpRequest)
+
+        public object GetConsultorio(ConsultorioModel model)
         {
             List<Consultorio> lc = new List<Consultorio>();
             List<ConsultorioModel> lcm = new List<ConsultorioModel>();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -162,26 +176,16 @@ namespace MilenioApi.Action
                         if (lc.Count != 0)
                         {
                             //busca por nombre
-                            if (string.IsNullOrEmpty(httpRequest.Form["nombre"]))
+                            if (string.IsNullOrEmpty(model.Nombre))
                             {
-                                string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                                lc = lc.Where(t => t.Nombre.Contains(nombre)).ToList();
+                                lc = lc.Where(t => t.Nombre.Contains(model.Nombre)).ToList();
                             }
 
                             //busca por descripcion
-                            if (string.IsNullOrEmpty(httpRequest.Form["descripcion"]))
+                            if (string.IsNullOrEmpty(model.Descripcion))
                             {
-                                string descripcion = Convert.ToString(httpRequest.Form["descripcion"]);
-                                lc = lc.Where(t => t.Descripcion.Contains(descripcion)).ToList();
+                                lc = lc.Where(t => t.Descripcion.Contains(model.Descripcion)).ToList();
                             }
-
-                            //busca por descripcion
-                            if (string.IsNullOrEmpty(httpRequest.Form["estado"]))
-                            {
-                                bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-                                lc = lc.Where(t => t.Estado == estado).ToList();
-                            }
-
                             foreach (var i in lc)
                             {
                                 ConsultorioModel cm = new ConsultorioModel();
@@ -189,6 +193,11 @@ namespace MilenioApi.Action
                                 lcm.Add(cm);
                             }
                         }
+                    }
+                    else
+                    {
+                        //token invalido
+                        return autil.MensajeRetorno(ref ret, 1, string.Empty, null);
                     }
                     return lcm;
                 }
@@ -202,32 +211,29 @@ namespace MilenioApi.Action
 
         #region Relacionadas
 
-        public Basic CreateConsultorioEspecialidad(HttpRequest httpRequest)
+        public object CreateConsultorioEspecialidad(ConsultorioModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Guid id_consultorio = Guid.Parse(httpRequest.Form["idconsultorio"]);
-                        Guid id_especialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
-
                         Consultorio_Especialidad ce = ent.Consultorio_Especialidad
-                                                     .Where(c => c.Id_Consultorio == id_consultorio
-                                                     && c.Id_Especialidad == id_especialidad
+                                                     .Where(c => c.Id_Consultorio == model.Id_Consultorio
+                                                     && c.Id_Especialidad == model.Id_Especialidad
                                                      && c.Id_Entidad == entidad).SingleOrDefault();
 
                         if (ce == null)
                         {
                             ce = new Consultorio_Especialidad();
-                            ce.Id_Consultorio = id_consultorio;
-                            ce.Id_Especialidad = id_especialidad;
+                            ce.Id_Consultorio = model.Id_Consultorio;
+                            ce.Id_Especialidad = model.Id_Especialidad;
                             ce.Id_Entidad = entidad;
                             ce.Estado = true;
                             ce.Usuario_Create = usuario;
@@ -262,31 +268,27 @@ namespace MilenioApi.Action
             }
         }
 
-        public Basic EditConsultorioEspecialidad(HttpRequest httpRequest)
+        public object EditConsultorioEspecialidad(ConsultorioModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Guid id_consultorio = Guid.Parse(httpRequest.Form["idconsultorio"]);
-                        Guid id_especialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
-                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-
                         Consultorio_Especialidad ce = ent.Consultorio_Especialidad
-                                                     .Where(c => c.Id_Consultorio == id_consultorio
-                                                     && c.Id_Especialidad == id_especialidad
+                                                     .Where(c => c.Id_Consultorio == model.Id_Consultorio
+                                                     && c.Id_Especialidad == model.Id_Especialidad
                                                      && c.Id_Entidad == entidad).SingleOrDefault();
 
                         if (ce != null)
                         {
-                            ce.Estado = estado;
+                            ce.Estado = model.Estado;
                             ce.Usuario_Update = usuario;
                             ce.Fecha_Update = DateTime.Now;
                             ent.SaveChanges();

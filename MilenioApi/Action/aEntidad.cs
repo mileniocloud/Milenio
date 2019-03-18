@@ -298,8 +298,8 @@ namespace MilenioApi.Action
                     Basic rep = new Basic();
                     //token invalido
                     rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
-                    u.Response_Code = rep.Response_Code;
-                    u.Message = rep.Message;
+                    u.Response_Code = rep.response_code;
+                    u.Message = rep.message;
                     ret.Add(u);
                     return ret;
                 }
@@ -349,8 +349,8 @@ namespace MilenioApi.Action
                     Basic rep = new Basic();
                     //token invalido
                     rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
-                    u.Response_Code = rep.Response_Code;
-                    u.Message = rep.Message;
+                    u.Response_Code = rep.response_code;
+                    u.Message = rep.message;
                     ret.Add(u);
                     return ret;
                 }

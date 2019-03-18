@@ -3,12 +3,15 @@ using WebActivatorEx;
 using MilenioApi;
 using Swashbuckle.Application;
 
+
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace MilenioApi
-{
+{    
     public class SwaggerConfig
     {
+        //static string rutadoc = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml");
+        static string rutadoc = System.IO.Path.Combine(System.Web.HttpRuntime.AppDomainAppPath, "App_Data/XmlDocument.xml");
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
@@ -101,7 +104,7 @@ namespace MilenioApi
                         // those comments into the generated docs and UI. You can enable this by providing the path to one or
                         // more Xml comment files.
                         //
-                        //c.IncludeXmlComments(GetXmlCommentsPath());
+                        c.IncludeXmlComments(rutadoc);
 
                         // Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types
                         // exposed in your API. However, there may be occasions when more control of the output is needed.
@@ -122,10 +125,10 @@ namespace MilenioApi
                         //c.SchemaFilter<ApplySchemaVendorExtensions>();
 
                         // In a Swagger 2.0 document, complex types are typically declared globally and referenced by unique
-                        // Schema Id. By default, Swashbuckle does NOT use the full type name in Schema Ids. In most cases, this
+                        // Schema id. By default, Swashbuckle does NOT use the full type name in Schema Ids. In most cases, this
                         // works well because it prevents the "implementation detail" of type namespaces from leaking into your
                         // Swagger docs and UI. However, if you have multiple types in your API with the same class name, you'll
-                        // need to opt out of this behavior to avoid Schema Id conflicts.
+                        // need to opt out of this behavior to avoid Schema id conflicts.
                         //
                         //c.UseFullTypeNameInSchemaIds();
 

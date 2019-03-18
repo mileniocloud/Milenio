@@ -5,10 +5,9 @@ using System.Web;
 
 namespace MilenioApi.Models
 {
-    public class ComboModel
+    public class ErrorFields
     {
-        public Guid id { get; set; }
-        public string value { get; set; }
-
+        public string field { get; set; }
+        public string message { get; set; }
     }
 }

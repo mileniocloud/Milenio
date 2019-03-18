@@ -49,7 +49,7 @@ public partial class Usuario
 
     public string Estado_Civil { get; set; }
 
-    public string TipoSangre { get; set; }
+    public string Tipo_Sangre { get; set; }
 
     public Nullable<int> Poblado_Id { get; set; }
 

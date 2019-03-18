@@ -34,8 +34,8 @@ namespace MilenioApi.Action
         //            cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
         //            if (cp != null)
         //            {
-        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
+        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.value).SingleOrDefault());
 
         //                Guid tipoidentificacion = Guid.Parse(httpRequest.Form["tipoidentificacion"]);
         //                int identificacion = int.Parse(httpRequest.Form["identificacion"]);
@@ -86,7 +86,7 @@ namespace MilenioApi.Action
         //                        pr.Registro_Profesional = registro_profesional;
         //                        pr.Foto = foto;
         //                        pr.Estado_Civil = estadocivil;
-        //                        pr.Estado = true;
+        //                        pr.estado = true;
         //                        pr.TipoSangre = tipo_sangre;
         //                        pr.Fecha_Contratacion = fcontratacion;
         //                        pr.Id_Tipo_Vinculacion = tipo_vinculacion;
@@ -123,7 +123,7 @@ namespace MilenioApi.Action
         //        catch (Exception ex)
         //        {
         //            //error general
-        //            ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+        //            ret = autil.MensajeRetorno(ref ret, 4, ex.message, null);
         //            return ret;
         //        }
         //    }
@@ -144,8 +144,8 @@ namespace MilenioApi.Action
         //            cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
         //            if (cp != null)
         //            {
-        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
+        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.value).SingleOrDefault());
 
         //                Guid id_profesional = Guid.Parse(httpRequest.Form["id_profesional"]);
         //                Guid tipoidentificacion = Guid.Parse(httpRequest.Form["tipoidentificacion"]);
@@ -197,7 +197,7 @@ namespace MilenioApi.Action
         //                        pr.Registro_Profesional = registro_profesional;
         //                        pr.Foto = foto;
         //                        pr.Estado_Civil = estadocivil;
-        //                        pr.Estado = estado;
+        //                        pr.estado = estado;
         //                        pr.TipoSangre = tipo_sangre;
         //                        pr.Fecha_Contratacion = fcontratacion;
         //                        pr.Id_Tipo_Vinculacion = tipo_vinculacion;
@@ -231,7 +231,7 @@ namespace MilenioApi.Action
         //        catch (Exception ex)
         //        {
         //            //error general
-        //            ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+        //            ret = autil.MensajeRetorno(ref ret, 4, ex.message, null);
         //            return ret;
         //        }
         //    }
@@ -252,8 +252,8 @@ namespace MilenioApi.Action
         //            cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
         //            if (cp != null)
         //            {
-        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
+        //                Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.value).SingleOrDefault());
 
         //                Guid id_profesional = Guid.Parse(httpRequest.Form["id_profesional"]);
         //                Guid id_usuario = Guid.Parse(httpRequest.Form["usuario"]);
@@ -275,7 +275,7 @@ namespace MilenioApi.Action
         //        catch (Exception ex)
         //        {
         //            //error general
-        //            ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+        //            ret = autil.MensajeRetorno(ref ret, 4, ex.message, null);
         //            return ret;
         //        }
         //    }
@@ -296,7 +296,7 @@ namespace MilenioApi.Action
         //            cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
         //            if (cp != null)
         //            {
-        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
         //                lp = ent.Profesional.Where(e => e.Id_Entidad == entidad).ToList();
 
         //                string nombre = Convert.ToString(httpRequest.Form["nombre"]);
@@ -349,8 +349,8 @@ namespace MilenioApi.Action
         //            bool estado = Convert.ToBoolean(httpRequest.Form["estado"]);
         //            if (cp != null)
         //            {
-        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-        //                lp = ent.Profesional.Where(e => e.Id_Entidad == entidad && e.Estado == estado).ToList();
+        //                Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
+        //                lp = ent.Profesional.Where(e => e.Id_Entidad == entidad && e.estado == estado).ToList();
 
         //                return lp;
         //            }

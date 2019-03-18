@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
@@ -21,87 +22,243 @@ namespace MilenioApi.Action
         ClaimsPrincipal cp = new ClaimsPrincipal();
 
         #region Login        
-        public LoginModel Login(HttpRequest httpRequest)
+        //public LoginModel Login(HttpRequest model)
+        //{
+        //    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+        //    {
+        //        LoginModel op = new LoginModel();
+        //        try
+        //        {
+        //            string login = Convert.ToString(model.Form["user"]);
+        //            string pass = Convert.ToString(model.Form["password"]);
+        //            pass = autil.Sha(pass);
+
+        //            Usuario p = ent.Usuario.Where(pr => pr.Login == login && pr.Password == pass).SingleOrDefault();
+
+        //            if (p != null)
+        //            {
+        //                //validamos si tiene una session abierta
+        //                if (!p.isloged)
+        //                {
+        //                    op.Id_User = p.Id_Usuario;
+        //                    op.user = p.Login;
+        //                    op.Email = p.Email;
+
+        //                    List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.estado == true)
+        //                                            .Select(t => new ComboModel
+        //                                            {
+        //                                                id = t.Id_Entidad,
+        //                                                value = t.Entidad.Nombre
+        //                                            }).ToList());
+
+        //                    op.Entidades = entidades.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
+        //                    op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null);
+        //                }
+        //                else
+        //                {
+        //                    //si entra aqui es porque ya tiene una session abierta
+        //                    Basic b = new Basic();
+        //                    autil.MensajeRetorno(ref b, 31, string.Empty, null);
+
+        //                    op.response_code = b.response_code;
+        //                    op.custom = b.custom;
+        //                    op.message = b.message;
+        //                    return op;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //login invalido
+        //                Basic b = new Basic();
+        //                autil.MensajeRetorno(ref b, 8, string.Empty, null);
+
+        //                op.response_code = b.response_code;
+        //                op.custom = b.custom;
+        //                op.message = b.message;
+        //                return op;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            //error general
+        //            Basic b = new Basic();
+        //            autil.MensajeRetorno(ref b, 4, ex.message + model.Form, null);
+
+        //            op.response_code = b.response_code;
+        //            op.custom = b.custom;
+        //            op.message = b.message;
+
+        //            return op;
+        //        }
+
+        //        return op;
+        //    }
+        //}
+
+        public object Login(LoginModel model)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
-                LoginModel op = new LoginModel();
+                LoginModel lm = new LoginModel();
+                Response r = new Response();
                 try
                 {
-                    string login = Convert.ToString(httpRequest.Form["user"]);
-                    string pass = Convert.ToString(httpRequest.Form["password"]);
-                    pass = autil.Sha(pass);
-
-                    Usuario p = ent.Usuario.Where(pr => pr.Login == login && pr.Password == pass).SingleOrDefault();
-
-                    if (p != null)
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
                     {
-                        //validamos si tiene una session abierta
-                        if (!p.isloged)
+                        string pass = autil.Sha(model.password);
+                        var um = ent.Usuario.Where(pr => pr.Login == model.user && pr.Password == pass).ToList();
+                        if (um.Count > 0)
                         {
-                            op.Id_User = p.Id_Usuario;
-                            op.Login = p.Login;
-                            op.Email = p.Email;
+                            foreach (var p in um)
+                            {
+                                //validamos si tiene una session abierta
+                                if (!p.isloged)
+                                {
+                                    List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true)
+                                                            .Select(t => new ComboModel
+                                                            {
+                                                                id = t.Id_Entidad,
+                                                                value = t.Entidad.Nombre
+                                                            }).ToList());
 
-                            List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true)
-                                                    .Select(t => new ComboModel
-                                                    {
-                                                        Id = t.Id_Entidad,
-                                                        Value = t.Entidad.Nombre
-                                                    }).ToList());
+                                    entidades = entidades.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
 
-                            op.Entidades = entidades.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
-                            op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null);
+                                    var data = um.Select(t => new
+                                    {
+                                        id_usuario = t.Id_Usuario,
+                                        login = t.Login,
+                                        entidades
+                                    }).SingleOrDefault();
+
+                                    r.data.Add(data);
+                                }
+                                else
+                                {
+                                    //si entra aqui es porque ya tiene una session abierta
+                                    return autil.MensajeRetorno(ref r, 31, string.Empty, null, HttpStatusCode.OK);
+                                }
+                            }
                         }
                         else
                         {
-                            //si entra aqui es porque ya tiene una session abierta
-                            Basic b = new Basic();
-                            autil.MensajeRetorno(ref b, 31, string.Empty, null);
-
-                            op.Response_Code = b.Response_Code;
-                            op.custom = b.custom;
-                            op.Message = b.Message;
-                            return op;
+                            //login invalido                            
+                            return autil.MensajeRetorno(ref r, 8, model.user + "-" + model.password, null, HttpStatusCode.OK);
                         }
+
                     }
                     else
                     {
-                        //login invalido
-                        Basic b = new Basic();
-                        autil.MensajeRetorno(ref b, 8, string.Empty, null);
-
-                        op.Response_Code = b.Response_Code;
-                        op.custom = b.custom;
-                        op.Message = b.Message;
-                        return op;
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref r, 8, string.Empty, null, rel, HttpStatusCode.OK);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    Basic b = new Basic();
-                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
-
-                    op.Response_Code = b.Response_Code;
-                    op.custom = b.custom;
-                    op.Message = b.Message;
-
-                    return op;
+                    return autil.MensajeRetorno(ref r, 4, ex.Message, null, HttpStatusCode.BadRequest);
                 }
 
-                return op;
+                //retorna un response, con el campo data lleno con la respuesta.               
+                return autil.MensajeRetorno(ref r, 9, null, null, HttpStatusCode.OK);
             }
         }
 
-        public Basic LogOff(HttpRequest httpRequest)
+        public object LoginEntidad(LoginModel model)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
-                Basic b = new Basic();
+                Response rp = new Response();
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
+                    {
+                        Guid entidad = model.identidad;
+                        string pass = autil.Sha(model.password);
+
+                        var um = ent.Usuario.Where(pr => pr.Login == model.user && pr.Password == pass).ToList();
+
+                        if (um.Count > 0)
+                        {
+                            foreach (var p in um)
+                            {
+                                //consultamos los roles disponibles
+                                List<ComboModel> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == entidad && r.Estado == true).Select(t => new ComboModel
+                                {
+                                    id = t.Rol.Id_Rol,
+                                    value = t.Rol.Nombre
+                                }).ToList();
+
+                                if (roles.Count() != 0)
+                                {
+                                    List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true && c.Entidad.Id_Entidad == entidad)
+                                                            .Select(t => new ComboModel
+                                                            {
+                                                                id = t.Id_Entidad,
+                                                                value = t.Entidad.Nombre
+                                                            }).ToList());
+                                    entidades = entidades.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
+
+                                    roles = roles.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
+
+                                    string token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, entidad);
+
+                                    //aqui seteamos que el usuario ya esta logueado
+                                    p.isloged = true;
+                                    ent.SaveChanges();
+
+                                    var r = (from t in um
+                                             select new
+                                             {
+                                                 id_usuario = p.Id_Usuario,
+                                                 login = p.Login,
+                                                 entidades,
+                                                 roles,
+                                                 token
+                                             }).SingleOrDefault();
+
+                                    rp.data.Add(r);
+                                }
+                                else
+                                {
+                                    //USUARIO SIN ROLES
+                                    return autil.MensajeRetorno(ref rp, 13, string.Empty, null);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            //login invalido                
+                            return autil.MensajeRetorno(ref rp, 8, string.Empty, null); ;
+                        }
+                    }
+                    else
+                    {
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref rp, 8, string.Empty, null, rel);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //error general
+                    return autil.MensajeRetorno(ref rp, 4, ex.Message, null);
+                }
+
+                //retorna un response, con el campo data lleno con la respuesta.               
+                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+            }
+        }
+
+        public object LogOff(LoginModel model)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                Response b = new Response();
+                try
+                {
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
@@ -111,126 +268,37 @@ namespace MilenioApi.Action
                         {
                             us.isloged = false;
                             ent.SaveChanges();
-                            b = autil.MensajeRetorno(ref b, 30, string.Empty, null);
-                            return b;
+                            return autil.MensajeRetorno(ref b, 30, string.Empty, null);
                         }
+                    }
+                    else
+                    {
+                        return autil.MensajeRetorno(ref b, 1, string.Empty, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-
-                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
-                    b.Response_Code = b.Response_Code;
-                    b.custom = b.custom;
-                    b.Message = b.Message;
-
-                    return b;
+                    return autil.MensajeRetorno(ref b, 4, ex.Message, null);
                 }
 
                 return b;
             }
         }
-        public LoginModel LoginEntidad(HttpRequest httpRequest)
-        {
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                LoginModel op = new LoginModel();
-                try
-                {
-                    string login = Convert.ToString(httpRequest.Form["user"]);
-                    string pass = Convert.ToString(httpRequest.Form["password"]);
-                    Guid entidad = Guid.Parse(httpRequest.Form["identidad"]);
 
-                    pass = autil.Sha(pass);
-
-                    Usuario p = ent.Usuario.Where(pr => pr.Login == login && pr.Password == pass).SingleOrDefault();
-
-                    if (p != null)
-                    {
-                        //consultamos los roles disponibles
-                        List<ComboModel> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == entidad && r.Estado == true).Select(t => new ComboModel
-                        {
-                            Id = t.Rol.Id_Rol,
-                            Value = t.Rol.Nombre
-                        }).ToList();
-
-                        if (roles.Count() != 0)
-                        {
-                            op.Id_User = p.Id_Usuario;
-                            op.Login = p.Login;
-                            op.Email = p.Email;
-
-                            List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true && c.Entidad.Id_Entidad == entidad)
-                                                    .Select(t => new ComboModel
-                                                    {
-                                                        Id = t.Id_Entidad,
-                                                        Value = t.Entidad.Nombre
-                                                    }).ToList());
-
-                            op.Roles = roles.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
-                            op.Entidades = entidades.GroupBy(rl => rl.Id).Select(g => g.First()).ToList();
-                            op.token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, entidad);
-
-                            //aqui seteamos que el usuario ya esta logueado
-                            p.isloged = true;
-                            ent.SaveChanges();
-
-                        }
-                        else
-                        {
-                            //USUARIO SIN ROLES
-                            Basic b = new Basic();
-                            autil.MensajeRetorno(ref b, 13, string.Empty, null);
-
-                            op.Response_Code = b.Response_Code;
-                            op.custom = b.custom;
-                            op.Message = b.Message;
-                            return op;
-                        }
-                    }
-                    else
-                    {
-                        //login invalido
-                        Basic b = new Basic();
-                        autil.MensajeRetorno(ref b, 8, string.Empty, null);
-
-                        op.Response_Code = b.Response_Code;
-                        op.custom = b.custom;
-                        op.Message = b.Message;
-                        return op;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //error general
-                    Basic b = new Basic();
-                    autil.MensajeRetorno(ref b, 4, ex.Message + httpRequest.Form, null);
-
-                    op.Response_Code = b.Response_Code;
-                    op.custom = b.custom;
-                    op.Message = b.Message;
-
-                    return op;
-                }
-
-                return op;
-            }
-        }
 
         /// <summary>
         /// Metodo que envia correo con opcion para cambio de clave
         /// </summary>
         /// <returns></returns>
-        public Basic OlvidoClave(HttpRequest httpRequest)
+        public object OlvidoClave(LoginModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             try
             {
-                string Login = Convert.ToString(httpRequest.Form["user"]);
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    Usuario p = ent.Usuario.Where(u => u.Login == Login).SingleOrDefault();
+                    Usuario p = ent.Usuario.Where(u => u.Login == model.user).SingleOrDefault();
                     if (p != null)
                     {
                         //metodo para enviar reseteo de contraseña                        
@@ -270,21 +338,20 @@ namespace MilenioApi.Action
         /// <summary>
         /// metodo para cambiar le la clave a un usuario
         /// </summary>
-        /// <param name="httpRequest"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public Basic CambioClave(HttpRequest httpRequest)
+        public object CambioClave(LoginModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                cp = tk.ValidateToken(Convert.ToString(model.token));
                 if (cp != null)
                 {
                     Guid? user_id = null;
                     string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
                     if (!string.IsNullOrEmpty(usid))
                         user_id = Guid.Parse(usid);
-                    string PassWord = Convert.ToString(httpRequest.Form["Password"]);
 
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
@@ -292,8 +359,7 @@ namespace MilenioApi.Action
 
                         if (p != null)
                         {
-                            PassWord = autil.Sha(PassWord);
-                            p.Password = PassWord;
+                            p.Password = autil.Sha(model.password);
                             ent.SaveChanges();
                             ret = autil.MensajeRetorno(ref ret, 10, string.Empty, null);
                         }
@@ -394,187 +460,212 @@ namespace MilenioApi.Action
         #endregion
 
         #region Create - ActInactivate - lists
-        /// <summary>
-        /// Metodo para crear usuarios
-        /// </summary>
-        public Basic CreateUser(HttpRequest httpRequest)
+
+        public object CreateUser(UsuarioModel model)
         {
             string pasos = "0";
-            Basic ret = new Basic();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
-                        pasos = pasos + "-1-";
-                        Guid entidad;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["entidadid"]))
-                            entidad = Guid.Parse(httpRequest.Form["entidadid"]);
-                        else
-                            entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        pasos = pasos + "-2-";
-                        Guid? usuario = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["usuarioid"]))
-                            usuario = Guid.Parse(httpRequest.Form["usuarioid"]);
-                        else
-                            usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        pasos = pasos + "-3-";
-                        string tipoidentificacion = Convert.ToString(httpRequest.Form["tipoidentificacion"]);
-                        string identificacion = Convert.ToString(httpRequest.Form["identificacion"]);
-                        string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        string primer_apellido = Convert.ToString(httpRequest.Form["primerapellido"]);
-                        string segundo_apellido = Convert.ToString(httpRequest.Form["segundoapellido"]);
-                        string sexo = Convert.ToString(httpRequest.Form["sexo"]);
-                        bool presta_servicio = Convert.ToBoolean(int.Parse(httpRequest.Form["prestaservicio"]));
-                        pasos = pasos + "-fechanacimiento-" + httpRequest.Form["fechanacimiento"].ToString();
-                        DateTime fnacimiento = Convert.ToDateTime(httpRequest.Form["fechanacimiento"]);
-                        pasos = pasos + "-4-";
-                        ///FOTO
-                        ///
-                        String foto = string.Empty;
-                        if (httpRequest.Files.Count > 0)
+                        Response b = new Response();
+                        List<ErrorFields> rel = autil.ValidateObject(model);
+                        if (rel.Count == 0)
                         {
-                            var _foto = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(_foto[0].InputStream).ReadBytes(_foto[0].ContentLength);
-                            foto = Convert.ToBase64String(Content);
-                        }
+                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                            //Y SE COPIA AL OBJETO USER
+                            Usuario us = new Usuario();
+                            Copier.CopyPropertiesTo(model, us);
+                            //
 
-                        pasos = pasos + "-5-";
-                        ///FOTO ABEAS
-                        String fotoabeas = string.Empty;
-                        if (httpRequest.Files.Count > 1)
-                        {
-                            var _fotoabeas = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(_fotoabeas[1].InputStream).ReadBytes(_fotoabeas[1].ContentLength);
-                            fotoabeas = Convert.ToBase64String(Content);
-                        }
-                        pasos = pasos + "-6-";
-                        string estadocivil = Convert.ToString(httpRequest.Form["estadocivil"]);
-                        string tipo_sangre = Convert.ToString(httpRequest.Form["tiposangre"]);
+                            Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                            Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        pasos = pasos + "-7-";
-                        int? poblado_id = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["barrio"]))
-                            poblado_id = int.Parse(httpRequest.Form["barrio"]);
-                        pasos = pasos + "-8-";
-                        DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
-                        string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
-                        string tipo_vinculacion = Convert.ToString(httpRequest.Form["tipovinculacion"]);
-                        string direccion = Convert.ToString(httpRequest.Form["direccion"]);
-                        string telefono = Convert.ToString(httpRequest.Form["telefono"]);
-                        pasos = pasos + "-9-";
-                        string login = Convert.ToString(httpRequest.Form["user"]);
-                        string password = Convert.ToString(httpRequest.Form["password"]);
-                        string email = Convert.ToString(httpRequest.Form["email"]);
-                        pasos = pasos + "-10-";
-
-                        pasos = pasos + "-abeas-" + Convert.ToString(httpRequest.Form["abeas"]);
-                        pasos = pasos + "-abeas-" + Convert.ToString(httpRequest.Form["tipoprofesional"]);
-                        pasos = pasos + "-abeas-" + Convert.ToString(httpRequest.Form["registroprofesional"]);
-
-                        bool abeas = Convert.ToBoolean(int.Parse(httpRequest.Form["abeas"]));
-                        Guid? tipoprofesional = Guid.Parse(httpRequest.Form["tipoprofesional"]);
-                        string registroprofesional = Convert.ToString(httpRequest.Form["registroprofesional"]);
-                        pasos = pasos + "-11-";
-                        password = autil.Sha(password);
-                        pasos = pasos + "-12-";
-
-                        //consulta login
-                        if (ent.Usuario.Where(u => u.Login == login).Count() == 0)
-                        {
-                            //consulta por cedula
-                            if (ent.Usuario.Where(u => u.Numero_Identificacion == identificacion).Count() == 0)
+                            //consulta login
+                            if (ent.Usuario.Where(u => u.Login == us.Login).Count() == 0)
                             {
-                                //consulta por email
-                                if (ent.Usuario.Where(u => u.Email == email).Count() == 0)
+                                //consulta por cedula
+                                if (ent.Usuario.Where(u => u.Numero_Identificacion == us.Numero_Identificacion).Count() == 0)
                                 {
-                                    //consulta por registro profesional
+                                    //consulta por email
+                                    if (ent.Usuario.Where(u => u.Email == us.Email).Count() == 0)
+                                    {
+                                        //consulta por registro profesional
+                                        int regxist = 0;
+
+                                        if (regxist == 0)
+                                        {
+                                            Guid id_usuario = Guid.NewGuid();
+                                            us.Id_Usuario = id_usuario;
+
+                                            ///agregado el usuario a la entidad donde se esta creando
+                                            Entidad_Usuario eu = new Entidad_Usuario();
+                                            eu.Id_Entidad = entidad;
+                                            eu.Id_Usuario = id_usuario;
+                                            eu.Estado = true;
+                                            eu.Fecha_Create = DateTime.Now;
+                                            eu.Fecha_Update = DateTime.Now;
+                                            eu.Usuario_Create = usuario;
+                                            eu.Usuario_Update = usuario;
+                                            ent.Entidad_Usuario.Add(eu);
+                                            /////
+
+                                            us.Fecha_Create = DateTime.Now;
+                                            us.Usuario_Create = usuario;
+                                            us.Fecha_Update = DateTime.Now;
+                                            us.Usuario_Update = usuario;
+                                            ent.Usuario.Add(us);
+
+                                            ///seccion para obtener los roles que le estan agregando al usuario
+                                            string roles;
+                                            if (!string.IsNullOrEmpty(model.List_Roles))
+                                            {
+                                                roles = Convert.ToString(model.List_Roles);
+                                                string[] rolesArray = roles.Split(',');
+                                                List<Rol_Usuario> lru = new List<Rol_Usuario>();
+                                                foreach (var r in rolesArray)
+                                                {
+                                                    //agregando la lista de usuarios
+                                                    Rol_Usuario ru = new Rol_Usuario();
+                                                    ru.Id_Entidad = entidad;
+                                                    ru.Id_Usuario = id_usuario;
+                                                    ru.Id_Rol = Guid.Parse(r);
+                                                    lru.Add(ru);
+                                                }
+
+                                                if (lru.Count > 0)
+                                                {
+                                                    //si hay roles que agregar, los agrega
+                                                    ent.Rol_Usuario.AddRange(lru);
+                                                }
+                                            }
+
+                                            ///salvando todos los cambios
+                                            ent.SaveChanges();
+                                            //se genera el codigo del mensaje de retorno exitoso
+                                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                                        }
+                                        else
+                                        {
+                                            ///Registro profesional existe
+                                            return ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ///Email existe
+                                        return ret = autil.MensajeRetorno(ref ret, 6, string.Empty, null);
+                                    }
+                                }
+                                else
+                                {
+                                    ///Cedula existe
+                                    return ret = autil.MensajeRetorno(ref ret, 5, string.Empty, null);
+                                }
+                            }
+                            else
+                            {
+                                //usuario ya existe
+                                ret = autil.MensajeRetorno(ref ret, 7, string.Empty, null);
+                            }
+                            return ret;
+                        }
+                        else
+                        {
+                            //fallo campos requeridos
+                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
+                        }
+                    }
+                    else
+                    {
+                        //token invalido
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+                        return ret;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    //error general
+                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message + " " + ex.InnerException + "/" + pasos, null);
+                    return ret;
+                }
+            }
+        }
+
+        public object EditUser(UsuarioModel model)
+        {
+            Response ret = new Response();
+            string pasos = "0";
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    if (cp != null)
+                    {
+                        Response b = new Response();
+                        List<ErrorFields> rel = autil.ValidateObject(model);
+                        if (rel.Count == 0)
+                        {
+                            Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                            Guid? usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+
+                            int lexist = ent.Usuario.Where(t => t.Login == model.Login && t.Id_Usuario != model.Id_Usuario).Count();
+
+                            if (lexist == 0)
+                            {
+                                int emexist = ent.Usuario.Where(t => t.Email == model.Email && t.Id_Usuario != model.Id_Usuario).Count();
+
+                                if (emexist == 0)
+                                {
                                     int regxist = 0;
-                                    if (!string.IsNullOrEmpty(registroprofesional))
-                                        regxist = ent.Usuario.Where(r => r.Registro_Profesional == registroprofesional).Count();
+                                    if (!string.IsNullOrEmpty(model.Registro_Profesional))
+                                        regxist = ent.Usuario.Where(r => r.Registro_Profesional == model.Registro_Profesional && r.Id_Usuario != model.Id_Usuario).Count();
 
                                     if (regxist == 0)
                                     {
-                                        pasos = pasos + "-13-";
+                                        pasos = pasos + "-9-";
                                         Guid id_usuario = Guid.NewGuid();
-                                        Usuario us = new Usuario();
-                                        us.Id_Usuario = id_usuario;
-                                        us.Nombres = nombre;
-                                        us.Primer_Apellido = primer_apellido;
-                                        us.Segundo_Apellido = segundo_apellido;
-                                        us.Id_Tipo_Identificacion = tipoidentificacion;
-                                        us.Numero_Identificacion = identificacion;
-                                        us.Poblado_Id = poblado_id;
-                                        us.Direccion = direccion;
-                                        us.Telefono = telefono;
-                                        us.Sexo = sexo;
-                                        us.Fecha_Nacimiento = fnacimiento;
-                                        us.Foto = foto;
-                                        us.Estado_Civil = estadocivil;
-                                        us.TipoSangre = tipo_sangre;
-                                        us.Fecha_Contratacion = fcontratacion;
-                                        us.Tipo_Vinculacion = tipo_vinculacion;
-                                        us.Observaciones = observaciones;
-                                        us.Presta_Servicio = presta_servicio;
-                                        us.Id_Tipo_Profesional = tipoprofesional.Value;
-                                        us.Registro_Profesional = registroprofesional;
 
-                                        us.Acepta_ABEAS = abeas;
-                                        us.Foto_ABEAS = fotoabeas;
+                                        Usuario us = ent.Usuario.Where(u => u.Id_Usuario == model.Id_Usuario).SingleOrDefault();
 
-                                        us.Login = login;
-                                        us.Password = password;
-                                        us.Email = email;
-                                        pasos = pasos + "-14-";
-                                        ///agregado el usuario a la entidad donde se esta creando
-                                        Entidad_Usuario eu = new Entidad_Usuario();
-                                        eu.Id_Entidad = entidad;
-                                        eu.Id_Usuario = id_usuario;
-                                        eu.Estado = true;
-                                        eu.Fecha_Create = DateTime.Now;
-                                        eu.Fecha_Update = DateTime.Now;
-                                        eu.Usuario_Create = usuario.Value;
-                                        eu.Usuario_Update = usuario.Value;
-                                        ent.Entidad_Usuario.Add(eu);
-                                        /////
+                                        us.Nombres = model.Nombres;
+                                        us.Primer_Apellido = model.Primer_Apellido;
+                                        us.Segundo_Apellido = model.Segundo_Apellido;
+                                        us.Poblado_Id = model.Poblado_Id;
+                                        us.Sexo = model.Sexo;
+                                        us.Fecha_Nacimiento = model.Fecha_Nacimiento;
+                                        us.Foto = model.Foto;
+                                        us.Estado_Civil = model.Estado_Civil;
+                                        us.Tipo_Sangre = model.Tipo_Sangre;
+                                        us.Fecha_Contratacion = model.Fecha_Contratacion.Value;
+                                        us.Tipo_Vinculacion = model.Tipo_Vinculacion;
+                                        us.Observaciones = model.Observaciones;
+
+                                        us.Acepta_ABEAS = model.Acepta_ABEAS;
+                                        us.Foto_ABEAS = model.Foto_ABEAS;
+                                        us.Presta_Servicio = model.Presta_Servicio;
+                                        us.Id_Tipo_Profesional = model.Id_Tipo_Profesional;
+                                        us.Registro_Profesional = model.Registro_Profesional;
+
+                                        us.Login = model.Login;
+                                        us.Email = model.Email;
 
                                         us.Fecha_Create = DateTime.Now;
                                         us.Usuario_Create = usuario;
                                         us.Fecha_Update = DateTime.Now;
                                         us.Usuario_Update = usuario;
-                                        ent.Usuario.Add(us);
-                                        pasos = pasos + "-15-";
-
-                                        ///seccion para obtener los roles que le estan agregando al usuario
-                                        string roles;
-                                        if (!string.IsNullOrEmpty(httpRequest.Form["roles"]))
-                                        {
-                                            roles = Convert.ToString(httpRequest.Form["roles"]);
-                                            string[] rolesArray = roles.Split(',');
-                                            List<Rol_Usuario> lru = new List<Rol_Usuario>();
-                                            foreach (var r in rolesArray)
-                                            {
-                                                //agregando la lista de usuarios
-                                                Rol_Usuario ru = new Rol_Usuario();
-                                                ru.Id_Entidad = entidad;
-                                                ru.Id_Usuario = id_usuario;
-                                                ru.Id_Rol = Guid.Parse(r);
-                                                lru.Add(ru);
-                                            }
-
-                                            if (lru.Count > 0)
-                                            {
-                                                //si hay roles que agregar, los agrega
-                                                ent.Rol_Usuario.AddRange(lru);
-                                            }
-                                        }
-
-                                        ///salvando todos los cambios
+                                        pasos = pasos + "-10-";
                                         ent.SaveChanges();
+                                        pasos = pasos + "-11-";
                                         //se genera el codigo del mensaje de retorno exitoso
-                                        ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                                        ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
                                     }
                                     else
                                     {
@@ -590,16 +681,16 @@ namespace MilenioApi.Action
                             }
                             else
                             {
-                                ///Cedula existe
-                                return ret = autil.MensajeRetorno(ref ret, 5, string.Empty, null);
+                                //usuario ya existe
+                                ret = autil.MensajeRetorno(ref ret, 7, string.Empty, null);
                             }
+                            return ret;
                         }
                         else
                         {
-                            //usuario ya existe
-                            ret = autil.MensajeRetorno(ref ret, 7, string.Empty, null);
+                            //fallo campos requeridos
+                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
                         }
-                        return ret;
                     }
                     else
                     {
@@ -617,28 +708,19 @@ namespace MilenioApi.Action
             }
         }
 
-        /// <summary>
-        /// Metodo que valida si una cedula ya existe
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public Basic ValidateUser(HttpRequest httpRequest)
+        public object ValidateUser(UsuarioModel model)
         {
-            Basic ret = new Basic();
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Entidad_Usuario us = ent.Entidad_Usuario.Where(t => t.Usuario.Numero_Identificacion == model.Numero_Identificacion).SingleOrDefault();
 
-                        string identificacion = Convert.ToString(httpRequest.Form["identificacion"]);
-
-                        List<Entidad_Usuario> leus = ent.Entidad_Usuario.ToList();
-
-                        Entidad_Usuario us = leus.Where(t => t.Usuario.Numero_Identificacion == identificacion).SingleOrDefault();
                         if (us != null)
                         {
                             //La cedula si existe
@@ -672,202 +754,20 @@ namespace MilenioApi.Action
             }
         }
 
-        /// <summary>
-        /// Metodo para editar la informacion del usuario
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public Basic EditUser(HttpRequest httpRequest)
+        public object CreateEntidadUser(UsuarioModel model)
         {
-            Basic ret = new Basic();
-            string pasos = "0";
+            Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
-                    if (cp != null)
-                    {
-                        pasos = pasos + "-1-";
-                        Guid entidad;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["entidadid"]))
-                            entidad = Guid.Parse(httpRequest.Form["entidadid"]);
-                        else
-                            entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        pasos = pasos + "-2-";
-                        Guid? usuario = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["usuarioid"]))
-                            usuario = Guid.Parse(httpRequest.Form["usuarioid"]);
-                        else
-                            usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-
-                        pasos = pasos + "-3-";
-                        Guid id_user = Guid.Parse(httpRequest.Form["iduser"]);
-                        pasos = pasos + "-31-";
-                        string nombre = Convert.ToString(httpRequest.Form["nombre"]);
-                        pasos = pasos + "-32-";
-                        string primer_apellido = Convert.ToString(httpRequest.Form["primerapellido"]);
-                        pasos = pasos + "-33-";
-                        string segundo_apellido = Convert.ToString(httpRequest.Form["segundoapellido"]);
-                        pasos = pasos + "-34-";
-                        string sexo = Convert.ToString(httpRequest.Form["sexo"]);
-                        pasos = pasos + "-35-";
-                        DateTime fnacimiento = Convert.ToDateTime(httpRequest.Form["fechanacimiento"]);
-                        pasos = pasos + "-36-";
-                        bool presta_servicio = Convert.ToBoolean(int.Parse(httpRequest.Form["prestaservicio"]));
-                        pasos = pasos + "-4-";
-                        ///FOTO
-                        ///
-                        String foto = string.Empty;
-                        if (httpRequest.Files.Count > 0)
-                        {
-                            var _foto = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(_foto[0].InputStream).ReadBytes(_foto[0].ContentLength);
-                            foto = Convert.ToBase64String(Content);
-                        }
-
-                        ///FOTO ABEAS
-                        String fotoabeas = string.Empty;
-                        if (httpRequest.Files.Count > 1)
-                        {
-                            var _fotoabeas = httpRequest.Files;
-                            Byte[] Content = new BinaryReader(_fotoabeas[1].InputStream).ReadBytes(_fotoabeas[1].ContentLength);
-                            fotoabeas = Convert.ToBase64String(Content);
-                        }
-                        pasos = pasos + "-5-";
-                        string estadocivil = Convert.ToString(httpRequest.Form["estadocivil"]);
-                        pasos = pasos + "-51-";
-                        string tipo_sangre = Convert.ToString(httpRequest.Form["tiposangre"]);
-                        pasos = pasos + "-52-";
-                        int? poblado_id = null;
-                        if (!string.IsNullOrEmpty(httpRequest.Form["barrio"]))
-                            poblado_id = int.Parse(httpRequest.Form["barrio"]);
-
-                        pasos = pasos + "-53-";
-                        DateTime fcontratacion = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
-                        pasos = pasos + "-54-";
-                        string observaciones = Convert.ToString(httpRequest.Form["observaciones"]);
-                        pasos = pasos + "-55-";
-                        string tipo_vinculacion = Convert.ToString(httpRequest.Form["tipovinculacion"]);
-                        pasos = pasos + "-56-";
-                        bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-                        pasos = pasos + "-6-";
-                        string login = Convert.ToString(httpRequest.Form["user"]);
-                        string email = Convert.ToString(httpRequest.Form["email"]);
-                        pasos = pasos + "-7-";
-                        bool abeas = Convert.ToBoolean(int.Parse(httpRequest.Form["abeas"]));
-
-                        Guid? tipoprofesional = Guid.Parse(httpRequest.Form["tipoprofesional"]);
-                        string registroprofesional = Convert.ToString(httpRequest.Form["registroprofesional"]);
-                        pasos = pasos + "-8-";
-                        List<Usuario> lus = ent.Usuario.ToList();
-
-                        int lexist = lus.Where(t => t.Login == login && t.Id_Usuario != id_user).Count();
-
-                        if (lexist == 0)
-                        {
-                            int emexist = lus.Where(t => t.Email == email && t.Id_Usuario != id_user).Count();
-
-                            if (emexist == 0)
-                            {
-                                int regxist = 0;
-                                if (!string.IsNullOrEmpty(registroprofesional))
-                                    regxist = lus.Where(r => r.Registro_Profesional == registroprofesional && r.Id_Usuario != id_user).Count();
-
-                                if (regxist == 0)
-                                {
-                                    pasos = pasos + "-9-";
-                                    Guid id_usuario = Guid.NewGuid();
-
-                                    Usuario us = ent.Usuario.Where(u => u.Id_Usuario == id_user).SingleOrDefault();
-
-                                    us.Nombres = nombre;
-                                    us.Primer_Apellido = primer_apellido;
-                                    us.Segundo_Apellido = segundo_apellido;
-                                    us.Poblado_Id = poblado_id;
-                                    us.Sexo = sexo;
-                                    us.Fecha_Nacimiento = fnacimiento;
-                                    us.Foto = foto;
-                                    us.Estado_Civil = estadocivil;
-                                    us.TipoSangre = tipo_sangre;
-                                    us.Fecha_Contratacion = fcontratacion;
-                                    us.Tipo_Vinculacion = tipo_vinculacion;
-                                    us.Observaciones = observaciones;
-
-                                    us.Acepta_ABEAS = abeas;
-                                    us.Foto_ABEAS = fotoabeas;
-                                    us.Presta_Servicio = presta_servicio;
-                                    us.Id_Tipo_Profesional = tipoprofesional.Value;
-                                    us.Registro_Profesional = registroprofesional;
-
-                                    us.Login = login;
-                                    us.Email = email;
-
-                                    us.Fecha_Create = DateTime.Now;
-                                    us.Usuario_Create = usuario;
-                                    us.Fecha_Update = DateTime.Now;
-                                    us.Usuario_Update = usuario;
-                                    pasos = pasos + "-10-";
-                                    ent.SaveChanges();
-                                    pasos = pasos + "-11-";
-                                    //se genera el codigo del mensaje de retorno exitoso
-                                    ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
-                                }
-                                else
-                                {
-                                    ///Registro profesional existe
-                                    return ret = autil.MensajeRetorno(ref ret, 3, string.Empty, null);
-                                }
-                            }
-                            else
-                            {
-                                ///Email existe
-                                return ret = autil.MensajeRetorno(ref ret, 6, string.Empty, null);
-                            }
-                        }
-                        else
-                        {
-                            //usuario ya existe
-                            ret = autil.MensajeRetorno(ref ret, 7, string.Empty, null);
-                        }
-                        return ret;
-                    }
-                    else
-                    {
-                        //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message + " " + ex.InnerException + "/" + pasos, null);
-                    return ret;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Metodo para agregar un usuario existente a una entidad
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public Basic CreateEntidadUser(HttpRequest httpRequest)
-        {
-            Basic ret = new Basic();
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                try
-                {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tk.ValidateToken(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        string identificacion = Convert.ToString(httpRequest.Form["identificacion"]);
 
-                        Usuario us = ent.Usuario.Where(u => u.Numero_Identificacion == identificacion).SingleOrDefault();
+                        Usuario us = ent.Usuario.Where(u => u.Numero_Identificacion == model.Numero_Identificacion).SingleOrDefault();
                         if (us != null)
                         {
                             Entidad_Usuario eu = new Entidad_Usuario();
@@ -903,25 +803,19 @@ namespace MilenioApi.Action
             }
         }
 
-        /// <summary>
-        /// metodo para consultar los usuarios de una entidad
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public UsuarioModel GetUsuariosEdit(HttpRequest httpRequest)
+        public object GetUsuariosEdit(UsuarioModel model)
         {
             UsuarioModel um = new UsuarioModel();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                cp = tk.ValidateToken(Convert.ToString(model.token));
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        Guid idusuario = Guid.Parse(httpRequest.Form["idusuario"]);
 
-                        Usuario us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad && t.Id_Usuario == idusuario)
+                        Usuario us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad && t.Id_Usuario == model.Id_Usuario)
                                            .Select(u => u.Usuario).SingleOrDefault();
 
                         if (us != null)
@@ -929,12 +823,13 @@ namespace MilenioApi.Action
                             Copier.CopyPropertiesTo(us, um);
                             um.Id_Municipio = us.Poblado.Municipio_Id;
                             um.Id_Departamento = us.Poblado.Municipio.Departamento.Dane_Id;
+                            um.Password = string.Empty;
 
-                            foreach (var u in ent.Rol_Usuario.Where(r => r.Id_Entidad == entidad && r.Id_Usuario == idusuario))
+                            foreach (var u in ent.Rol_Usuario.Where(r => r.Id_Entidad == entidad && r.Id_Usuario == model.Id_Usuario))
                             {
                                 ComboModel cm = new ComboModel();
                                 cm.id = u.Id_Rol;
-                                cm.Value = u.Rol.Nombre;
+                                cm.value = u.Rol.Nombre;
                                 um.Roles.Add(cm);
                             }
 
@@ -961,11 +856,8 @@ namespace MilenioApi.Action
                 {
                     //TOKEN INVALIDO
                     UsuarioModel u = new UsuarioModel();
-                    Basic rep = new Basic();
-                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
-                    u.Response_Code = rep.Response_Code;
-                    u.Message = rep.Message;
-                    return um;
+                    Response rep = new Response();
+                    return autil.MensajeRetorno(ref rep, 1, string.Empty, null); ;
                 }
 
             }
@@ -975,13 +867,12 @@ namespace MilenioApi.Action
             }
         }
 
-        public Return GetUsuarios(HttpRequest httpRequest)
+        public object GetUsuarios(UsuarioModel model)
         {
-            Return ret = new Return();
-            List<UsuarioModel> um = new List<UsuarioModel>();
+            Response rp = new Response();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                cp = tk.ValidateToken(Convert.ToString(model.token));
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -990,94 +881,82 @@ namespace MilenioApi.Action
 
                         IQueryable<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad).Select(u => u.Usuario);
                         //consulta por id usuario
-                        if (!string.IsNullOrEmpty(httpRequest.Form["idusuario"]))
+                        if (model.Id_Usuario != Guid.Empty)
                         {
-                            Guid idusuario = Guid.Parse(httpRequest.Form["idusuario"]);
-                            us = us.Where(c => c.Id_Usuario == idusuario);
+                            us = us.Where(c => c.Id_Usuario == model.Id_Usuario);
                         }
 
                         //consulta por cedula
-                        if (!string.IsNullOrEmpty(httpRequest.Form["identificacion"]))
+                        if (!string.IsNullOrEmpty(model.Numero_Identificacion))
                         {
-                            string nroidentificacion = Convert.ToString(httpRequest.Form["identificacion"]);
-                            us = us.Where(c => c.Numero_Identificacion.Contains(nroidentificacion));
+                            us = us.Where(c => c.Numero_Identificacion.Contains(model.Numero_Identificacion));
                         }
                         ///consulta por nombre
-                        if (!string.IsNullOrEmpty(httpRequest.Form["nombres"]))
+                        if (!string.IsNullOrEmpty(model.Nombres))
                         {
-                            string nombres = Convert.ToString(httpRequest.Form["nombres"]);
-                            us = us.Where(c => c.Nombres.Contains(nombres));
+                            us = us.Where(c => c.Nombres.Contains(model.Nombres));
                         }
 
                         ///consulta por primer apellido
-                        if (!string.IsNullOrEmpty(httpRequest.Form["primerapellido"]))
+                        if (!string.IsNullOrEmpty(model.Primer_Apellido))
                         {
-                            string primerapellido = Convert.ToString(httpRequest.Form["primerapellido"]);
-                            us = us.Where(c => c.Primer_Apellido.Contains(primerapellido));
+                            us = us.Where(c => c.Primer_Apellido.Contains(model.Primer_Apellido));
                         }
 
                         ///consulta por segundo apellido
-                        if (!string.IsNullOrEmpty(httpRequest.Form["segundoapellido"]))
+                        if (!string.IsNullOrEmpty(model.Segundo_Apellido))
                         {
-                            string segundoapellido = Convert.ToString(httpRequest.Form["segundoapellido"]);
-                            us = us.Where(c => c.Segundo_Apellido.Contains(segundoapellido));
+                            us = us.Where(c => c.Segundo_Apellido.Contains(model.Segundo_Apellido));
                         }
 
                         ///consulta por login
-                        if (!string.IsNullOrEmpty(httpRequest.Form["login"]))
+                        if (!string.IsNullOrEmpty(model.Login))
                         {
-                            string login = Convert.ToString(httpRequest.Form["login"]);
-                            us = us.Where(c => c.Login.Contains(login));
+                            us = us.Where(c => c.Login.Contains(model.Login));
                         }
 
                         ///consulta por email
-                        if (!string.IsNullOrEmpty(httpRequest.Form["email"]))
+                        if (!string.IsNullOrEmpty(model.Email))
                         {
-                            string email = Convert.ToString(httpRequest.Form["email"]);
-                            us = us.Where(c => c.Email.Contains(email));
+                            us = us.Where(c => c.Email.Contains(model.Email));
                         }
 
                         ///consulta por fecha contratacion
-                        if (!string.IsNullOrEmpty(httpRequest.Form["fechacontratacion"]))
+                        if (!string.IsNullOrEmpty(model.Fecha_Contratacion.ToString()))
                         {
-                            DateTime fecha = Convert.ToDateTime(httpRequest.Form["fechacontratacion"]);
-                            us = us.Where(c => c.Fecha_Contratacion == fecha);
+                            us = us.Where(c => c.Fecha_Contratacion == model.Fecha_Contratacion);
                         }
 
-                        //int pageSize = Convert.ToInt32(httpRequest.Form["pageSize"]);
-                        //int startingPageIndex = Convert.ToInt32(httpRequest.Form["startingPageIndex"]);
-
-
-                        //IQueryable<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad).Select(u => u.Usuario);
-                        um = us.Select(u => new UsuarioModel
+                        //int pageSize = Convert.ToInt32(model.Form["pageSize"]);
+                        //int startingPageIndex = Convert.ToInt32(model.Form["startingPageIndex"]);
+                        var rl = us.Select(u => new
                         {
-                            Id_Usuario = u.Id_Usuario,
-                            Nombres = u.Nombres,
-                            Primer_Apellido = u.Primer_Apellido,
-                            Segundo_Apellido = u.Segundo_Apellido,
-                            Login = u.Login,
-                            Fecha_Contratacion = u.Fecha_Contratacion,
-                            Email = u.Email
+                            u.Id_Usuario,
+                            u.Nombres,
+                            u.Primer_Apellido,
+                            u.Segundo_Apellido,
+                            u.Login,
+                            u.Fecha_Contratacion,
+                            u.Email
                         }).ToList();
+
+
                         //.OrderBy(o=> o.Nombres).Skip(startingPageIndex * pageSize).Take(pageSize).ToList();
 
-                        ret.count = um.Count();
-                        ret.listresponse.AddRange(um);
-                        return ret;
+                        rp.cantidad = rl.Count();
+                        rp.pagina = 0;
+                        rp.data.AddRange(rl);
+
+                        //retorna un response, con el campo data lleno con la respuesta.               
+                        return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+
                     }
                 }
                 else
                 {
-                    //TOKEN INVALIDO
-                    //UsuarioModel u = new UsuarioModel();
-                    Basic rep = new Basic();
-                    rep = autil.MensajeRetorno(ref rep, 1, string.Empty, null);
-                    Copier.CopyPropertiesTo(rep, ret);
-                    ret.count = 0;
-                    //u.Response_Code = rep.Response_Code;
-                    //u.Message = rep.Message;
-                    //um.Add(u);
-                    return ret;
+                    //TOKEN INVALIDO                   
+                    Response rep = new Response();
+                    return autil.MensajeRetorno(ref rep, 1, string.Empty, null); ;
                 }
 
             }
@@ -1087,34 +966,6 @@ namespace MilenioApi.Action
             }
         }
 
-        /// <summary>
-        /// Metodo pra llenar combo de tipo de de identificacion
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        /// <returns></returns>
-        public List<ComboModel> GetTipoIdentificacion(HttpRequest httpRequest)
-        {
-            List<ComboModel> ret = new List<ComboModel>();
-            try
-            {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
-                if (cp != null)
-                {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
-                    {
-                        ret = ent.Tipo_Identificacion.Select(l => new ComboModel { id = l.Id_Tipo_Identificacion, Value = l.Nombre }).ToList();
-                        return ret;
-                    }
-                }
-                else
-                    return ret;
-            }
-
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         #endregion
 
         #region Profesional
@@ -1134,7 +985,7 @@ namespace MilenioApi.Action
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
-                        ret = ent.Tipo_Profesional.Select(l => new ComboModel { id = l.Id_Tipo_Profesional, Value = l.Nombre }).ToList();
+                        ret = ent.Tipo_Profesional.Select(l => new ComboModel { id = l.Id_Tipo_Profesional, value = l.Nombre }).ToList();
                         return ret;
                     }
                 }
@@ -1282,7 +1133,7 @@ namespace MilenioApi.Action
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
-                        ret = ent.Rol.Where(r => r.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, Value = l.Nombre }).ToList();
+                        ret = ent.Rol.Where(r => r.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Nombre }).ToList();
                         return ret;
                     }
                 }
@@ -1314,7 +1165,7 @@ namespace MilenioApi.Action
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
                         Guid idusuario = Guid.Parse(httpRequest.Form["usuario"]);
 
-                        ret = ent.Rol_Usuario.Where(u => u.Id_Entidad == entidad && u.Id_Usuario == idusuario && u.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, Value = l.Rol.Nombre }).ToList();
+                        ret = ent.Rol_Usuario.Where(u => u.Id_Entidad == entidad && u.Id_Usuario == idusuario && u.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Rol.Nombre }).ToList();
                         return ret;
                     }
                 }
@@ -1345,7 +1196,7 @@ namespace MilenioApi.Action
                         List<Rol> rol = ent.Rol_Usuario.Where(u => u.Id_Entidad == entidad && u.Id_Usuario == idusuario && u.Estado == true).Select(t => t.Rol).ToList();
                         List<Rol> _rol = ent.Rol.ToList();
 
-                        ret = _rol.Except(rol).Select(l => new ComboModel { id = l.Id_Rol, Value = l.Nombre }).ToList();
+                        ret = _rol.Except(rol).Select(l => new ComboModel { id = l.Id_Rol, value = l.Nombre }).ToList();
 
                         return ret;
                     }
@@ -1477,18 +1328,18 @@ namespace MilenioApi.Action
         #region metodos basicos
 
         ///CREATE
-        //public Basic CreateXXX(HttpRequest httpRequest)
+        //public Basic CreateXXX(HttpRequest model)
         //{
         //    Basic ret = new Basic();
         //    using (MilenioCloudEntities ent = new MilenioCloudEntities())
         //    {
         //        try
         //        {
-        //            cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+        //            cp = tk.ValidateToken(Convert.ToString(model.Form["token"]));
         //            if (cp != null)
         //            {
-        //Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-        //Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+        //Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.value).SingleOrDefault());
+        //Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.value).SingleOrDefault());
         //                //se genera el codigo del mensaje de retorno exitoso
         //                return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
         //            }
@@ -1502,7 +1353,7 @@ namespace MilenioApi.Action
         //        catch (Exception ex)
         //        {
         //            //error general
-        //            ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+        //            ret = autil.MensajeRetorno(ref ret, 4, ex.message, null);
         //            return ret;
         //        }
         //    }

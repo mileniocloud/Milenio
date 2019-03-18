@@ -7,9 +7,10 @@ namespace MilenioApi.Models
 {
     public class Return
     {
-        public string Codigo { get; set; }
-        public string Response_Code { get; set; }
-        public string Message { get; set; }
+        public string name { get; set; }
+        public string codigo { get; set; }
+        public string response_Code { get; set; }
+        public string message { get; set; }
         public Guid? id { get; set; }
         public string  custom { get; set; }
         public string token { get; set; }

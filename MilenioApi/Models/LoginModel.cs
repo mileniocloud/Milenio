@@ -8,17 +8,17 @@ namespace MilenioApi.Models
 {
     public class LoginModel
     {
-        public Guid idusuario { get; set; }
-        public Guid identidad { get; set; }
+        public Guid Id_Usuario { get; set; }
+        public Guid Id_Entidad { get; set; }
 
         [Display(Name ="Login") ]
         [Required]
-        public string user { get; set; }
+        public string User { get; set; }
 
         [Required]
-        public string password { get; set; }
+        public string Password { get; set; }
         [EmailAddress]
-        public string email { get; set; }
+        public string Email { get; set; }
         public string token { get; set; }
         public List<ComboModel> Roles = new List<ComboModel>();
         public List<ComboModel> Entidades = new List<ComboModel>();

@@ -11,18 +11,18 @@
             <param name="o"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aEntidad.CreateEntidad(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aEntidad.CreateEntidad(MilenioApi.Models.EntidadModel)">
             <summary>
             Metodo permite la creacion de entidaddes
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aEntidad.EditEntidad(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aEntidad.EditEntidad(MilenioApi.Models.EntidadModel)">
             <summary>
             Metodo para editar entidades
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:MilenioApi.Action.aSeguridad.OlvidoClave(MilenioApi.Models.LoginModel)">

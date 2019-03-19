@@ -105,8 +105,8 @@ namespace MilenioApi.Action
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
-                        string pass = autil.Sha(model.password);
-                        var um = ent.Usuario.Where(pr => pr.Login == model.user && pr.Password == pass).ToList();
+                        string pass = autil.Sha(model.Password);
+                        var um = ent.Usuario.Where(pr => pr.Login == model.User && pr.Password == pass).ToList();
                         if (um.Count > 0)
                         {
                             foreach (var p in um)
@@ -142,7 +142,7 @@ namespace MilenioApi.Action
                         else
                         {
                             //login invalido                            
-                            return autil.MensajeRetorno(ref rp, 8, model.user + "-" + model.password, null, HttpStatusCode.OK);
+                            return autil.MensajeRetorno(ref rp, 8, model.User + "-" + model.Password, null, HttpStatusCode.OK);
                         }
 
                     }
@@ -173,17 +173,16 @@ namespace MilenioApi.Action
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
-                        Guid entidad = model.identidad;
-                        string pass = autil.Sha(model.password);
+                        string pass = autil.Sha(model.Password);
 
-                        var um = ent.Usuario.Where(pr => pr.Login == model.user && pr.Password == pass).ToList();
+                        var um = ent.Usuario.Where(pr => pr.Login == model.User && pr.Password == pass).ToList();
 
                         if (um.Count > 0)
                         {
                             foreach (var p in um)
                             {
                                 //consultamos los roles disponibles
-                                List<ComboModel> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == entidad && r.Estado == true).Select(t => new ComboModel
+                                List<ComboModel> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == model.Id_Entidad && r.Estado == true).Select(t => new ComboModel
                                 {
                                     id = t.Rol.Id_Rol,
                                     value = t.Rol.Nombre
@@ -191,7 +190,7 @@ namespace MilenioApi.Action
 
                                 if (roles.Count() != 0)
                                 {
-                                    List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true && c.Entidad.Id_Entidad == entidad)
+                                    List<ComboModel> entidades = (p.Entidad_Usuario.Where(c => c.Estado == true && c.Entidad.Id_Entidad == model.Id_Entidad)
                                                             .Select(t => new ComboModel
                                                             {
                                                                 id = t.Id_Entidad,
@@ -201,7 +200,7 @@ namespace MilenioApi.Action
 
                                     roles = roles.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
 
-                                    string token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, entidad);
+                                    string token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, model.Id_Entidad);
 
                                     //aqui seteamos que el usuario ya esta logueado
                                     p.isloged = true;
@@ -297,7 +296,7 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    Usuario p = ent.Usuario.Where(u => u.Login == model.user).SingleOrDefault();
+                    Usuario p = ent.Usuario.Where(u => u.Login == model.User).SingleOrDefault();
                     if (p != null)
                     {
                         //metodo para enviar reseteo de contraseña                        
@@ -358,7 +357,7 @@ namespace MilenioApi.Action
 
                         if (p != null)
                         {
-                            p.Password = autil.Sha(model.password);
+                            p.Password = autil.Sha(model.Password);
                             ent.SaveChanges();
                             ret = autil.MensajeRetorno(ref ret, 10, string.Empty, null);
                         }
@@ -1137,6 +1136,7 @@ namespace MilenioApi.Action
         public object GetRoles(UsuarioModel model)
         {
             List<ComboModel> rl = new List<ComboModel>();
+            Response rp = new Response();
             try
             {
                 cp = tk.ValidateToken(Convert.ToString(model.token));
@@ -1145,17 +1145,23 @@ namespace MilenioApi.Action
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
                         rl = ent.Rol.Where(r => r.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Nombre }).ToList();
-                        return rl;
+                        rp.data.Add(rl);
+
                     }
                 }
                 else
-                    return rl;
+                {
+                    //TOKEN INVALIDO                   
+                    return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                }
+
+                //retorna un response, con el campo data lleno con la respuesta.               
+                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
             }
 
             catch (Exception ex)
             {
-                //error general
-                Response rp = new Response();
+                //error general               
                 return autil.MensajeRetorno(ref rp, 4, ex.Message + " " + ex.InnerException, null, HttpStatusCode.InternalServerError);
             }
         }
@@ -1167,6 +1173,7 @@ namespace MilenioApi.Action
         public object GetRolesUsuario(UsuarioModel model)
         {
             List<ComboModel> rl = new List<ComboModel>();
+            Response rp = new Response();
             try
             {
                 cp = tk.ValidateToken(Convert.ToString(model.token));
@@ -1178,17 +1185,22 @@ namespace MilenioApi.Action
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
                         rl = ent.Rol_Usuario.Where(u => u.Id_Entidad == entidad && u.Id_Usuario == model.Id_Usuario && u.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Rol.Nombre }).ToList();
-                        return rl;
+                        rp.data.Add(rl);
                     }
                 }
                 else
-                    return rl;
+                {
+                    //TOKEN INVALIDO                   
+                    return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                }
+
+                //retorna un response, con el campo data lleno con la respuesta.
+                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
             }
 
             catch (Exception ex)
             {
-                //error general
-                Response rp = new Response();
+                //error general               
                 return autil.MensajeRetorno(ref rp, 4, ex.Message + " " + ex.InnerException, null, HttpStatusCode.InternalServerError);
             }
         }
@@ -1243,7 +1255,7 @@ namespace MilenioApi.Action
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        
+
                         Rol_Usuario ru = ent.Rol_Usuario.Where(r => r.Id_Rol == model.Id_Rol && r.Id_Usuario == model.Id_Usuario && r.Id_Entidad == entidad).SingleOrDefault();
                         if (ru == null)
                         {
@@ -1291,9 +1303,9 @@ namespace MilenioApi.Action
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public Basic EditRolUsuario(UsuarioModel model)
+        public object EditRolUsuario(UsuarioModel model)
         {
-            Basic ret = new Basic();
+            Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
@@ -1303,7 +1315,7 @@ namespace MilenioApi.Action
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        
+
                         Rol_Usuario ru = ent.Rol_Usuario.Where(r => r.Id_Rol == model.Id_Rol && r.Id_Usuario == model.Id_Usuario && r.Id_Entidad == entidad).SingleOrDefault();
                         if (ru != null)
                         {
@@ -1313,20 +1325,20 @@ namespace MilenioApi.Action
                             ent.SaveChanges();
                         }
                         //se genera el codigo del mensaje de retorno exitoso
-                        return ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null, HttpStatusCode.OK);
+                        return autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                     }
                     else
                     {
                         //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
-                        return ret;
+                        rp = autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                        return rp;
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
-                    return ret;
+                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    return rp;
                 }
             }
         }

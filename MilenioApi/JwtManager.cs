@@ -78,31 +78,7 @@ namespace WebApi.Jwt
 
             return token;
         }
-
-        public static string GenerateInvalidToken(string username, int expireMinutes = 2)
-        {
-            var symmetricKey = Convert.FromBase64String(Secret);
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var now = DateTime.UtcNow;
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                        {
-                            new Claim(ClaimTypes.Name, username)
-                        }),
-
-                Expires = now.AddMinutes(expireMinutes),
-
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(stoken);
-
-            return token;
-        }
-
+               
         public static ClaimsPrincipal GetPrincipal(string token)
         {
             try

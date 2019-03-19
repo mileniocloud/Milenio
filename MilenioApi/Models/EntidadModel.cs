@@ -21,9 +21,11 @@ namespace MilenioApi.Models
         public string Hora_Desde { get; set; }
         public string Hora_Hasta { get; set; }
 
-
+        public bool Estado { get; set; }
         public int Id_Municipio { get; set; }
         public int Id_Departamento { get; set; }
+
+        public Guid Id_Especialidad { get; set; }
 
         public string token { get; set; }
     }

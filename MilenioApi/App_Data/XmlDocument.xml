@@ -45,32 +45,32 @@
             <param name="httpRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.GetRoles(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aSeguridad.GetRoles(MilenioApi.Models.UsuarioModel)">
             <summary>
             Metodo para tener todos los roles activos
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.GetRolesUsuario(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aSeguridad.GetRolesUsuario(MilenioApi.Models.UsuarioModel)">
             <summary>
             Metodo para tener todos los roles de un usuario
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.CreateRolUsuario(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aSeguridad.CreateRolUsuario(MilenioApi.Models.UsuarioModel)">
             <summary>
             Metodo para agregar rol a un usuario
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.EditRolUsuario(System.Web.HttpRequest)">
+        <member name="M:MilenioApi.Action.aSeguridad.EditRolUsuario(MilenioApi.Models.UsuarioModel)">
             <summary>
             Metodo para elimiar rol a un usuario
             </summary>
-            <param name="httpRequest"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="P:MilenioApi.Startup.OAuthOptions">

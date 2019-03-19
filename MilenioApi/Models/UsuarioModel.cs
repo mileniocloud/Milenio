@@ -44,6 +44,7 @@ namespace MilenioApi.Models
         [Required]
         public string Password { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         public bool Acepta_ABEAS { get; set; }
@@ -62,6 +63,7 @@ namespace MilenioApi.Models
         public int Id_Departamento { get; set; }        
         public Guid Id_Tipo_Profesional { get; set; }
         public string Registro_Profesional { get; set; }
+        public Guid Id_Rol { get; set; }
 
         public string List_Roles { get; set; }
     }

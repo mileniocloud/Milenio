@@ -25,8 +25,6 @@ namespace MilenioApi.Models
         public int Id_Municipio { get; set; }
         public int Id_Departamento { get; set; }
 
-        public string Response_Code { get; set; }
-        public string Message { get; set; }
-
+        public string token { get; set; }
     }
 }

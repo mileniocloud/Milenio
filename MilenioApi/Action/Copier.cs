@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace MilenioApi.Action
 {
@@ -27,6 +29,20 @@ namespace MilenioApi.Action
 
             }
 
+        }
+
+        public static object CopyPropertiesToVar<T>(this T source)
+        {
+            var sourceProps = typeof(T).GetProperties().Where(x => x.CanRead).ToList();
+            dynamic dynamico = new ExpandoObject();
+            var dictionary = (IDictionary<string, object>)dynamico;           
+
+            foreach (var sourceProp in sourceProps)
+            {
+                var valor = sourceProp.GetValue(source, null);
+                dictionary.Add(sourceProp.Name.Replace("_", "").ToLower(), valor);
+            }
+            return dynamico;
         }
     }
 }

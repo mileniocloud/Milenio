@@ -306,43 +306,43 @@ namespace MilenioApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("GetRoles")]
-        public HttpResponseMessage GetRoles()
+        public HttpResponseMessage GetRoles(UsuarioModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.GetRoles(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.GetRoles(t));
         }
         [HttpPost]
         [AllowAnonymous]
         [Route("GetRolesUsuario")]
-        public HttpResponseMessage GetRolesUsuario()
+        public HttpResponseMessage GetRolesUsuario(UsuarioModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.GetRolesUsuario(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.GetRolesUsuario(t));
         }
         [HttpPost]
         [AllowAnonymous]
         [Route("CreateRolUsuario")]
-        public HttpResponseMessage CreateRolUsuario()
+        public HttpResponseMessage CreateRolUsuario(UsuarioModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.CreateRolUsuario(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.CreateRolUsuario(t));
         }
         [HttpPost]
         [AllowAnonymous]
         [Route("EditRolUsuario")]
-        public HttpResponseMessage EditRolUsuario()
+        public HttpResponseMessage EditRolUsuario(UsuarioModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.EditRolUsuario(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.EditRolUsuario(t));
         }
 
         [HttpPost]
         [AllowAnonymous]
         [Route("GetNotRolesUsuario")]
-        public HttpResponseMessage GetNotRolesUsuario()
+        public HttpResponseMessage GetNotRolesUsuario(UsuarioModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.GetNotRolesUsuario(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.GetNotRolesUsuario(t));
         }
         #endregion
     }

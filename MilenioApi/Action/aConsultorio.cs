@@ -218,6 +218,7 @@ namespace MilenioApi.Action
         public object CreateConsultorioEspecialidad(ConsultorioModel model)
         {
             Response ret = new Response();
+            string hola = string.Empty;
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try

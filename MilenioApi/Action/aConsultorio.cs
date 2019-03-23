@@ -176,34 +176,38 @@ namespace MilenioApi.Action
                         if (lc.Count != 0)
                         {
                             //busca por nombre
-                            if (string.IsNullOrEmpty(model.Nombre))
+                            if (!string.IsNullOrEmpty(model.Nombre))
                             {
                                 lc = lc.Where(t => t.Nombre.Contains(model.Nombre)).ToList();
                             }
 
                             //busca por descripcion
-                            if (string.IsNullOrEmpty(model.Descripcion))
+                            if (!string.IsNullOrEmpty(model.Descripcion))
                             {
                                 lc = lc.Where(t => t.Descripcion.Contains(model.Descripcion)).ToList();
                             }
-                            foreach (var i in lc)
+                            var rl = lc.Select(u => new
                             {
-                                ConsultorioModel cm = new ConsultorioModel();
-                                Copier.CopyPropertiesTo(i, cm);
-                                lcm.Add(cm);
-                            }
+                                id_consultorio = u.Id_Consultorio,
+                                u.Nombre,
+                                u.Descripcion,
+                                u.Estado
+                            }).ToList();
+                            ret.cantidad = rl.Count();
+                            ret.pagina = 0;
+                            ret.data.AddRange(rl);
                         }
                     }
                     else
                     {
                         //token invalido
-                        return autil.MensajeRetorno(ref ret, 1, string.Empty, null);
+                        return autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
                     }
-                    return lcm;
+                    return autil.MensajeRetorno(ref ret, 9, null, null, HttpStatusCode.OK);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return lcm;
+                    return autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.BadRequest);
                 }
             }
         }
@@ -224,45 +228,75 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Consultorio_Especialidad ce = ent.Consultorio_Especialidad
-                                                     .Where(c => c.Id_Consultorio == model.Id_Consultorio
-                                                     && c.Id_Especialidad == model.Id_Especialidad
-                                                     && c.Id_Entidad == entidad).SingleOrDefault();
 
-                        if (ce == null)
+                        int vCons = ent.Consultorio.Where(t => t.Nombre == model.Nombre && t.Id_Entidad == entidad).Count();
+                        Consultorio cons = new Consultorio();
+                        if (vCons == 0)
                         {
-                            ce = new Consultorio_Especialidad();
-                            ce.Id_Consultorio = model.Id_Consultorio;
-                            ce.Id_Especialidad = model.Id_Especialidad;
-                            ce.Id_Entidad = entidad;
-                            ce.Estado = true;
-                            ce.Usuario_Create = usuario;
-                            ce.Usuario_Update = usuario;
-                            ce.Fecha_Create = DateTime.Now;
-                            ce.Fecha_Update = DateTime.Now;
-                            ent.Consultorio_Especialidad.Add(ce);
+                            Copier.CopyPropertiesTo(model, cons);
+                            Guid id_Consultorio = Guid.NewGuid();
+                            cons.Id_Consultorio = id_Consultorio;
+                            cons.Id_Entidad = entidad;
+                            cons.Estado = true;
+                            cons.Usuario_Create = usuario;
+                            cons.Usuario_Update = usuario;
+                            cons.Fecha_Create = DateTime.Now;
+                            cons.Fecha_Update = DateTime.Now;
+                            ent.Consultorio.Add(cons);
+                            string especialildad;
+                            if (!string.IsNullOrEmpty(model.list_Especialidad))
+                            {
+                                especialildad = Convert.ToString(model.list_Especialidad);
+                                string[] especialidadArray = especialildad.Split(',');
+                                List<Consultorio_Especialidad> lce = new List<Consultorio_Especialidad>();
+                                foreach (var esp in especialidadArray)
+                                {
+                                    Consultorio_Especialidad ce = new Consultorio_Especialidad();
+                                    if (ce != null)
+                                    {
+                                        ce.Id_Consultorio = id_Consultorio;
+                                        ce.Id_Especialidad = Guid.Parse(esp);
+                                        ce.Id_Entidad = entidad;
+                                        ce.Estado = true;
+                                        ce.Usuario_Create = usuario;
+                                        ce.Usuario_Update = usuario;
+                                        ce.Fecha_Create = DateTime.Now;
+                                        ce.Fecha_Update = DateTime.Now;
+                                        lce.Add(ce);
+                                    }
+                                    
+                                }
+
+                                if (lce.Count > 0)
+                                {
+                                    //si hay especialidades que agregar, las agrega
+                                    ent.Consultorio_Especialidad.AddRange(lce);
+                                }
+                            }
+
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
+                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
-                            //se especialidad agregada
-                            return ret = autil.MensajeRetorno(ref ret, 27, string.Empty, null);
+                            //Retorna consultorio ya existente
+                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
+                        
                     }
+                    return ret;
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return ret;
                 }
             }
@@ -283,7 +317,7 @@ namespace MilenioApi.Action
 
                         Consultorio_Especialidad ce = ent.Consultorio_Especialidad
                                                      .Where(c => c.Id_Consultorio == model.Id_Consultorio
-                                                     && c.Id_Especialidad == model.Id_Especialidad
+                                                     && c.Id_Especialidad == Guid.Parse( model.list_Especialidad)
                                                      && c.Id_Entidad == entidad).SingleOrDefault();
 
                         if (ce != null)

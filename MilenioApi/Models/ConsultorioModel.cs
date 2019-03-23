@@ -8,7 +8,7 @@ namespace MilenioApi.Models
 {
     public class ConsultorioModel
     {
-        public Guid Id_Especialidad { get; set; }
+        public string list_Especialidad { get; set; }
         public Guid Id_Entidad { get; set; }
         public Guid Id_Consultorio { get; set; }
         [Required]

@@ -268,9 +268,9 @@ namespace MilenioApi.Action
                             CodigoEntidad = u.CodigoEntidad
 
                         }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
-
-
+                        
                         rp.data.Add(rl);
+                        rp.cantidad = rl.Count();
                     }
                     //retorna un response, con el campo data lleno con la respuesta.               
                     return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);

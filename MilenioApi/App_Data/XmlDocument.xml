@@ -25,13 +25,13 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.OlvidoClave(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Action.aSeguridad.ForgotPassword(MilenioApi.Models.LoginModel)">
             <summary>
             Metodo que envia correo con opcion para cambio de clave
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aSeguridad.CambioClave(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Action.aSeguridad.ChangePassword(MilenioApi.Models.LoginModel)">
             <summary>
             metodo para cambiar le la clave a un usuario
             </summary>
@@ -682,7 +682,7 @@
              </remarks>
              <returns>Regresa el token + los roles asociados a esa entidad seleccionada</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.OlvidoClave(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SeguridadController.ForgotPassword(MilenioApi.Models.LoginModel)">
             <summary>
             Se usa para enviar un correo que le permitira cambiar la clave
             </summary>
@@ -692,7 +692,7 @@
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.CambioClave(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SeguridadController.ChangePassword(MilenioApi.Models.LoginModel)">
             <summary>
             Se usa para enviar un correo que le permitira cambiar la clave
             </summary>
@@ -809,6 +809,29 @@
             <remarks>
             PARAMETRO: Id_Usuario [GUID] [REQUERIDO]
             PARAMETRO: token [STRING]
+            </remarks>
+            <returns>Regresa informacion completa del usuario </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SeguridadController.UserProfile(MilenioApi.Models.UsuarioModel)">
+            <summary>
+            Metodo consultar el perfil del usuario
+            </summary>
+            <remarks>
+            PARAMETRO: token [STRING]
+            </remarks>
+            <returns>Regresa informacion completa del usuario </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SeguridadController.EditProfile(MilenioApi.Models.UsuarioModel)">
+            <summary>
+            Metodo editar el perfil del usuario
+            </summary>
+            <remarks>
+            PARAMETRO: Telefono [STRING]
+            PARAMETRO: Foto [STRING]
+            PARAMETRO: Poblado_Id [STRING]
+            PARAMETRO: Direccion [STRING]
+            PARAMETRO: Email [STRING]
+            PARAMETRO: Estado_Civil [STRING]
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>

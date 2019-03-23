@@ -122,15 +122,23 @@ namespace MilenioApi.Action
                                                             }).ToList());
 
                                     entidades = entidades.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
-
-                                    var data = um.Select(t => new
+                                    //
+                                    if (entidades.Count > 1)
                                     {
-                                        id_usuario = t.Id_Usuario,
-                                        login = t.Login,
-                                        entidades
-                                    }).SingleOrDefault();
+                                        var data = um.Select(t => new
+                                        {
+                                            id_usuario = t.Id_Usuario,
+                                            login = t.Login,
+                                            entidades
+                                        }).SingleOrDefault();
 
-                                    rp.data.Add(data);
+                                        rp.data.Add(data);
+                                    }
+                                    else
+                                    {
+                                        model.Id_Entidad = entidades[0].id;
+                                        return rp = (Response)LoginEntidad(model);
+                                    }
                                 }
                                 else
                                 {
@@ -144,7 +152,6 @@ namespace MilenioApi.Action
                             //login invalido                            
                             return autil.MensajeRetorno(ref rp, 8, model.User + "-" + model.Password, null, HttpStatusCode.OK);
                         }
-
                     }
                     else
                     {
@@ -289,7 +296,7 @@ namespace MilenioApi.Action
         /// Metodo que envia correo con opcion para cambio de clave
         /// </summary>
         /// <returns></returns>
-        public object OlvidoClave(LoginModel model)
+        public object ForgotPassword(LoginModel model)
         {
             Response rp = new Response();
             try
@@ -338,7 +345,7 @@ namespace MilenioApi.Action
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public object CambioClave(LoginModel model)
+        public object ChangePassword(LoginModel model)
         {
             Response ret = new Response();
             try
@@ -457,7 +464,7 @@ namespace MilenioApi.Action
         }
         #endregion
 
-        #region Create - ActInactivate - lists
+        #region USER - Create - ActInactivate - lists
 
         public object CreateUser(UsuarioModel model)
         {
@@ -852,7 +859,7 @@ namespace MilenioApi.Action
                                              t.Registro_Profesional,
                                              Rol = cmr,
                                              t.Poblado.Municipio_Id,
-                                             us.Poblado.Municipio.Departamento.Dane_Id,
+                                             Departamento_Id = us.Poblado.Municipio.Departamento.Dane_Id,
                                              Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
                                          }).SingleOrDefault();
 
@@ -976,6 +983,114 @@ namespace MilenioApi.Action
             }
         }
 
+        public object UserProfile(UsuarioModel model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tk.ValidateToken(Convert.ToString(model.token));
+                if (cp != null)
+                {
+                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    {
+                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        var vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).ToList();
+
+                        if (vu.Count > 0)
+                        {
+                            foreach (var us in vu)
+                            {
+                                var r = (from t in vu
+                                         select new
+                                         {
+                                             t.Id_Tipo_Identificacion,
+                                             t.Numero_Identificacion,
+                                             t.Nombres,
+                                             t.Primer_Apellido,
+                                             t.Segundo_Apellido,
+                                             t.Sexo,
+                                             t.Fecha_Nacimiento,
+                                             t.Foto,
+                                             t.Estado_Civil,
+                                             t.Tipo_Sangre,
+                                             t.Poblado_Id,
+                                             t.Direccion,
+                                             t.Telefono,
+                                             t.Fecha_Contratacion,
+                                             t.Observaciones,
+                                             t.Tipo_Vinculacion,
+                                             t.Presta_Servicio,
+                                             t.Email,
+                                             t.Acepta_ABEAS,
+                                             t.Foto_ABEAS,
+                                             t.Id_Tipo_Profesional,
+                                             t.Registro_Profesional,
+                                             t.Poblado.Municipio_Id,
+                                             Departamento_Id = us.Poblado.Municipio.Departamento.Dane_Id,
+                                             Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
+                                         }).SingleOrDefault();
+
+                                rp.data.Add(r);
+                            }
+                        }
+
+                        return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    }
+                }
+                else
+                {
+                    //TOKEN INVALIDO
+                    return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object EditProfile(UsuarioModel model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tk.ValidateToken(Convert.ToString(model.token));
+                if (cp != null)
+                {
+                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    {
+                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        Usuario vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).SingleOrDefault();
+
+                        vu.Telefono = model.Telefono;
+                        vu.Foto = model.Foto;
+                        vu.Poblado_Id = model.Poblado_Id;
+                        vu.Direccion = model.Direccion;
+                        vu.Email = model.Email;
+                        vu.Estado_Civil = model.Estado_Civil;
+
+                        ent.SaveChanges();
+
+                        return autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
+                    }
+                }
+                else
+                {
+                    //TOKEN INVALIDO
+                    return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+            }
+        }
         #endregion
 
         #region Profesional

@@ -91,11 +91,11 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>
         [AllowAnonymous]
-        [Route("OlvidoClave")]
-        public HttpResponseMessage OlvidoClave([FromBody] LoginModel t)
+        [Route("ForgotPassword")]
+        public HttpResponseMessage ForgotPassword([FromBody] LoginModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.OlvidoClave(t));
+            return ut.ReturnResponse(s.ForgotPassword(t));
         }
 
         /// <summary>
@@ -108,11 +108,11 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>REGRESA UN MENSAJE INDICANDO QUE LA CALVE CAMBIO</returns>
         [AllowAnonymous]
-        [Route("CambioClave")]
-        public HttpResponseMessage CambioClave([FromBody] LoginModel t)
+        [Route("ChangePassword")]
+        public HttpResponseMessage ChangePassword([FromBody] LoginModel t)
         {
             aSeguridad s = new aSeguridad();
-            return ut.ReturnResponse(s.CambioClave(t));
+            return ut.ReturnResponse(s.ChangePassword(t));
         }
         #endregion
 
@@ -266,6 +266,43 @@ namespace MilenioApi.Controllers
         {
             aSeguridad s = new aSeguridad();
             return ut.ReturnResponse(s.GetUsuariosEdit(t));
+        }
+
+        /// <summary>
+        /// Metodo consultar el perfil del usuario
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: token [STRING]
+        /// </remarks>
+        /// <returns>Regresa informacion completa del usuario </returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("UserProfile")]
+        public HttpResponseMessage UserProfile(UsuarioModel t)
+        {
+            aSeguridad s = new aSeguridad();
+            return ut.ReturnResponse(s.UserProfile(t));
+        }
+
+        /// <summary>
+        /// Metodo editar el perfil del usuario
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: Telefono [STRING]
+        /// PARAMETRO: Foto [STRING]
+        /// PARAMETRO: Poblado_Id [STRING]
+        /// PARAMETRO: Direccion [STRING]
+        /// PARAMETRO: Email [STRING]
+        /// PARAMETRO: Estado_Civil [STRING]
+        /// </remarks>
+        /// <returns>Regresa informacion completa del usuario </returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("EditProfile")]
+        public HttpResponseMessage EditProfile(UsuarioModel t)
+        {
+            aSeguridad s = new aSeguridad();
+            return ut.ReturnResponse(s.EditProfile(t));
         }
 
         [HttpPost]

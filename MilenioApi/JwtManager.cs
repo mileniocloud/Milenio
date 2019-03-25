@@ -10,6 +10,7 @@ using MilenioApi.DAO;
 using System.Web.Script.Serialization;
 using MilenioApi.Models;
 using MilenioApi.Controllers;
+using System.Configuration;
 
 namespace WebApi.Jwt
 {
@@ -20,43 +21,36 @@ namespace WebApi.Jwt
         ///     var hmac = new HMACSHA256();
         ///     var key = Convert.ToBase64String(hmac.Key);
         /// </summary>
-        private const string Secret = "db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==";
 
-        public static string GenerateToken(string login, List<ComboModel> entidades, string userid, List<ComboModel> roles, Guid? entidad_id)
-        {
-            var symmetricKey = Convert.FromBase64String(Secret);
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-
-            var listroles = new JavaScriptSerializer().Serialize(roles);           
-            string listentidades = JsonConvert.SerializeObject(entidades);
-
-            var now = DateTime.UtcNow;
-            int expireMinutes = int.Parse(System.Configuration.ConfigurationManager.AppSettings["tokentime"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                        {
-                            new Claim(ClaimTypes.Name, login),
-                            new Claim(ClaimTypes.NameIdentifier, userid),
-                            new Claim(ClaimTypes.GroupSid, listentidades),
-                            new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()),
-                            new Claim(ClaimTypes.Role, listroles)
-                        }),
-                Expires = now.AddMinutes(expireMinutes),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(stoken);
-
-            return token;
-        }
         public static string GenerateToken(string login, string userid, List<ComboModel> roles, Guid? entidad_id)
         {
-            return TokenGenerator.GenerateTokenJwt(login, userid, roles, entidad_id);
+            // appsetting for Token JWT
+            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
+            var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
+            var issuerToken = ConfigurationManager.AppSettings["JWT_ISSUER_TOKEN"];
+            var expireTime = ConfigurationManager.AppSettings["JWT_EXPIRE_MINUTES"];
+
+            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var listroles = new JavaScriptSerializer().Serialize(roles);
+            // create a claimsIdentity
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login), new Claim(ClaimTypes.NameIdentifier, userid), new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()), new Claim(ClaimTypes.Role, listroles) });
+
+            // create token to the user
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var jwtSecurityToken = tokenHandler.CreateJwtSecurityToken(
+                audience: audienceToken,
+                issuer: issuerToken,
+                subject: claimsIdentity,
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(expireTime)),
+                signingCredentials: signingCredentials);
+
+            var jwtTokenString = tokenHandler.WriteToken(jwtSecurityToken);
+
+            return jwtTokenString;
         }
-               
+
         public static ClaimsPrincipal GetPrincipal(string token)
         {
             try
@@ -67,7 +61,7 @@ namespace WebApi.Jwt
                 if (jwtToken == null)
                     return null;
 
-                var symmetricKey = Convert.FromBase64String(Secret);
+                var symmetricKey = Convert.FromBase64String("");
 
                 var validationParameters = new TokenValidationParameters()
                 {

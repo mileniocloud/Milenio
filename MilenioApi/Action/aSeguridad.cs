@@ -55,8 +55,7 @@ namespace MilenioApi.Action
                                     if (entidades.Count > 1)
                                     {
                                         var data = um.Select(t => new
-                                        {
-                                            id_usuario = t.Id_Usuario,
+                                        {                                            
                                             login = t.Login,
                                             entidades
                                         }).SingleOrDefault();
@@ -144,8 +143,7 @@ namespace MilenioApi.Action
 
                                     var r = (from t in um
                                              select new
-                                             {
-                                                 id_usuario = p.Id_Usuario,
+                                             {                                                
                                                  login = p.Login,
                                                  entidades,
                                                  roles,

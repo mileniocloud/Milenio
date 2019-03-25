@@ -301,6 +301,7 @@
     <Compile Include="Controllers\ProfesionalController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
+    <Compile Include="Controllers\TokenGenerator.cs" />
     <Compile Include="DAO\Actividad_Economica.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>

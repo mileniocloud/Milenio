@@ -9,6 +9,7 @@ using System.Linq;
 using MilenioApi.DAO;
 using System.Web.Script.Serialization;
 using MilenioApi.Models;
+using MilenioApi.Controllers;
 
 namespace WebApi.Jwt
 {
@@ -53,30 +54,7 @@ namespace WebApi.Jwt
         }
         public static string GenerateToken(string login, string userid, List<ComboModel> roles, Guid? entidad_id)
         {
-            var symmetricKey = Convert.FromBase64String(Secret);
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var listroles = new JavaScriptSerializer().Serialize(roles);
-
-            var now = DateTime.UtcNow;
-            int expireMinutes = int.Parse(System.Configuration.ConfigurationManager.AppSettings["tokentime"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                        {
-                            new Claim(ClaimTypes.Name, login),
-                            new Claim(ClaimTypes.NameIdentifier, userid),
-                            new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()),
-                            new Claim(ClaimTypes.Role, listroles)
-                        }),
-                Expires = now.AddMinutes(expireMinutes),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(stoken);
-
-            return token;
+            return TokenGenerator.GenerateTokenJwt(login, userid, roles, entidad_id);
         }
                
         public static ClaimsPrincipal GetPrincipal(string token)

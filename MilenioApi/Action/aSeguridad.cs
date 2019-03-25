@@ -19,9 +19,10 @@ namespace MilenioApi.Action
         private TokenController tk = new TokenController();
         aUtilities autil = new aUtilities();
         ClaimsPrincipal cp = new ClaimsPrincipal();
+        TokenValidationHandler tkv = new TokenValidationHandler();
 
         #region Login        
-      
+
         public object Login(LoginModel model)
         {
             ///cambios del dia 23/03/2019
@@ -55,7 +56,7 @@ namespace MilenioApi.Action
                                     if (entidades.Count > 1)
                                     {
                                         var data = um.Select(t => new
-                                        {                                            
+                                        {
                                             login = t.Login,
                                             entidades
                                         }).SingleOrDefault();
@@ -117,11 +118,8 @@ namespace MilenioApi.Action
                             foreach (var p in um)
                             {
                                 //consultamos los roles disponibles
-                                List<ComboModel> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == model.Id_Entidad && r.Estado == true).Select(t => new ComboModel
-                                {
-                                    id = t.Rol.Id_Rol,
-                                    value = t.Rol.Nombre
-                                }).ToList();
+                                List<string> roles = ent.Rol_Usuario.Where(r => r.Id_Usuario == p.Id_Usuario && r.Id_Entidad == model.Id_Entidad && r.Estado == true)
+                                                    .Select(t => t.Rol.Nombre).ToList();
 
                                 if (roles.Count() != 0)
                                 {
@@ -131,9 +129,10 @@ namespace MilenioApi.Action
                                                                 id = t.Id_Entidad,
                                                                 value = t.Entidad.Nombre
                                                             }).ToList());
+
                                     entidades = entidades.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
 
-                                    roles = roles.GroupBy(rl => rl.id).Select(g => g.First()).ToList();
+                                    roles = roles.GroupBy(rl => rl).Select(g => g.First()).ToList();
 
                                     string token = JwtManager.GenerateToken(p.Login, p.Id_Usuario.ToString(), roles, model.Id_Entidad);
 
@@ -143,7 +142,7 @@ namespace MilenioApi.Action
 
                                     var r = (from t in um
                                              select new
-                                             {                                                
+                                             {
                                                  login = p.Login,
                                                  entidades,
                                                  roles,
@@ -915,61 +914,54 @@ namespace MilenioApi.Action
             Response rp = new Response();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(model.token));
-                if (cp != null)
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    cp = tkv.getprincipal(Convert.ToString(model.token));
+
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    var vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).ToList();
+
+                    if (vu.Count > 0)
                     {
-                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-
-                        var vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).ToList();
-
-                        if (vu.Count > 0)
+                        foreach (var us in vu)
                         {
-                            foreach (var us in vu)
-                            {
-                                var r = (from t in vu
-                                         select new
-                                         {
-                                             t.Id_Tipo_Identificacion,
-                                             t.Numero_Identificacion,
-                                             t.Nombres,
-                                             t.Primer_Apellido,
-                                             t.Segundo_Apellido,
-                                             t.Sexo,
-                                             t.Fecha_Nacimiento,
-                                             t.Foto,
-                                             t.Estado_Civil,
-                                             t.Tipo_Sangre,
-                                             t.Poblado_Id,
-                                             t.Direccion,
-                                             t.Telefono,
-                                             t.Fecha_Contratacion,
-                                             t.Observaciones,
-                                             t.Tipo_Vinculacion,
-                                             t.Presta_Servicio,
-                                             t.Email,
-                                             t.Acepta_ABEAS,
-                                             t.Foto_ABEAS,
-                                             t.Id_Tipo_Profesional,
-                                             t.Registro_Profesional,
-                                             t.Poblado.Municipio_Id,
-                                             Departamento_Id = us.Poblado.Municipio.Departamento.Dane_Id,
-                                             Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
-                                         }).SingleOrDefault();
+                            var r = (from t in vu
+                                     select new
+                                     {
+                                         t.Id_Tipo_Identificacion,
+                                         t.Numero_Identificacion,
+                                         t.Nombres,
+                                         t.Primer_Apellido,
+                                         t.Segundo_Apellido,
+                                         t.Sexo,
+                                         t.Fecha_Nacimiento,
+                                         t.Foto,
+                                         t.Estado_Civil,
+                                         t.Tipo_Sangre,
+                                         t.Poblado_Id,
+                                         t.Direccion,
+                                         t.Telefono,
+                                         t.Fecha_Contratacion,
+                                         t.Observaciones,
+                                         t.Tipo_Vinculacion,
+                                         t.Presta_Servicio,
+                                         t.Email,
+                                         t.Acepta_ABEAS,
+                                         t.Foto_ABEAS,
+                                         t.Id_Tipo_Profesional,
+                                         t.Registro_Profesional,
+                                         t.Poblado.Municipio_Id,
+                                         Departamento_Id = us.Poblado.Municipio.Departamento.Dane_Id,
+                                         Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
+                                     }).SingleOrDefault();
 
-                                rp.data.Add(r);
-                            }
+                            rp.data.Add(r);
                         }
-
-                        return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                     }
-                }
-                else
-                {
-                    //TOKEN INVALIDO
-                    return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+
+                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)

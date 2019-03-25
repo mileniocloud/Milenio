@@ -22,7 +22,7 @@ namespace WebApi.Jwt
         ///     var key = Convert.ToBase64String(hmac.Key);
         /// </summary>
 
-        public static string GenerateToken(string login, string userid, List<ComboModel> roles, Guid? entidad_id)
+        public static string GenerateToken(string login, string userid, List<string> roles, Guid? entidad_id)
         {
             // appsetting for Token JWT
             var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
@@ -32,9 +32,20 @@ namespace WebApi.Jwt
 
             var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-            var listroles = new JavaScriptSerializer().Serialize(roles);
+            
             // create a claimsIdentity
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login), new Claim(ClaimTypes.NameIdentifier, userid), new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString()), new Claim(ClaimTypes.Role, listroles) });
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] {
+                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.NameIdentifier, userid)
+                ,new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString())                
+            });
+
+            //recorremos la lista de roles que se envian, y se agrega un rol por cada uno
+            foreach (var r in roles)
+            {
+                Claim cc = new Claim(ClaimTypes.Role, r);
+                claimsIdentity.AddClaim(cc);
+            }
 
             // create token to the user
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();

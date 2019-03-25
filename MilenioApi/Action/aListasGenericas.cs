@@ -28,13 +28,13 @@ namespace MilenioApi.Action
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
-                        List<Basic> dp = ent.Departamento.Select(l => new Basic { id = l.Codigo_Id, value = l.Nombre, codigo = l.Dane_Id.ToString() }).ToList();
-                        List<Basic> mp = ent.Municipio.Select(l => new Basic { codigostring = l.Dane_Id.ToString(), value = l.Nombre, codigo = l.Departamento_Id.ToString() }).ToList();
-                        List<Basic> pb = ent.Poblado.Select(l => new Basic { codigostring = l.Poblado_Id.ToString(), value = l.Nombre, codigo = l.Municipio_Id.ToString() }).ToList();
+                        //List<Basic> dp = ent.Departamento.Select(l => new ComboModel { id = l.Codigo_Id, value = l.Nombre, codigo = l.Dane_Id.ToString() }).ToList();
+                        //List<Basic> mp = ent.Municipio.Select(l => new Basic { codigostring = l.Dane_Id.ToString(), value = l.Nombre, codigo = l.Departamento_Id.ToString() }).ToList();
+                        //List<Basic> pb = ent.Poblado.Select(l => new Basic { codigostring = l.Poblado_Id.ToString(), value = l.Nombre, codigo = l.Municipio_Id.ToString() }).ToList();
 
-                        pm.Departamento.AddRange(dp);
-                        pm.Municipio.AddRange(mp);
-                        pm.Poblado.AddRange(pb);
+                        //pm.Departamento.AddRange(dp);
+                        //pm.Municipio.AddRange(mp);
+                        //pm.Poblado.AddRange(pb);
 
                         return pm;
                     }

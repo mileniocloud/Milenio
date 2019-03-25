@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Swashbuckle.Application;
+using static MilenioApi.Controllers.TokenValidationHandler;
 
 namespace MilenioApi
 {
@@ -26,6 +27,7 @@ namespace MilenioApi
             config.MapHttpAttributeRoutes();
             var corsAttr = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(corsAttr);
+            config.MessageHandlers.Add(new TokenValidateHandler());
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

@@ -14,7 +14,7 @@ namespace MilenioApi.Action
 {
     public class aListasGenericas
     {
-        TokenController tk = new TokenController();
+        TokenValidationHandler tvh = new TokenValidationHandler();
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
 
@@ -23,7 +23,7 @@ namespace MilenioApi.Action
             PobladoModel pm = new PobladoModel();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())

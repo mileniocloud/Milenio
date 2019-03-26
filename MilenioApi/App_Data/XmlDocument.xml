@@ -835,12 +835,5 @@
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>
-        <member name="M:WebApi.Jwt.JwtManager.GenerateToken(System.String,System.String,System.Collections.Generic.List{System.String},System.Nullable{System.Guid})">
-            <summary>
-            Use the below code to generate symmetric Secret Key
-                var hmac = new HMACSHA256();
-                var key = Convert.ToBase64String(hmac.Key);
-            </summary>
-        </member>
     </members>
 </doc>

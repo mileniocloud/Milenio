@@ -48,7 +48,50 @@ namespace MilenioApi.Controllers
             return false;
         }
 
+        public string GenerateToken(string login, string userid, List<string> roles, Guid? entidad_id)
+        {
+            // appsetting for Token JWT
+            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
+            var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
+            var issuerToken = ConfigurationManager.AppSettings["JWT_ISSUER_TOKEN"];
+            var expireTime = ConfigurationManager.AppSettings["JWT_EXPIRE_MINUTES"];
 
+            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            // create a claimsIdentity
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] {
+                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.NameIdentifier, userid)
+                ,new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString())
+            });
+
+            //recorremos la lista de roles que se envian, y se agrega un rol por cada uno
+            foreach (var r in roles)
+            {
+                Claim cc = new Claim(ClaimTypes.Role, r);
+                claimsIdentity.AddClaim(cc);
+            }
+
+            // create token to the user
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var jwtSecurityToken = tokenHandler.CreateJwtSecurityToken(
+                audience: audienceToken,
+                issuer: issuerToken,
+                subject: claimsIdentity,
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(expireTime)),
+                signingCredentials: signingCredentials);
+
+            var jwtTokenString = tokenHandler.WriteToken(jwtSecurityToken);
+
+            return jwtTokenString;
+        }
+
+        public static DateTime ConvertTimespan(uint timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(timestamp);
+        }
         internal class TokenValidateHandler : DelegatingHandler
         {
             private static bool TryRetrieveToken(HttpRequestMessage request, out string token)

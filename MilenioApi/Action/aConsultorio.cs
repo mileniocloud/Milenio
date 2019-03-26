@@ -38,20 +38,54 @@ namespace MilenioApi.Action
                                                        
                             //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
                             //Y SE COPIA AL OBJETO USER
-                            Consultorio cl = new Consultorio();
-                            Copier.CopyPropertiesTo(model, cl);
+                            Consultorio cons = new Consultorio();
+                           
                             //
                             //VALIDAMOS SI EL CONSULTORIO YA EXISTE
                             Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
 
                             if (c == null)
                             {
-                                cl.Fecha_Create = DateTime.Now;
-                                cl.Fecha_Update = DateTime.Now;
-                                cl.Usuario_Create = usuario;
-                                cl.Usuario_Update = usuario;
+                                Copier.CopyPropertiesTo(model, cons);
+                                Guid id_Consultorio = Guid.NewGuid();
+                                cons.Id_Consultorio = id_Consultorio;
+                                cons.Id_Entidad = entidad;
+                                cons.Estado = true;
+                                cons.Usuario_Create = usuario;
+                                cons.Usuario_Update = usuario;
+                                cons.Fecha_Create = DateTime.Now;
+                                cons.Fecha_Update = DateTime.Now;
+                                ent.Consultorio.Add(cons);
+                                string especialildad;
+                                if (!string.IsNullOrEmpty(model.list_Especialidad))
+                                {
+                                    especialildad = Convert.ToString(model.list_Especialidad);
+                                    string[] especialidadArray = especialildad.Split(',');
+                                    List<Consultorio_Especialidad> lce = new List<Consultorio_Especialidad>();
+                                    foreach (var esp in especialidadArray)
+                                    {
+                                        Consultorio_Especialidad ce = new Consultorio_Especialidad();
+                                        if (ce != null)
+                                        {
+                                            ce.Id_Consultorio = id_Consultorio;
+                                            ce.Id_Especialidad = Guid.Parse(esp);
+                                            ce.Id_Entidad = entidad;
+                                            ce.Estado = true;
+                                            ce.Usuario_Create = usuario;
+                                            ce.Usuario_Update = usuario;
+                                            ce.Fecha_Create = DateTime.Now;
+                                            ce.Fecha_Update = DateTime.Now;
+                                            lce.Add(ce);
+                                        }
 
-                                ent.Consultorio.Add(cl);
+                                    }
+
+                                    if (lce.Count > 0)
+                                    {
+                                        //si hay especialidades que agregar, las agrega
+                                        ent.Consultorio_Especialidad.AddRange(lce);
+                                    }
+                                }
                                 ent.SaveChanges();
                                 //se genera el codigo del mensaje de retorno exitoso
                                 return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);

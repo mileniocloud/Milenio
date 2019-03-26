@@ -57,8 +57,8 @@ namespace MilenioApi.Action
                                    select g).SingleOrDefault();
 
                 
-                ret.response_code = ge.Codigo;
-                ret.message = ge.Message + " " + custom;
+               
+               
             }
 
             return ret;
@@ -73,8 +73,8 @@ namespace MilenioApi.Action
                                    select g).SingleOrDefault();
 
                 
-                ret.response_code = ge.Codigo;
-                ret.message = ge.Message + " " + custom;
+               
+               
             }
 
             return ret;

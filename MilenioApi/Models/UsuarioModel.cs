@@ -7,9 +7,9 @@ using System.Web;
 
 namespace MilenioApi.Models
 {
-    public class UsuarioModel
+    public class UsuarioModel: Basic
     {
-        public string token { get; set; }
+
         public Guid Id_Usuario { get; set; }
         [Required]
         public string Id_Tipo_Identificacion { get; set; }

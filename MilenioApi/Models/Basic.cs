@@ -6,18 +6,25 @@ using System.Web;
 namespace MilenioApi.Models
 {
     public class Basic
-    {      
+    {
         public string nombre { get; set; }
         public string descripcion { get; set; }
-        public string codigo { get; set; }
-        public string message { get; set; }
-        public Guid? id { get; set; }
-        public string custom { get; set; }
-        public string token { get; set; }
-        public string value { get; set; }
-        public bool estado { get; set; }
-        public int codigoint { get; set; }
-        public string codigostring { get; set; }
-        public string response_code { get; set; }
+
+        public string _token { get; set; }
+
+        public string token
+        {
+            get
+            {
+                var httpRequest = HttpContext.Current.Request;
+                var token = httpRequest.RequestContext.HttpContext.Items;
+               return _token = ((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter.ToString();
+            }
+            set
+            {
+                
+            }
+        }
+
     }
 }

@@ -1,10 +1,5 @@
 ﻿using MilenioApi.Action;
 using MilenioApi.Models;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -15,6 +10,7 @@ namespace MilenioApi.Controllers
     public class SeguridadController : ApiController
     {
         aUtilities ut = new aUtilities();
+
 
         #region Login
         /// <summary>
@@ -276,12 +272,13 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion completa del usuario </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("UserProfile")]
         public HttpResponseMessage UserProfile(UsuarioModel t)
         {
-            aSeguridad s = new aSeguridad();
+            aSeguridad s = new aSeguridad();           
             return ut.ReturnResponse(s.UserProfile(t));
+
         }
 
         /// <summary>
@@ -314,7 +311,10 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetTipoProfesional(HttpContext.Current.Request));
         }
 
-       
+        public string windowroles()
+        {
+            return string.Empty;
+        }
         #endregion
 
         #region Especialidad profesional

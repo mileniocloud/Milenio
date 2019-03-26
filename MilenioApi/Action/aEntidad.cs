@@ -15,7 +15,7 @@ namespace MilenioApi.Action
 {
     public class aEntidad
     {
-        TokenController tk = new TokenController();
+        TokenValidationHandler tvh = new TokenValidationHandler();
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
 
@@ -37,7 +37,7 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Response b = new Response();
@@ -155,7 +155,7 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    cp = tk.ValidateToken(model.token);
+                    cp = tvh.getprincipal(model.token);
                     if (cp != null)
                     {
                         List<ErrorFields> rel = autil.ValidateObject(model);
@@ -222,7 +222,7 @@ namespace MilenioApi.Action
             Response rp = new Response();
             try
             {
-                cp = tk.ValidateToken(model.token);
+                cp = tvh.getprincipal(model.token);
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -297,7 +297,7 @@ namespace MilenioApi.Action
             Response rp = new Response();
             try
             {
-                cp = tk.ValidateToken(model.token);
+                cp = tvh.getprincipal(model.token);
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -348,7 +348,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(model.token);
+                    cp = tvh.getprincipal(model.token);
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -402,7 +402,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(model.token);
+                    cp = tvh.getprincipal(model.token);
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());

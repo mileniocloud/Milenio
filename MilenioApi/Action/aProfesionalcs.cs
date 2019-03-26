@@ -14,7 +14,7 @@ namespace MilenioApi.Action
 {
     public class aProfesionalcs
     {
-        private TokenController tk = new TokenController();
+        private TokenValidationHandler tvh = new TokenValidationHandler();
         aUtilities autil = new aUtilities();
         ClaimsPrincipal cp = new ClaimsPrincipal();
 

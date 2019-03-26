@@ -14,7 +14,7 @@ namespace MilenioApi.Action
 {
     public class aAgenda
     {
-        TokenController tk = new TokenController();
+        TokenValidationHandler tvh = new TokenValidationHandler();
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
 
@@ -26,7 +26,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -102,7 +102,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -175,7 +175,7 @@ namespace MilenioApi.Action
             List<Agenda_Profesional> ap = new List<Agenda_Profesional>();
             try
             {
-                cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
                 if (cp != null)
                 {
                     using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -274,7 +274,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(httpRequest.Form["token"]));
+                    cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());

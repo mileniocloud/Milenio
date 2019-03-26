@@ -12,7 +12,7 @@ namespace MilenioApi.Action
 {
     public class aConsultorio
     {
-        private TokenController tk = new TokenController();
+        private TokenValidationHandler tvh = new TokenValidationHandler();
         aUtilities autil = new aUtilities();
         #region CRUD
         ClaimsPrincipal cp = new ClaimsPrincipal();
@@ -24,7 +24,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(model.token);
+                    cp = tvh.getprincipal(model.token);
                     if (cp != null)
                     {
                         Response b = new Response();
@@ -91,7 +91,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Response b = new Response();
@@ -165,7 +165,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -222,7 +222,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
@@ -309,7 +309,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tk.ValidateToken(Convert.ToString(model.token));
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
                     if (cp != null)
                     {
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());

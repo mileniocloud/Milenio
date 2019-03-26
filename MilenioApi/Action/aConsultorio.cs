@@ -315,38 +315,70 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Consultorio_Especialidad ce = ent.Consultorio_Especialidad
+                        Consultorio con = ent.Consultorio
                                                      .Where(c => c.Id_Consultorio == model.Id_Consultorio
-                                                     && c.Id_Especialidad == Guid.Parse( model.list_Especialidad)
                                                      && c.Id_Entidad == entidad).SingleOrDefault();
 
-                        if (ce != null)
+                        if (con != null)
                         {
-                            ce.Estado = model.Estado;
-                            ce.Usuario_Update = usuario;
-                            ce.Fecha_Update = DateTime.Now;
+                            Copier.CopyPropertiesTo(model, con);
+                            con.Estado = model.Estado;
+                            con.Usuario_Update = usuario;
+                            con.Fecha_Update = DateTime.Now;
+                            string especialildad;
+                            if (!string.IsNullOrEmpty(model.list_Especialidad))
+                            {
+                                especialildad = Convert.ToString(model.list_Especialidad);
+                                string[] especialidadArray = especialildad.Split(',');
+                                List<Consultorio_Especialidad> lce = new List<Consultorio_Especialidad>();
+                                foreach (var esp in especialidadArray)
+                                {
+                                    Consultorio_Especialidad ce = ent.Consultorio_Especialidad.Where(ces => ces.Id_Consultorio == model.Id_Consultorio
+                                                     && ces.Id_Entidad == entidad && ces.Id_Especialidad == Guid.Parse(esp)).SingleOrDefault();
+                                    if (ce != null)
+                                    {
+                                        ce.Id_Consultorio = model.Id_Consultorio;
+                                        ce.Id_Especialidad = Guid.Parse(esp);
+                                        ce.Id_Entidad = entidad;
+                                        ce.Estado = true;
+                                        ce.Usuario_Create = usuario;
+                                        ce.Usuario_Update = usuario;
+                                        ce.Fecha_Create = DateTime.Now;
+                                        ce.Fecha_Update = DateTime.Now;
+                                        lce.Add(ce);
+                                    }
+
+                                }
+
+                                if (lce.Count > 0)
+                                {
+                                    //si hay especialidades que agregar, las agrega
+                                    ent.Consultorio_Especialidad.AddRange(lce);
+                                }
+                            }
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            return ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
+                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
-                            // especialidad no agregada
-                            return ret = autil.MensajeRetorno(ref ret, 28, string.Empty, null);
+                            //Retorna consultorio no existente
+                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
+                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
+                        
                     }
+                    return ret;
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
+                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return ret;
                 }
             }

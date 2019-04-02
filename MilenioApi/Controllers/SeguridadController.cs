@@ -1,5 +1,7 @@
 ﻿using MilenioApi.Action;
 using MilenioApi.Models;
+using Swashbuckle.Swagger.Annotations;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -22,8 +24,8 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa un usuario con la lista de entidades a las que pertenece </returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("Login")]
+    
         public HttpResponseMessage Login([FromBody] LoginModel t)
         {
             aSeguridad s = new aSeguridad();
@@ -36,7 +38,7 @@ namespace MilenioApi.Controllers
         /// PARAMETRO: token [STRING]
         /// </remarks>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("LogOff")]
         public HttpResponseMessage LogOff([FromBody] LoginModel t)
         {
@@ -70,8 +72,7 @@ namespace MilenioApi.Controllers
         ///} <br /><br />
         /// </remarks>
         /// <returns>Regresa el token + los roles asociados a esa entidad seleccionada</returns>
-        [HttpPost]
-        [AllowAnonymous]
+        [HttpPost]       
         [Route("LoginEntidad")]
         public HttpResponseMessage LoginEntidad([FromBody] LoginModel t)
         {
@@ -83,10 +84,9 @@ namespace MilenioApi.Controllers
         /// </summary>
         /// <param name="t"></param>
         /// <remarks>
-        /// PARAMETRO: token [STRING]
+        /// PARAMETRO: user [STRING]
         /// </remarks>
-        /// <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>
-        [AllowAnonymous]
+        /// <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>      
         [Route("ForgotPassword")]
         public HttpResponseMessage ForgotPassword([FromBody] LoginModel t)
         {
@@ -99,11 +99,10 @@ namespace MilenioApi.Controllers
         /// </summary>
         /// <param name="t"></param>
         /// <remarks>
-        /// PARAMETRO: token [STRING] <br />
-        /// PARAMETRO: password [STRING] <br />
+        /// PARAMETRO: token (se pasa como un campo normal)[STRING]
+        /// PARAMETRO: password [STRING]
         /// </remarks>
-        /// <returns>REGRESA UN MENSAJE INDICANDO QUE LA CALVE CAMBIO</returns>
-        [AllowAnonymous]
+        /// <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>   
         [Route("ChangePassword")]
         public HttpResponseMessage ChangePassword([FromBody] LoginModel t)
         {
@@ -147,7 +146,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa un objeto indicando el estado de la transaccion </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("CreateUser")]
         public HttpResponseMessage CreateUser(UsuarioModel t)
         {
@@ -188,7 +187,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa un objeto indicando el estado de la transaccion </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("EditUser")]
         public HttpResponseMessage EditUser(UsuarioModel t)
         {
@@ -205,7 +204,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion si el usuario existe o no </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("CreateEntidadUser")]
         public HttpResponseMessage CreateEntidadUser(UsuarioModel t)
         {
@@ -221,7 +220,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion si el usuario existe o no </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("ValidateUser")]
         public HttpResponseMessage ValidateUser(UsuarioModel t)
         {
@@ -240,7 +239,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion si el usuario existe o no </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetUsuarios")]
         public HttpResponseMessage GetUsuarios(UsuarioModel t)
         {
@@ -256,7 +255,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion completa del usuario </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetUsuariosEdit")]
         public HttpResponseMessage GetUsuariosEdit(UsuarioModel t)
         {
@@ -294,7 +293,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion completa del usuario </returns>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("EditProfile")]
         public HttpResponseMessage EditProfile(UsuarioModel t)
         {
@@ -303,7 +302,7 @@ namespace MilenioApi.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetTipoProfesional")]
         public HttpResponseMessage GetTipoProfesional()
         {
@@ -320,7 +319,7 @@ namespace MilenioApi.Controllers
         #region Especialidad profesional
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("CreateEspecialidadProfesional")]
         public HttpResponseMessage CreateEspecialidadProfesional()
         {
@@ -329,7 +328,7 @@ namespace MilenioApi.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("EditEspecialidadProfesional")]
         public HttpResponseMessage EditEspecialidadProfesional()
         {
@@ -341,7 +340,7 @@ namespace MilenioApi.Controllers
 
         #region Seccion Rol
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetRoles")]
         public HttpResponseMessage GetRoles(UsuarioModel t)
         {
@@ -349,7 +348,7 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetRoles(t));
         }
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetRolesUsuario")]
         public HttpResponseMessage GetRolesUsuario(UsuarioModel t)
         {
@@ -357,7 +356,7 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetRolesUsuario(t));
         }
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("CreateRolUsuario")]
         public HttpResponseMessage CreateRolUsuario(UsuarioModel t)
         {
@@ -365,7 +364,7 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.CreateRolUsuario(t));
         }
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("EditRolUsuario")]
         public HttpResponseMessage EditRolUsuario(UsuarioModel t)
         {
@@ -374,7 +373,7 @@ namespace MilenioApi.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [Route("GetNotRolesUsuario")]
         public HttpResponseMessage GetNotRolesUsuario(UsuarioModel t)
         {
@@ -382,5 +381,9 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetNotRolesUsuario(t));
         }
         #endregion
+
+
+
+
     }
 }

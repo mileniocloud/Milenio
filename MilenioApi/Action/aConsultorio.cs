@@ -25,89 +25,81 @@ namespace MilenioApi.Action
                 try
                 {
                     cp = tvh.getprincipal(model.token);
-                    if (cp != null)
+
+                    Response b = new Response();
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
                     {
-                        Response b = new Response();
-                        List<ErrorFields> rel = autil.ValidateObject(model);
-                        if (rel.Count == 0)
+                        //con estas dos lineas se saca el id del usuario y el id de la entidad del token
+                        Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
+                        ////
+
+                        //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                        //Y SE COPIA AL OBJETO USER
+                        Consultorio cons = new Consultorio();
+
+                        //
+                        //VALIDAMOS SI EL CONSULTORIO YA EXISTE
+                        Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
+
+                        if (c == null)
                         {
-                            //con estas dos lineas se saca el id del usuario y el id de la entidad del token
-                            Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
-                            Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
-                            ////
-                                                       
-                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
-                            //Y SE COPIA AL OBJETO USER
-                            Consultorio cons = new Consultorio();
-                           
-                            //
-                            //VALIDAMOS SI EL CONSULTORIO YA EXISTE
-                            Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
-
-                            if (c == null)
+                            Copier.CopyPropertiesTo(model, cons);
+                            Guid id_Consultorio = Guid.NewGuid();
+                            cons.Id_Consultorio = id_Consultorio;
+                            cons.Id_Entidad = entidad;
+                            cons.Estado = true;
+                            cons.Usuario_Create = usuario;
+                            cons.Usuario_Update = usuario;
+                            cons.Fecha_Create = DateTime.Now;
+                            cons.Fecha_Update = DateTime.Now;
+                            ent.Consultorio.Add(cons);
+                            string especialildad;
+                            if (!string.IsNullOrEmpty(model.list_Especialidad))
                             {
-                                Copier.CopyPropertiesTo(model, cons);
-                                Guid id_Consultorio = Guid.NewGuid();
-                                cons.Id_Consultorio = id_Consultorio;
-                                cons.Id_Entidad = entidad;
-                                cons.Estado = true;
-                                cons.Usuario_Create = usuario;
-                                cons.Usuario_Update = usuario;
-                                cons.Fecha_Create = DateTime.Now;
-                                cons.Fecha_Update = DateTime.Now;
-                                ent.Consultorio.Add(cons);
-                                string especialildad;
-                                if (!string.IsNullOrEmpty(model.list_Especialidad))
+                                especialildad = Convert.ToString(model.list_Especialidad);
+                                string[] especialidadArray = especialildad.Split(',');
+                                List<Consultorio_Especialidad> lce = new List<Consultorio_Especialidad>();
+                                foreach (var esp in especialidadArray)
                                 {
-                                    especialildad = Convert.ToString(model.list_Especialidad);
-                                    string[] especialidadArray = especialildad.Split(',');
-                                    List<Consultorio_Especialidad> lce = new List<Consultorio_Especialidad>();
-                                    foreach (var esp in especialidadArray)
+                                    Consultorio_Especialidad ce = new Consultorio_Especialidad();
+                                    if (ce != null)
                                     {
-                                        Consultorio_Especialidad ce = new Consultorio_Especialidad();
-                                        if (ce != null)
-                                        {
-                                            ce.Id_Consultorio = id_Consultorio;
-                                            ce.Id_Especialidad = Guid.Parse(esp);
-                                            ce.Id_Entidad = entidad;
-                                            ce.Estado = true;
-                                            ce.Usuario_Create = usuario;
-                                            ce.Usuario_Update = usuario;
-                                            ce.Fecha_Create = DateTime.Now;
-                                            ce.Fecha_Update = DateTime.Now;
-                                            lce.Add(ce);
-                                        }
-
-                                    }
-
-                                    if (lce.Count > 0)
-                                    {
-                                        //si hay especialidades que agregar, las agrega
-                                        ent.Consultorio_Especialidad.AddRange(lce);
+                                        ce.Id_Consultorio = id_Consultorio;
+                                        ce.Id_Especialidad = Guid.Parse(esp);
+                                        ce.Id_Entidad = entidad;
+                                        ce.Estado = true;
+                                        ce.Usuario_Create = usuario;
+                                        ce.Usuario_Update = usuario;
+                                        ce.Fecha_Create = DateTime.Now;
+                                        ce.Fecha_Update = DateTime.Now;
+                                        lce.Add(ce);
                                     }
                                 }
-                                ent.SaveChanges();
-                                //se genera el codigo del mensaje de retorno exitoso
-                                return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
+
+                                if (lce.Count > 0)
+                                {
+                                    //si hay especialidades que agregar, las agrega
+                                    ent.Consultorio_Especialidad.AddRange(lce);
+                                }
                             }
-                            else
-                            {
-                                //consultorio existe
-                                return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
-                            }
+                            ent.SaveChanges();
+                            //se genera el codigo del mensaje de retorno exitoso
+                            return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
-                            //fallo campos requeridos
-                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                            //consultorio existe
+                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
-                        //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
-                        return ret;
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -126,59 +118,46 @@ namespace MilenioApi.Action
                 try
                 {
                     cp = tvh.getprincipal(Convert.ToString(model.token));
-                    if (cp != null)
+
+                    Response b = new Response();
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
                     {
-                        Response b = new Response();
-                        List<ErrorFields> rel = autil.ValidateObject(model);
-                        if (rel.Count == 0)
+                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                        //Y SE COPIA AL OBJETO USER
+                        Consultorio cl = new Consultorio();
+                        Copier.CopyPropertiesTo(model, cl);
+                        //
+
+                        //VALIDAMOS QUE NO EXISTA UN CONSULTORIO CON EL MISMO NOMBRE EN LA ENTIDAD
+                        int nombexiste = ent.Consultorio.Where(r => r.Nombre == model.Nombre && r.Id_Consultorio != model.Id_Consultorio).Count();
+                        if (nombexiste == 0)
                         {
-                            Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                            Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                            Consultorio c = ent.Consultorio.Where(f => f.Id_Consultorio == model.Id_Consultorio).SingleOrDefault();
+                            c.Nombre = model.Nombre;
+                            c.Descripcion = model.Descripcion;
+                            c.Estado = model.Estado;
+                            c.Fecha_Update = DateTime.Now;
+                            c.Usuario_Update = usuario;
 
-                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
-                            //Y SE COPIA AL OBJETO USER
-                            Consultorio cl = new Consultorio();
-                            Copier.CopyPropertiesTo(model, cl);
-                            //
-
-                            List<Consultorio> lc = ent.Consultorio.Where(t => t.Id_Entidad == entidad).ToList();
-
-                            if (lc.Count != 0)
-                            {
-                                //VALIDAMOS QUE NO EXISTA UN CONSULTORIO CON EL MISMO NOMBRE EN LA ENTIDAD
-                                int nombexiste = lc.Where(r => r.Nombre == model.Nombre && r.Id_Consultorio != model.Id_Consultorio).Count();
-                                if (nombexiste == 0)
-                                {
-                                    Consultorio c = lc.Where(f => f.Id_Consultorio == model.Id_Consultorio).SingleOrDefault();
-                                    c.Nombre = model.Nombre;
-                                    c.Descripcion = model.Descripcion;
-                                    c.Estado = model.Estado;
-                                    c.Fecha_Update = DateTime.Now;
-                                    c.Usuario_Update = usuario;
-
-                                    ent.SaveChanges();
-                                    //se genera el codigo del mensaje de retorno exitoso
-                                    ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
-                                }
-                                else
-                                {
-                                    //consultorio existe
-                                    ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
-                                }
-                            }
-                            return ret;
+                            ent.SaveChanges();
+                            //se genera el codigo del mensaje de retorno exitoso
+                            ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
                         }
                         else
                         {
-                            //fallo campos requeridos
-                            return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
+                            //consultorio existe
+                            ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
                         }
+                        return ret;
                     }
                     else
                     {
-                        //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
                     }
                 }
                 catch (Exception ex)
@@ -229,7 +208,7 @@ namespace MilenioApi.Action
                             }).ToList();
                             ret.cantidad = rl.Count();
                             ret.pagina = 0;
-                            ret.data.AddRange(rl);
+                            ret.data = rl;
                         }
                     }
                     else
@@ -298,7 +277,7 @@ namespace MilenioApi.Action
                                         ce.Fecha_Update = DateTime.Now;
                                         lce.Add(ce);
                                     }
-                                    
+
                                 }
 
                                 if (lce.Count > 0)
@@ -323,7 +302,7 @@ namespace MilenioApi.Action
                     {
                         //token invalido
                         ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
-                        
+
                     }
                     return ret;
                 }
@@ -405,7 +384,7 @@ namespace MilenioApi.Action
                     {
                         //token invalido
                         ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
-                        
+
                     }
                     return ret;
                 }

@@ -127,7 +127,7 @@ namespace MilenioApi.Action
                 foreach (ValidationResult vr in results)
                 {
                     ErrorFields r = new ErrorFields();
-                    r.field = vr.MemberNames.First();
+                   // r.field = vr.MemberNames.First();
                     r.message = vr.ErrorMessage;
                     rl.Add(r);
                 }

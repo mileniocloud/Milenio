@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
@@ -20,7 +21,7 @@ namespace MilenioApi.Action
         ClaimsPrincipal cp = new ClaimsPrincipal();
         TokenValidationHandler tvh = new TokenValidationHandler();
 
-        #region Login        
+        #region Login
 
         public object Login(LoginModel model)
         {
@@ -60,7 +61,7 @@ namespace MilenioApi.Action
                                             entidades
                                         }).SingleOrDefault();
 
-                                        rp.data.Add(data);
+                                        rp.data = data;
                                     }
                                     else
                                     {
@@ -148,7 +149,7 @@ namespace MilenioApi.Action
                                                  token
                                              }).SingleOrDefault();
 
-                                    rp.data.Add(r);
+                                    rp.data = r;
                                 }
                                 else
                                 {
@@ -210,11 +211,20 @@ namespace MilenioApi.Action
             }
         }
 
+        public void TimeLogOff(Guid idusuario)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                Usuario us = ent.Usuario.Where(u => u.Id_Usuario == idusuario).SingleOrDefault();
 
-        /// <summary>
-        /// Metodo que envia correo con opcion para cambio de clave
-        /// </summary>
-        /// <returns></returns>
+                if (us != null)
+                {
+                    us.isloged = false;
+                    ent.SaveChanges();
+                }
+            }
+        }
+
         public object ForgotPassword(LoginModel model)
         {
             Response rp = new Response();
@@ -324,21 +334,13 @@ namespace MilenioApi.Action
 
                     smtp.Credentials = userCredentials;
 
-                    MailMessage message = new MailMessage();
+                    MailMessage message = new MailMessage();                    
 
                     message.From = new MailAddress(ConfigurationManager.AppSettings["SenderEmailAddress"], ConfigurationManager.AppSettings["SenderDisplayName"]);
-
                     message.Subject = ConfigurationManager.AppSettings["EmailSubjec"];
-
                     message.Body = this.SetEmailBody(login, token);
+                    message.IsBodyHtml = true;                    
 
-                    //  message.AlternateViews.Add(body);
-
-                    message.IsBodyHtml = true;
-
-                    // System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(path);
-
-                    //message.Attachments.Add(attachment);
                     message.To.Add(email);
 
                     smtp.Send(message);
@@ -744,7 +746,7 @@ namespace MilenioApi.Action
                                          Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
                                      }).SingleOrDefault();
 
-                            rp.data.Add(r);
+                            rp.data = r;
                         }
                     }
 
@@ -836,7 +838,7 @@ namespace MilenioApi.Action
 
                     rp.cantidad = rl.Count();
                     rp.pagina = 0;
-                    rp.data.AddRange(rl);
+                    rp.data = rl;
 
                     //retorna un response, con el campo data lleno con la respuesta.               
                     return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
@@ -899,7 +901,7 @@ namespace MilenioApi.Action
                                          Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
                                      }).SingleOrDefault();
 
-                            rp.data.Add(r);
+                            rp.data = r;
                         }
                     }
 
@@ -1114,7 +1116,7 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     rl = ent.Rol.Where(r => r.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Nombre }).ToList();
-                    rp.data.Add(rl);
+                    rp.data = rl;
 
                 }
                 //retorna un response, con el campo data lleno con la respuesta.               
@@ -1145,7 +1147,7 @@ namespace MilenioApi.Action
                     Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
                     rl = ent.Rol_Usuario.Where(u => u.Id_Entidad == entidad && u.Id_Usuario == model.Id_Usuario && u.Estado == true).Select(l => new ComboModel { id = l.Id_Rol, value = l.Rol.Nombre }).ToList();
-                    rp.data.Add(rl);
+                    rp.data = rl;
                 }
 
                 //retorna un response, con el campo data lleno con la respuesta.

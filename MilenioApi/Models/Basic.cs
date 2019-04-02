@@ -7,8 +7,8 @@ namespace MilenioApi.Models
 {
     public class Basic
     {
-        public string nombre { get; set; }
-        public string descripcion { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
 
         public string _token { get; set; }
 

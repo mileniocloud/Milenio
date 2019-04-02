@@ -269,7 +269,7 @@ namespace MilenioApi.Action
 
                         }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
                         
-                        rp.data.Add(rl);
+                        rp.data = rl;
                         rp.cantidad = rl.Count();
                     }
                     //retorna un response, con el campo data lleno con la respuesta.               

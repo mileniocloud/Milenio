@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using Swashbuckle.Application;
 using static MilenioApi.Controllers.TokenValidationHandler;
 
 namespace MilenioApi

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace MilenioApi.Models
         public Guid Id_Usuario { get; set; }
         public Guid Id_Entidad { get; set; }
 
-        [Display(Name ="Login") ]
+        [Display(Name = "aliasuser")]
+        [JsonProperty("aliasuser")]
         [Required]
         public string User { get; set; }
 

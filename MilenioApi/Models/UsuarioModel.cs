@@ -9,7 +9,6 @@ namespace MilenioApi.Models
 {
     public class UsuarioModel: Basic
     {
-
         public Guid Id_Usuario { get; set; }
         [Required]
         public string Id_Tipo_Identificacion { get; set; }

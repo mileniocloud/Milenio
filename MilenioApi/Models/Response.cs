@@ -14,7 +14,7 @@ namespace MilenioApi.Models
         public int cantidad { get; set; }
         public int pagina { get; set; }
 
-        public List<object> data = new List<object>();
+        public object data = new object();
         public List<object> error = new List<object>();
     }
 }

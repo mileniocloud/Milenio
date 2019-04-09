@@ -10,6 +10,7 @@ namespace MilenioApi.Controllers
     public class UserController : ApiController
     {
         aUtilities ut = new aUtilities();
+        
         #region Create - ActInactivate - list
 
         /// <summary>
@@ -169,8 +170,9 @@ namespace MilenioApi.Controllers
         [HttpGet]
         [Authorize]
         [Route("UserProfile")]
-        public HttpResponseMessage UserProfile(UserModel t)
+        public HttpResponseMessage UserProfile()
         {
+            UserModel t = new UserModel();
             aUser s = new aUser();
             return ut.ReturnResponse(s.UserProfile(t));
 

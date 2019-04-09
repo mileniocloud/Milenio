@@ -553,14 +553,7 @@ namespace MilenioApi.Action
             }
             catch (Exception ex)
             {
-                //error general
-                string tok = string.Empty;
-                if(model != null)
-                    tok = model.token;
-                else
-                tok = "vacio";
-
-                return autil.MensajeRetorno(ref rp, 4, ex.Message + "--token: " + tok, null, HttpStatusCode.InternalServerError);
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 

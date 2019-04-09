@@ -89,6 +89,8 @@ public partial class Usuario
 
     public bool isloged { get; set; }
 
+    public string Token_Password_Change { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

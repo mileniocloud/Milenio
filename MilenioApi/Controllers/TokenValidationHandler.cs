@@ -23,7 +23,7 @@ namespace MilenioApi.Controllers
     {
         public ClaimsPrincipal getprincipal(string token)
         {
-            token = Decrypt(token);
+            //token = Decrypt(token);
 
             var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
             var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
@@ -44,7 +44,6 @@ namespace MilenioApi.Controllers
             return tokenHandler.ValidateToken(token, validationParameters, out securityToken);
 
         }
-
 
         public bool LifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
         {
@@ -69,8 +68,8 @@ namespace MilenioApi.Controllers
             // create a claimsIdentity
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] {
                 new Claim(ClaimTypes.Name, login),
-                new Claim(ClaimTypes.NameIdentifier, userid)
-                ,new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, userid),
+                new Claim(ClaimTypes.PrimaryGroupSid, entidad_id.ToString())
             });
 
             //recorremos la lista de roles que se envian, y se agrega un rol por cada uno
@@ -95,61 +94,9 @@ namespace MilenioApi.Controllers
 
             var jwtTokenString = tokenHandler.WriteToken(jwtSecurityToken);
 
-            return Encrypt(jwtTokenString);
+            return jwtTokenString;
+            //return Encrypt(jwtTokenString);
         }
-
-        private string Encrypt(string token)
-        {
-            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
-            string PasswordHash = "P@@Sw0rd";
-            string SaltKey = secretKey;
-            string VIKey = "@1B2c3D4e5F6g7H8";
-
-            byte[] plainTextBytes = Encoding.UTF8.GetBytes(token);
-
-            byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
-            var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.Zeros };
-            var encryptor = symmetricKey.CreateEncryptor(keyBytes, Encoding.ASCII.GetBytes(VIKey));
-
-            byte[] cipherTextBytes;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                {
-                    cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
-                    cryptoStream.FlushFinalBlock();
-                    cipherTextBytes = memoryStream.ToArray();
-                    cryptoStream.Close();
-                }
-                memoryStream.Close();
-            }
-            return Convert.ToBase64String(cipherTextBytes);
-
-        }
-
-        public static string Decrypt(string encryptedText)
-        {
-            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
-            string PasswordHash = "P@@Sw0rd";
-            string SaltKey = secretKey;
-            string VIKey = "@1B2c3D4e5F6g7H8";
-
-            byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);
-            byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
-            var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.None };
-
-            var decryptor = symmetricKey.CreateDecryptor(keyBytes, Encoding.ASCII.GetBytes(VIKey));
-            var memoryStream = new MemoryStream(cipherTextBytes);
-            var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
-
-            int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-            memoryStream.Close();
-            cryptoStream.Close();
-            return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
-        }
-
         public static DateTime ConvertTimespan(uint timestamp)
         {
             return new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(timestamp);
@@ -165,7 +112,9 @@ namespace MilenioApi.Controllers
                     return false;
                 }
                 var bearerToken = authzHeaders.ElementAt(0);
-                token = Decrypt(bearerToken.StartsWith("Bearer ") ? bearerToken.Substring(7) : bearerToken);
+                //con esta linea se desencripta si es que colocamos el token encriptado con el MD
+                //token = Decrypt(bearerToken.StartsWith("Bearer ") ? bearerToken.Substring(7) : bearerToken);
+                token = bearerToken.StartsWith("Bearer ") ? bearerToken.Substring(7) : bearerToken;
 
                 return true;
             }
@@ -176,10 +125,12 @@ namespace MilenioApi.Controllers
                 aUtilities autil = new aUtilities();
 
                 string token;
+                HttpResponseMessage st = new HttpResponseMessage();
 
                 // determine whether a jwt exists or not
                 if (!TryRetrieveToken(request, out token))
                 {
+                    //Task<HttpResponseMessage> x = base.SendAsync(request, cancellationToken);
                     return base.SendAsync(request, cancellationToken);
                 }
 
@@ -207,8 +158,6 @@ namespace MilenioApi.Controllers
                     Thread.CurrentPrincipal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
                     HttpContext.Current.User = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
 
-
-
                     return base.SendAsync(request, cancellationToken);
                 }
                 catch (SecurityTokenValidationException ex)
@@ -217,25 +166,31 @@ namespace MilenioApi.Controllers
                     {
                         LoginModel lm = new LoginModel();
                         lm.token = token;
-                        aSeguridad sg = new aSeguridad();
+                        aSecurity sg = new aSecurity();
                         ClaimsPrincipal cp = getprincipalnotime(token);
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
                         sg.TimeLogOff(usuario);
 
-                        autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.Redirect);
+                        st.StatusCode = HttpStatusCode.Unauthorized;
+                        st.Headers.Add("Message", "Session Vencida");
+                        //autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.Redirect);
                     }
                     else
                     {
-                        autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.Unauthorized);
+                        st.StatusCode = HttpStatusCode.Unauthorized;
+                        st.Headers.Add("Message", "Session no autorizada");
+                        //autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.Unauthorized);
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    st.StatusCode = HttpStatusCode.InternalServerError;
+                    st.Headers.Add("Message", "Error General");
+                    //autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 }
 
-                return Task<HttpResponseMessage>.Factory.StartNew(() => autil.ReturnResponse(rp));
+                return Task<HttpResponseMessage>.Factory.StartNew(() => st);
             }
 
             public bool LifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters)

@@ -12,7 +12,7 @@ using System.Web;
 
 namespace MilenioApi.Action
 {
-    public class aListasGenericas
+    public class aGenericLists
     {
         TokenValidationHandler tvh = new TokenValidationHandler();
         ClaimsPrincipal cp = new ClaimsPrincipal();

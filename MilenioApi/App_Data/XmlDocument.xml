@@ -4,6 +4,34 @@
         <name>MilenioApi</name>
     </assembly>
     <members>
+        <member name="M:MilenioApi.Action.aRol.GetRoles(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para tener todos los roles activos
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.GetRolesUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para tener todos los roles de un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.CreateRolUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para agregar rol a un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.EditRolUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para elimiar rol a un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="M:MilenioApi.Action.aUtilities.ReturnResponse(System.Object)">
             <summary>
             Metodo que convierte la respuesta en un HttpResponseMessage
@@ -11,58 +39,16 @@
             <param name="o"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aEntidad.CreateEntidad(MilenioApi.Models.EntidadModel)">
+        <member name="M:MilenioApi.Action.aEntity.CreateEntidad(MilenioApi.Models.EntidadModel)">
             <summary>
             Metodo permite la creacion de entidaddes
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aEntidad.EditEntidad(MilenioApi.Models.EntidadModel)">
+        <member name="M:MilenioApi.Action.aEntity.EditEntidad(MilenioApi.Models.EntidadModel)">
             <summary>
             Metodo para editar entidades
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.ChangePassword(MilenioApi.Models.LoginModel)">
-            <summary>
-            metodo para cambiar le la clave a un usuario
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.GetTipoProfesional(System.Web.HttpRequest)">
-            <summary>
-            Metodo para llenar combo de tipo de profesional
-            </summary>
-            <param name="httpRequest"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.GetRoles(MilenioApi.Models.UsuarioModel)">
-            <summary>
-            Metodo para tener todos los roles activos
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.GetRolesUsuario(MilenioApi.Models.UsuarioModel)">
-            <summary>
-            Metodo para tener todos los roles de un usuario
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.CreateRolUsuario(MilenioApi.Models.UsuarioModel)">
-            <summary>
-            Metodo para agregar rol a un usuario
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aSeguridad.EditRolUsuario(MilenioApi.Models.UsuarioModel)">
-            <summary>
-            Metodo para elimiar rol a un usuario
             </summary>
             <param name="model"></param>
             <returns></returns>
@@ -571,42 +557,40 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:MilenioApi.Controllers.ConsultorioController.CreateConsultorio(MilenioApi.Models.ConsultorioModel)">
+        <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para crear un consultorio
             </summary>
             <remarks>
-            PARAMETRO: Nombre [STRING] [REQUERIDO] <br />
-            PARAMETRO: Descripcion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Estado [BOOL] [REQUERIDO]<br />
-            PARAMETRO: token [STRING] [REQUERIDO]
+            PARAMETRO: name [STRING] [REQUERIDO] <br />
+            PARAMETRO: description [STRING] [REQUERIDO]<br />
+            PARAMETRO: status [BOOL] [REQUERIDO]<br />
             </remarks>
             <returns>Regresa un objeto informado exito de la operacion </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ConsultorioController.EditConsultorio(MilenioApi.Models.ConsultorioModel)">
+        <member name="M:MilenioApi.Controllers.OfficeController.EditOffice(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para editar un consultorio
             </summary>
             <remarks>
-            PARAMETRO: Nombre [STRING] [REQUERIDO]<br />
-            PARAMETRO: Descripcion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Estado [BOOL] [REQUERIDO]<br />
-            PARAMETRO: token [STRING] [REQUERIDO]
+            PARAMETRO: name [STRING] [REQUERIDO] <br />
+            PARAMETRO: description [STRING] [REQUERIDO]<br />
+            PARAMETRO: status [BOOL] [REQUERIDO]<br />
+            PARAMETRO: idoffice [GUID] [REQUERIDO]<br />
             </remarks>
             <returns>Regresa un objeto informado exito de la operacion </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ConsultorioController.GetConsultorio(MilenioApi.Models.ConsultorioModel)">
+        <member name="M:MilenioApi.Controllers.OfficeController.GetOffice(MilenioApi.Models.OfficeModel)">
             <summary>
-            Metodo para editar un consultorio
+            Metodo para consultar consultorios, 
             </summary>
             <remarks>
-            PARAMETRO: Nombre [STRING]<br />
-            PARAMETRO: Descripcion [STRING]<br />  
-            PARAMETRO: token [STRING] [REQUERIDO]
+            PARAMETRO: name [STRING] [OPTIONAL] (si se pasa este valor, se buscara consultorios con este nombre) <br />
+            PARAMETRO: description [STRING] [OPTIONAL] (si se pasa este valor se buscara consultorios con esa descripcion)<br />
             </remarks>
             <returns>Regresa una lista con los consultorios que cumplan con los parametros de busqueda</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ConsultorioController.CreateConsultorioEspecialidad(MilenioApi.Models.ConsultorioModel)">
+        <member name="M:MilenioApi.Controllers.OfficeController.CreateConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para agregar una especialidad a un consultorio
             </summary>
@@ -617,7 +601,7 @@
             </remarks>
             <returns>Regresa un objeto indicando el resultado de la operacion</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ConsultorioController.EditConsultorioEspecialidad(MilenioApi.Models.ConsultorioModel)">
+        <member name="M:MilenioApi.Controllers.OfficeController.EditConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para editar el estado de una especialidad en un consultorio
             </summary>
@@ -630,7 +614,16 @@
             </remarks>
             <returns>Regresa un objeto indicando el resultado de la operacion</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.Login(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.DashboardController.Dashboard(MilenioApi.Models.DashboardModel)">
+            <summary>
+            Metodo para construir el dashboard
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa el json con el menu </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.Login(MilenioApi.Models.LoginModel)">
             <summary>
             Metodo para loguear y traer la lista de entidades
             </summary>
@@ -640,7 +633,7 @@
             </remarks>
             <returns>Regresa un usuario con la lista de entidades a las que pertenece </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.LogOff(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SecurityController.LogOff(MilenioApi.Models.LoginModel)">
             <summary>
             Metodo para desloguear el usuario
             </summary>
@@ -648,7 +641,7 @@
             PARAMETRO: token [STRING]
             </remarks>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.LoginEntidad(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SecurityController.LoginEntidad(MilenioApi.Models.LoginModel)">
              <summary>
              Metodo para loguear y retornar el token + los roles
              </summary>
@@ -676,7 +669,7 @@
              </remarks>
              <returns>Regresa el token + los roles asociados a esa entidad seleccionada</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.ForgotPassword(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SecurityController.ForgotPassword(MilenioApi.Models.LoginModel)">
             <summary>
             Se usa para enviar un correo que le permitira cambiar la clave
             </summary>
@@ -686,86 +679,89 @@
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>      
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.ChangePassword(MilenioApi.Models.LoginModel)">
+        <member name="M:MilenioApi.Controllers.SecurityController.ChangePassword(MilenioApi.Models.LoginModel)">
+            <summary>
+            Se usa para enviar un correo que le permitira cambiar la clave
+            </summary>
+            <param name="t"></param>
+            <remarks> 
+            PARAMETRO: password [STRING]
+            PARAMETRO: oldpassword [STRING]
+            </remarks>
+            <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.ResetPassword(MilenioApi.Models.LoginModel)">
             <summary>
             Se usa para enviar un correo que le permitira cambiar la clave
             </summary>
             <param name="t"></param>
             <remarks>
-            PARAMETRO: token (se pasa como un campo normal)[STRING]
-            PARAMETRO: password [STRING]
+            PARAMETRO: user [STRING] - el usuario que desea cambiar la clave
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>   
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.CreateUser(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo crear usuarios del sistema dada una entidad
             </summary>
             <remarks>
-            PARAMETRO: Id_Tipo_Identificacion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Numero_Identificacion [STRING] [REQUERIDO] <br />
-            PARAMETRO: Nombres [STRING] [REQUERIDO] <br />
-            PARAMETRO: Primer_Apellido [STRING] [REQUERIDO]<br />
-            PARAMETRO: Segundo_Apellido [STRING] [REQUERIDO]<br />
-            PARAMETRO: Sexo [STRING] <br />
-            PARAMETRO: Fecha_Nacimiento [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
-            PARAMETRO: Foto [STRING] <br />
-            PARAMETRO: Estado_Civil [STRING] <br />
-            PARAMETRO: Tipo_Sangre [STRING] <br />
-            PARAMETRO: Poblado_Id [INT] [REQUERIDO]<br />
-            PARAMETRO: Direccion [STRING] <br />
-            PARAMETRO: Telefono [STRING] <br />
-            PARAMETRO: Fecha_Contratacion [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
-            PARAMETRO: Observaciones [STRING] <br />
-            PARAMETRO: Tipo_Vinculacion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Presta_Servicio [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document  [STRING] [REQUERIDO] <br />
+            PARAMETRO: fullname [STRING] [REQUERIDO] <br />
+            PARAMETRO: firstlastname  [STRING] [REQUERIDO]<br />
+            PARAMETRO: secondlastname  [STRING] [REQUERIDO]<br />
+            PARAMETRO: gender [STRING] <br />
+            PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: civilstatus  [STRING] <br />
+            PARAMETRO: blodtype [STRING] <br />
+            PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: telephone  [STRING] <br />
+            PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: observation [STRING] <br />
+            PARAMETRO: linktype [STRING] [REQUERIDO]<br />
+            PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
             PARAMETRO: Login [STRING] [REQUERIDO]<br />
             PARAMETRO: Password [STRING] [REQUERIDO]<br />
             PARAMETRO: Email [STRING] [REQUERIDO]<br />
-            PARAMETRO: Acepta_ABEAS [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: Foto_ABEAS [STRING] <br />
-            PARAMETRO: Id_Tipo_Profesional [GUID] <br />
-            PARAMETRO: Registro_Profesional [STRING] <br />        
-            PARAMETRO: List_Roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
-            PARAMETRO: token [STRING]
+            PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photoabeas [STRING] <br />
+            PARAMETRO: typeprofessional  [GUID] <br />
+            PARAMETRO: registryprofessional  [STRING] <br />        
+            PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
             </remarks>
             <returns>Regresa un objeto indicando el estado de la transaccion </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.EditUser(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.EditUser(MilenioApi.Models.UserModel)">
             <summary>
-            Metodo para editar usuarios (al editar un usuario de edita para todas las entidades)
+            Metodo crear usuarios del sistema dada una entidad
             </summary>
-            <remarks>
-            PARAMETRO: Id_Tipo_Identificacion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Numero_Identificacion [STRING] [REQUERIDO] <br />
-            PARAMETRO: Nombres [STRING] [REQUERIDO] <br />
-            PARAMETRO: Primer_Apellido [STRING] [REQUERIDO]<br />
-            PARAMETRO: Segundo_Apellido [STRING] [REQUERIDO]<br />
-            PARAMETRO: Sexo [STRING] <br />
-            PARAMETRO: Fecha_Nacimiento [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
-            PARAMETRO: Foto [STRING] <br />
-            PARAMETRO: Estado_Civil [STRING] <br />
-            PARAMETRO: Tipo_Sangre [STRING] <br />
-            PARAMETRO: Poblado_Id [INT] [REQUERIDO]<br />
-            PARAMETRO: Direccion [STRING] <br />
-            PARAMETRO: Telefono [STRING] <br />
-            PARAMETRO: Fecha_Contratacion [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
-            PARAMETRO: Observaciones [STRING] <br />
-            PARAMETRO: Tipo_Vinculacion [STRING] [REQUERIDO]<br />
-            PARAMETRO: Presta_Servicio [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            <remarks>        
+            PARAMETRO: gender [STRING] <br />
+            PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: civilstatus  [STRING] <br />
+            PARAMETRO: blodtype [STRING] <br />
+            PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: telephone  [STRING] <br />
+            PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: observation [STRING] <br />
+            PARAMETRO: linktype [STRING] [REQUERIDO]<br />
+            PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
             PARAMETRO: Login [STRING] [REQUERIDO]<br />
             PARAMETRO: Password [STRING] [REQUERIDO]<br />
             PARAMETRO: Email [STRING] [REQUERIDO]<br />
-            PARAMETRO: Acepta_ABEAS [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: Foto_ABEAS [STRING] <br />
-            PARAMETRO: Id_Tipo_Profesional [GUID] <br />
-            PARAMETRO: Registro_Profesional [STRING] <br />        
-            PARAMETRO: List_Roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
-            PARAMETRO: token [STRING]
+            PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photoabeas [STRING] <br />
+            PARAMETRO: typeprofessional  [GUID] <br />
+            PARAMETRO: registryprofessional  [STRING] <br />        
+            PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
             </remarks>
             <returns>Regresa un objeto indicando el estado de la transaccion </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.CreateEntidadUser(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.CreateEntityUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo para agregar un usuario exixtente a la entidd a la que se esta tratando de ingresar como usuario nuevo
             </summary>
@@ -775,7 +771,7 @@
             </remarks>
             <returns>Regresa informacion si el usuario existe o no </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.ValidateUser(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.ValidateUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo para validar si una cedula ya existe en alguna entidad para preguntar si desean agregarlo
             </summary>
@@ -785,7 +781,7 @@
             </remarks>
             <returns>Regresa informacion si el usuario existe o no </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.GetUsuarios(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.GetUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo para traer lista de usuarios, contiene logica para consultar por varios campos 
             
@@ -796,7 +792,7 @@
             </remarks>
             <returns>Regresa informacion si el usuario existe o no </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.GetUsuariosEdit(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.GetUserEdit(MilenioApi.Models.UserModel)">
             <summary>
             Metodo para consultar un usuario por su ID
             </summary>
@@ -806,26 +802,26 @@
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.UserProfile(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.UserProfile(MilenioApi.Models.UserModel)">
             <summary>
             Metodo consultar el perfil del usuario
             </summary>
             <remarks>
-            PARAMETRO: token [STRING]
+            
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SeguridadController.EditProfile(MilenioApi.Models.UsuarioModel)">
+        <member name="M:MilenioApi.Controllers.UserController.EditProfile(MilenioApi.Models.UserModel)">
             <summary>
             Metodo editar el perfil del usuario
             </summary>
             <remarks>
-            PARAMETRO: Telefono [STRING]
+            PARAMETRO: telephone [STRING]
             PARAMETRO: Foto [STRING]
-            PARAMETRO: Poblado_Id [STRING]
-            PARAMETRO: Direccion [STRING]
+            PARAMETRO: neighborhood [STRING]
+            PARAMETRO: address [STRING]
             PARAMETRO: Email [STRING]
-            PARAMETRO: Estado_Civil [STRING]
+            PARAMETRO: civilstatus [STRING]
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>

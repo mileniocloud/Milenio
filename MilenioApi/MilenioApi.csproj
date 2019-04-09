@@ -250,12 +250,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action\aAgenda.cs" />
-    <Compile Include="Action\aConsultorio.cs" />
-    <Compile Include="Action\aListasGenericas.cs" />
-    <Compile Include="Action\aProfesionalcs.cs" />
+    <Compile Include="Action\aOffice.cs" />
+    <Compile Include="Action\aDashboard.cs" />
+    <Compile Include="Action\aGenericLists.cs" />
+    <Compile Include="Action\aRol.cs" />
+    <Compile Include="Action\aUser.cs" />
     <Compile Include="Action\aUtilities.cs" />
-    <Compile Include="Action\aEntidad.cs" />
-    <Compile Include="Action\aSeguridad.cs" />
+    <Compile Include="Action\aEntity.cs" />
+    <Compile Include="Action\aSecurity.cs" />
     <Compile Include="Action\Copier.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -293,14 +295,15 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AgendaController.cs" />
-    <Compile Include="Controllers\ConsultorioController.cs" />
-    <Compile Include="Controllers\EntidadController.cs" />
+    <Compile Include="Controllers\OfficeController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ListasGenericasController.cs" />
-    <Compile Include="Controllers\PersonaController.cs" />
-    <Compile Include="Controllers\ProfesionalController.cs" />
-    <Compile Include="Controllers\SeguridadController.cs" />
+    <Compile Include="Controllers\GenericListsController.cs" />
+    <Compile Include="Controllers\RolController.cs" />
+    <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\TokenValidationHandler.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAO\Actividad_Economica.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
@@ -388,9 +391,6 @@
     <Compile Include="DAO\Rol_Vista_Entidad.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAO\sysdiagrams.cs">
-      <DependentUpon>MilenioModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAO\Telefono.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
@@ -421,7 +421,9 @@
     <Compile Include="Models\AgendaProfesionalModel.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\ComboModel.cs" />
-    <Compile Include="Models\ConsultorioModel.cs" />
+    <Compile Include="Models\DashboardModel.cs" />
+    <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\OfficeModel.cs" />
     <Compile Include="Models\EntidadModel.cs" />
     <Compile Include="Models\ErrorFields.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -431,7 +433,7 @@
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\ResponseList.cs" />
     <Compile Include="Models\Return.cs" />
-    <Compile Include="Models\UsuarioModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -516,7 +518,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Dashboard\" />
     <Folder Include="Views\Entidad\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

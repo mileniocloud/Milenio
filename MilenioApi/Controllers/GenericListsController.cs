@@ -6,7 +6,7 @@ using System.Web.Http;
 namespace MilenioApi.Controllers
 {
     [RoutePrefix("api/Listas")]
-    public class ListasGenericasController : ApiController
+    public class GenericListsController : ApiController
     {
         aUtilities ut = new aUtilities();
 
@@ -15,7 +15,7 @@ namespace MilenioApi.Controllers
         [Route("GetPoblado")]
         public HttpResponseMessage GetPoblado()
         {
-            aListasGenericas s = new aListasGenericas();
+            aGenericLists s = new aGenericLists();
             return ut.ReturnResponse(s.GetPoblado(HttpContext.Current.Request));
         }
     }

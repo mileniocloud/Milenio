@@ -29,7 +29,6 @@
         <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="12.75" PointY="10.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Rol_Usuario" Width="1.5" PointX="15" PointY="14.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.Rol_Vista_Entidad" Width="1.5" PointX="9.75" PointY="15.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="3.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="9.75" PointY="19.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Identificacion" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Profesional" Width="1.5" PointX="10.25" PointY="24.375" />
@@ -59,7 +58,7 @@
         <AssociationConnector Association="MilenioCloudModel.FK_Rol_Usuario_Rol" />
         <AssociationConnector Association="MilenioCloudModel.FK_Rol_Vista_Entidad_Rol" />
         <AssociationConnector Association="MilenioCloudModel.FK_Rol_Vista_Entidad_Vistas" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Usuario" Width="1.5" PointX="12.5" PointY="22.125" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Usuario" Width="1.5" PointX="12.5" PointY="23.125" />
         <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Usuario_Usuario" />
         <AssociationConnector Association="MilenioCloudModel.FK_Especialidad_Profesional_Usuario" />
         <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Poblado" />

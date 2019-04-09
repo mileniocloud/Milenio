@@ -19,78 +19,68 @@ namespace MilenioApi.Action
         aUtilities autil = new aUtilities();
 
         #region Agenda Profesional
-        public Basic CreateAgendaProfesional(HttpRequest httpRequest)
+        public object CreateAgendaProfesional(HttpRequest httpRequest)
         {
-            Basic ret = new Basic();
+            Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
-                    if (cp != null)
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    Guid id_consultorio = Guid.Parse(httpRequest.Form["idconsultorio"]);
+                    Guid id_especialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
+                    Guid id_profesional = Guid.Parse(httpRequest.Form["idprofesional"]);
+
+                    DateTime fecha_desde = Convert.ToDateTime(httpRequest.Form["fechadesde"]);
+                    DateTime fecha_hasta = Convert.ToDateTime(httpRequest.Form["fechahasta"]);
+
+                    Agenda_Profesional ap = ent.Agenda_Profesional
+                                            .Where(f =>
+                                            f.Id_Profesional == id_profesional
+                                            && f.Id_Entidad == entidad
+                                            && f.Id_Consultorio == id_consultorio
+                                            && f.Estado == true
+                                            && f.Id_Especialidad == id_especialidad
+                                            && (
+                                            (f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde)
+                                            || (f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta)
+                                            || (f.Fecha_Desde >= fecha_desde && f.Fecha_Hasta <= fecha_hasta))
+                                            ).SingleOrDefault();
+                    if (ap == null)
                     {
-                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                        ap = new Agenda_Profesional();
+                        ap.Id_Agenda_Profesional = Guid.NewGuid();
+                        ap.Fecha_Desde = fecha_desde;
+                        ap.Fecha_Hasta = fecha_hasta;
+                        ap.Id_Consultorio = id_consultorio;
+                        ap.Id_Especialidad = id_especialidad;
+                        ap.Id_Profesional = id_profesional;
+                        ap.Id_Entidad = entidad;
+                        ap.Estado = true;
+                        ap.Fecha_Create = DateTime.Now;
+                        ap.Fecha_Update = DateTime.Now;
+                        ap.Usuario_Create = usuario;
+                        ap.Usuario_Update = usuario;
+                        ent.Agenda_Profesional.Add(ap);
 
-                        Guid id_consultorio = Guid.Parse(httpRequest.Form["idconsultorio"]);
-                        Guid id_especialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
-                        Guid id_profesional = Guid.Parse(httpRequest.Form["idprofesional"]);
+                        ent.SaveChanges();
 
-                        DateTime fecha_desde = Convert.ToDateTime(httpRequest.Form["fechadesde"]);
-                        DateTime fecha_hasta = Convert.ToDateTime(httpRequest.Form["fechahasta"]);
-
-                        Agenda_Profesional ap = ent.Agenda_Profesional
-                                                .Where(f =>
-                                                f.Id_Profesional == id_profesional
-                                                && f.Id_Entidad == entidad
-                                                && f.Id_Consultorio == id_consultorio
-                                                && f.Estado == true
-                                                && f.Id_Especialidad == id_especialidad
-                                                && (
-                                                (f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde)
-                                                || (f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta)
-                                                || (f.Fecha_Desde >= fecha_desde && f.Fecha_Hasta <= fecha_hasta))
-                                                ).SingleOrDefault();
-                        if (ap == null)
-                        {
-                            ap = new Agenda_Profesional();
-                            ap.Id_Agenda_Profesional = Guid.NewGuid();
-                            ap.Fecha_Desde = fecha_desde;
-                            ap.Fecha_Hasta = fecha_hasta;
-                            ap.Id_Consultorio = id_consultorio;
-                            ap.Id_Especialidad = id_especialidad;
-                            ap.Id_Profesional = id_profesional;
-                            ap.Id_Entidad = entidad;
-                            ap.Estado = true;
-                            ap.Fecha_Create = DateTime.Now;
-                            ap.Fecha_Update = DateTime.Now;
-                            ap.Usuario_Create = usuario;
-                            ap.Usuario_Update = usuario;
-                            ent.Agenda_Profesional.Add(ap);
-
-                            ent.SaveChanges();
-
-                            //se genera el codigo del mensaje de retorno exitoso
-                            return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null);
-                        }
-                        else
-                        {
-                            //ya existen fechas iguales creadas
-                            return ret = autil.MensajeRetorno(ref ret, 26, string.Empty, null);
-                        }
+                        //se genera el codigo del mensaje de retorno exitoso
+                        return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null);
                     }
                     else
                     {
-                        //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null);
-                        return ret;
+                        //ya existen fechas iguales creadas
+                        return rp = autil.MensajeRetorno(ref rp, 26, string.Empty, null);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
-                    return ret;
+                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null);
+                    return rp;
                 }
             }
         }

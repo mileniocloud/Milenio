@@ -6,8 +6,8 @@ using System.Web.Http;
 
 namespace MilenioApi.Controllers
 {
-    [RoutePrefix("api/Consultorio")]
-    public class ConsultorioController : ApiController
+    [RoutePrefix("api/Office")]
+    public class OfficeController : ApiController
     {
         aUtilities ut = new aUtilities();
 
@@ -15,56 +15,54 @@ namespace MilenioApi.Controllers
         /// Metodo para crear un consultorio
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Nombre [STRING] [REQUERIDO] <br />
-        /// PARAMETRO: Descripcion [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Estado [BOOL] [REQUERIDO]<br />
-        /// PARAMETRO: token [STRING] [REQUERIDO]
+        /// PARAMETRO: name [STRING] [REQUERIDO] <br />
+        /// PARAMETRO: description [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: status [BOOL] [REQUERIDO]<br />
         /// </remarks>
         /// <returns>Regresa un objeto informado exito de la operacion </returns>
         [HttpPost]
-        [AllowAnonymous]
-        [Route("CreateConsultorio")]
-        public HttpResponseMessage CreateConsultorio(ConsultorioModel t)
+        [Authorize]
+        [Route("CreateOffice")]
+        public HttpResponseMessage CreateOffice(OfficeModel t)
         {
-            aConsultorio s = new aConsultorio();
-            return ut.ReturnResponse(s.CreateConsultorio(t));
+            aOffice s = new aOffice();
+            return ut.ReturnResponse(s.CreateOffice(t));
         }
 
         /// <summary>
         /// Metodo para editar un consultorio
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Nombre [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Descripcion [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Estado [BOOL] [REQUERIDO]<br />
-        /// PARAMETRO: token [STRING] [REQUERIDO]
+        /// PARAMETRO: name [STRING] [REQUERIDO] <br />
+        /// PARAMETRO: description [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: status [BOOL] [REQUERIDO]<br />
+        /// PARAMETRO: idoffice [GUID] [REQUERIDO]<br />
         /// </remarks>
         /// <returns>Regresa un objeto informado exito de la operacion </returns>
         [HttpPost]
-        [AllowAnonymous]
-        [Route("EditConsultorio")]
-        public HttpResponseMessage EditConsultorio(ConsultorioModel t)
+        [Authorize]
+        [Route("EditOffice")]
+        public HttpResponseMessage EditOffice(OfficeModel t)
         {
-            aConsultorio s = new aConsultorio();
-            return ut.ReturnResponse(s.EditConsultorio(t));
+            aOffice s = new aOffice();
+            return ut.ReturnResponse(s.EditOffice(t));
         }
 
         /// <summary>
-        /// Metodo para editar un consultorio
+        /// Metodo para consultar consultorios, 
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Nombre [STRING]<br />
-        /// PARAMETRO: Descripcion [STRING]<br />  
-        /// PARAMETRO: token [STRING] [REQUERIDO]
+        /// PARAMETRO: name [STRING] [OPTIONAL] (si se pasa este valor, se buscara consultorios con este nombre) <br />
+        /// PARAMETRO: description [STRING] [OPTIONAL] (si se pasa este valor se buscara consultorios con esa descripcion)<br />
         /// </remarks>
         /// <returns>Regresa una lista con los consultorios que cumplan con los parametros de busqueda</returns>
         [HttpPost]
-        [AllowAnonymous]
-        [Route("GetConsultorio")]
-        public HttpResponseMessage GetConsultorio(ConsultorioModel t)
+        [Authorize]
+        [Route("GetOffice")]
+        public HttpResponseMessage GetOffice(OfficeModel t)
         {
-            aConsultorio s = new aConsultorio();
-            return ut.ReturnResponse(s.GetConsultorio(t));
+            aOffice s = new aOffice();
+            return ut.ReturnResponse(s.GetOffice(t));
         }
 
 
@@ -82,9 +80,9 @@ namespace MilenioApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("CreateConsultorioEspecialidad")]
-        public HttpResponseMessage CreateConsultorioEspecialidad(ConsultorioModel t)
+        public HttpResponseMessage CreateConsultorioEspecialidad(OfficeModel t)
         {
-            aConsultorio s = new aConsultorio();
+            aOffice s = new aOffice();
             return ut.ReturnResponse(s.CreateConsultorioEspecialidad(t));
         }
 
@@ -102,9 +100,9 @@ namespace MilenioApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("EditConsultorioEspecialidad")]
-        public HttpResponseMessage EditConsultorioEspecialidad(ConsultorioModel t)
+        public HttpResponseMessage EditConsultorioEspecialidad(OfficeModel t)
         {
-            aConsultorio s = new aConsultorio();
+            aOffice s = new aOffice();
             return ut.ReturnResponse(s.EditConsultorioEspecialidad(t));
         }
 

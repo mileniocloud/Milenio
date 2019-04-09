@@ -13,15 +13,11 @@ using System.Web;
 
 namespace MilenioApi.Action
 {
-    public class aEntidad
+    public class aEntity
     {
         TokenValidationHandler tvh = new TokenValidationHandler();
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
-
-        #region Especialidad
-
-        #endregion
 
         #region Seccion de entidad
 
@@ -138,7 +134,7 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //error general
-                rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 return rp;
             }
         }
@@ -211,7 +207,7 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //error general
-                rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 return rp;
             }
         }
@@ -286,7 +282,7 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //error general
-                rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 return rp;
             }
         }
@@ -333,7 +329,7 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //error general
-                rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 return rp;
             }
         }
@@ -389,7 +385,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -437,7 +433,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }

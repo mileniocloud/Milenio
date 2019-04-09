@@ -185,7 +185,7 @@
             <PropertyRef Name="codigo_id" />
           </Key>
           <Property Name="codigo_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Codigo" Type="nvarchar" MaxLength="4" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="10" />
           <Property Name="Message" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Horario_Agenda">
@@ -298,16 +298,6 @@
           <Property Name="Id_Entidad" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Autorizado" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="Telefono">
           <Key>
             <PropertyRef Name="Codigo_Id" />
@@ -391,6 +381,7 @@
           <Property Name="Usuario_Update" Type="uniqueidentifier" />
           <Property Name="Fecha_Update" Type="datetime" Nullable="false" />
           <Property Name="isloged" Type="bit" Nullable="false" />
+          <Property Name="Token_Password_Change" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Vistas">
           <Key>
@@ -782,7 +773,6 @@
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol_Usuario" EntityType="Self.Rol_Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol_Vista_Entidad" EntityType="Self.Rol_Vista_Entidad" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Telefono" EntityType="Self.Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Identificacion" EntityType="Self.Tipo_Identificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Profesional" EntityType="Self.Tipo_Profesional" Schema="dbo" store:Type="Tables" />
@@ -934,7 +924,6 @@
           <EntitySet Name="Rol" EntityType="MilenioCloudModel.Rol" />
           <EntitySet Name="Rol_Usuario" EntityType="MilenioCloudModel.Rol_Usuario" />
           <EntitySet Name="Rol_Vista_Entidad" EntityType="MilenioCloudModel.Rol_Vista_Entidad" />
-          <EntitySet Name="sysdiagrams" EntityType="MilenioCloudModel.sysdiagrams" />
           <EntitySet Name="Telefono" EntityType="MilenioCloudModel.Telefono" />
           <EntitySet Name="Tipo_Identificacion" EntityType="MilenioCloudModel.Tipo_Identificacion" />
           <EntitySet Name="Tipo_Profesional" EntityType="MilenioCloudModel.Tipo_Profesional" />
@@ -1261,7 +1250,7 @@
             <PropertyRef Name="codigo_id" />
           </Key>
           <Property Name="codigo_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Codigo" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Horario_Agenda">
@@ -1389,16 +1378,6 @@
           <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Rol_Vista_Entidad_Entidad" FromRole="Rol_Vista_Entidad" ToRole="Entidad" />
           <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.FK_Rol_Vista_Entidad_Rol" FromRole="Rol_Vista_Entidad" ToRole="Rol" />
           <NavigationProperty Name="Vistas" Relationship="MilenioCloudModel.FK_Rol_Vista_Entidad_Vistas" FromRole="Rol_Vista_Entidad" ToRole="Vistas" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Telefono">
           <Key>
@@ -1798,6 +1777,7 @@
           <Property Name="Usuario_Update" Type="Guid" />
           <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="isloged" Type="Boolean" Nullable="false" />
+          <Property Name="Token_Password_Change" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Entidad_Usuario" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Usuario" FromRole="Usuario" ToRole="Entidad_Usuario" />
           <NavigationProperty Name="Especialidad_Profesional" Relationship="MilenioCloudModel.FK_Especialidad_Profesional_Usuario" FromRole="Usuario" ToRole="Especialidad_Profesional" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_Usuario_Poblado" FromRole="Usuario" ToRole="Poblado" />
@@ -2163,17 +2143,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="MilenioCloudModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Telefono">
             <EntityTypeMapping TypeName="MilenioCloudModel.Telefono">
               <MappingFragment StoreEntitySet="Telefono">
@@ -2241,6 +2210,7 @@
           <EntitySetMapping Name="Usuario">
             <EntityTypeMapping TypeName="MilenioCloudModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Token_Password_Change" ColumnName="Token_Password_Change" />
                 <ScalarProperty Name="isloged" ColumnName="isloged" />
                 <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
                 <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />

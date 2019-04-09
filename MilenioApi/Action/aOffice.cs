@@ -10,16 +10,16 @@ using System.Web;
 
 namespace MilenioApi.Action
 {
-    public class aConsultorio
+    public class aOffice
     {
         private TokenValidationHandler tvh = new TokenValidationHandler();
         aUtilities autil = new aUtilities();
         #region CRUD
         ClaimsPrincipal cp = new ClaimsPrincipal();
 
-        public object CreateConsultorio(ConsultorioModel model)
+        public object CreateOffice(OfficeModel model)
         {
-            Response ret = new Response();
+            Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
@@ -86,12 +86,12 @@ namespace MilenioApi.Action
                             }
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
-                            return ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //consultorio existe
-                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.MensajeRetorno(ref rp, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
@@ -104,15 +104,15 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.BadRequest);
-                    return ret;
+                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
+                    return rp;
                 }
             }
         }
 
-        public object EditConsultorio(ConsultorioModel model)
+        public object EditOffice(OfficeModel model)
         {
-            Response ret = new Response();
+            Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
@@ -145,14 +145,14 @@ namespace MilenioApi.Action
 
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
-                            ret = autil.MensajeRetorno(ref ret, 20, string.Empty, null);
+                            rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null);
                         }
                         else
                         {
                             //consultorio existe
-                            ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null);
+                            rp = autil.MensajeRetorno(ref rp, 25, string.Empty, null);
                         }
-                        return ret;
+                        return rp;
                     }
                     else
                     {
@@ -163,17 +163,17 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null);
-                    return ret;
+                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null);
+                    return rp;
                 }
             }
         }
 
-        public object GetConsultorio(ConsultorioModel model)
+        public object GetOffice(OfficeModel model)
         {
             List<Consultorio> lc = new List<Consultorio>();
-            List<ConsultorioModel> lcm = new List<ConsultorioModel>();
-            Response ret = new Response();
+            List<OfficeModel> lcm = new List<OfficeModel>();
+            Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
@@ -201,26 +201,26 @@ namespace MilenioApi.Action
                             }
                             var rl = lc.Select(u => new
                             {
-                                id_consultorio = u.Id_Consultorio,
-                                u.Nombre,
-                                u.Descripcion,
-                                u.Estado
+                                idoffice = u.Id_Consultorio,
+                                name = u.Nombre,
+                                description = u.Descripcion,
+                                status = u.Estado
                             }).ToList();
-                            ret.cantidad = rl.Count();
-                            ret.pagina = 0;
-                            ret.data = rl;
+                            rp.cantidad = rl.Count();
+                            rp.pagina = 0;
+                            rp.data = rl;
                         }
                     }
                     else
                     {
                         //token invalido
-                        return autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
+                        return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
                     }
-                    return autil.MensajeRetorno(ref ret, 9, null, null, HttpStatusCode.OK);
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
                 catch (Exception ex)
                 {
-                    return autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.BadRequest);
+                    return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
                 }
             }
         }
@@ -228,7 +228,7 @@ namespace MilenioApi.Action
 
         #region Relacionadas
 
-        public object CreateConsultorioEspecialidad(ConsultorioModel model)
+        public object CreateConsultorioEspecialidad(OfficeModel model)
         {
             Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -315,7 +315,7 @@ namespace MilenioApi.Action
             }
         }
 
-        public object EditConsultorioEspecialidad(ConsultorioModel model)
+        public object EditConsultorioEspecialidad(OfficeModel model)
         {
             Response ret = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())

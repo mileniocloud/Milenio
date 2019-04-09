@@ -18,11 +18,15 @@ namespace MilenioApi.Models
             {
                 var httpRequest = HttpContext.Current.Request;
                 var token = httpRequest.RequestContext.HttpContext.Items;
-               return _token = ((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter.ToString();
+
+                if (((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter != null)
+                    _token = ((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter.ToString();
+
+                return _token;
             }
             set
             {
-                
+
             }
         }
 

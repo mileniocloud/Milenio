@@ -83,8 +83,6 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
 
-    public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-
     public virtual DbSet<Telefono> Telefono { get; set; }
 
     public virtual DbSet<Tipo_Identificacion> Tipo_Identificacion { get; set; }

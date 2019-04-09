@@ -4,10 +4,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 
 namespace MilenioApi.Action
 {
@@ -56,9 +61,9 @@ namespace MilenioApi.Action
                                    where g.codigo_id == idmensje
                                    select g).SingleOrDefault();
 
-                
-               
-               
+
+
+
             }
 
             return ret;
@@ -72,9 +77,9 @@ namespace MilenioApi.Action
                                    where g.codigo_id == idmensje
                                    select g).SingleOrDefault();
 
-                
-               
-               
+
+
+
             }
 
             return ret;
@@ -114,6 +119,15 @@ namespace MilenioApi.Action
             return httpResponseMessage;
         }
 
+
+        public HttpResponseMessage ReturnResponseApi(HttpResponseMessage o)
+        {
+            HttpResponseMessage httpResponseMessage = null;
+            httpResponseMessage = new HttpResponseMessage(o.StatusCode);
+           
+            return httpResponseMessage;
+        }
+
         public List<ErrorFields> ValidateObject(object t)
         {
             List<ErrorFields> rl = new List<ErrorFields>();
@@ -127,7 +141,7 @@ namespace MilenioApi.Action
                 foreach (ValidationResult vr in results)
                 {
                     ErrorFields r = new ErrorFields();
-                   // r.field = vr.MemberNames.First();
+                    // r.field = vr.MemberNames.First();
                     r.message = vr.ErrorMessage;
                     rl.Add(r);
                 }
@@ -147,5 +161,70 @@ namespace MilenioApi.Action
 
             return res.ToString();
         }
+
+        public string Encrypt(string token)
+        {
+            Byte[] stringBytes = System.Text.Encoding.Unicode.GetBytes(token);
+            StringBuilder sbBytes = new StringBuilder(stringBytes.Length * 2);
+            foreach (byte b in stringBytes)
+            {
+                sbBytes.AppendFormat("{0:X2}", b);
+            }
+            return sbBytes.ToString();
+            //return Convert.ToBase64String(cipherTextBytes);
+        }
+
+        public string Decrypt(string encryptedText)
+        {
+            int numberChars = encryptedText.Length;
+            byte[] bytes = new byte[numberChars / 2];
+            for (int i = 0; i < numberChars; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(encryptedText.Substring(i, 2), 16);
+            }
+            return System.Text.Encoding.Unicode.GetString(bytes);
+        }
+        public void SendMail(string email, string token, string nombre, string login, AlternateView emailbody)
+        {
+            try
+            {
+                var userCredentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["SMTPUserName"].ToString(), ConfigurationManager.AppSettings["SMTPPassword"]);
+
+                if (System.Convert.ToBoolean(ConfigurationManager.AppSettings["EmailAlertEnabled"]))
+                {
+                    SmtpClient smtp = new SmtpClient
+                    {
+                        Host = Convert.ToString(ConfigurationManager.AppSettings["SMTPHost"]),
+
+                        Port = Convert.ToInt32(ConfigurationManager.AppSettings["SMTPPort"]),
+
+                        EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["SMTPEnableSsl"]),
+
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+
+                        Timeout = Convert.ToInt32(ConfigurationManager.AppSettings["SMTPTimeout"]),
+
+                        UseDefaultCredentials = false
+                    };
+
+                    smtp.Credentials = userCredentials;
+
+                    MailMessage message = new MailMessage();
+
+                    message.From = new MailAddress(ConfigurationManager.AppSettings["SenderEmailAddress"], ConfigurationManager.AppSettings["SenderDisplayName"]);
+                    message.Subject = ConfigurationManager.AppSettings["EmailSubjec"];
+                    message.IsBodyHtml = true;
+                    message.AlternateViews.Add(emailbody);
+                    message.To.Add(email);
+
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
     }
 }

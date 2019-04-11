@@ -309,8 +309,8 @@ namespace MilenioApi.Action
                         foreach (var i in et.ToList())
                         {
                             EntidadModel em = new EntidadModel();
-                            em.Id_Municipio = i.Poblado.Municipio_Id;
-                            em.Id_Departamento = i.Poblado.Municipio.Departamento_Id;
+                            //em.Id_Municipio = i.Poblado.Municipio_Id;
+                            //em.Id_Departamento = i.Poblado.Municipio.Departamento_Id;
                             Copier.CopyPropertiesTo(i, em);
                             rl.Add(em);
                         }
@@ -350,13 +350,13 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Especialidad_Entidad ee = ent.Especialidad_Entidad.Where(t => t.Id_Entidad == entidad && t.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
+                        Especialidad_Entidad ee = ent.Especialidad_Entidad.Where(t => t.Id_Entidad == entidad).SingleOrDefault();
 
                         if (ee == null)
                         {
                             ee = new Especialidad_Entidad();
                             ee.Id_Entidad = entidad;
-                            ee.Id_Especialidad = model.Id_Especialidad;
+                            //ee.Id_Especialidad = model.Id_Especialidad;
                             ee.Estado = true;
                             ee.Usuario_Create = usuario;
                             ee.Usuario_Update = usuario;
@@ -404,7 +404,7 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                        Especialidad_Entidad ee = ent.Especialidad_Entidad.Where(t => t.Id_Entidad == entidad && t.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
+                        Especialidad_Entidad ee = ent.Especialidad_Entidad.Where(t => t.Id_Entidad == entidad).SingleOrDefault();
 
                         if (ee != null)
                         {

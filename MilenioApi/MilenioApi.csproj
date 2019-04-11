@@ -431,8 +431,6 @@
     <Compile Include="Models\PobladoModel.cs" />
     <Compile Include="Models\ProfesionalModel.cs" />
     <Compile Include="Models\Response.cs" />
-    <Compile Include="Models\ResponseList.cs" />
-    <Compile Include="Models\Return.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />

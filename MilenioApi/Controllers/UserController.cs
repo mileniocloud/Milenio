@@ -10,11 +10,11 @@ namespace MilenioApi.Controllers
     public class UserController : ApiController
     {
         aUtilities ut = new aUtilities();
-        
+
         #region Create - ActInactivate - list
 
         /// <summary>
-        /// Metodo crear usuarios del sistema dada una entidad
+        /// Metodo crear usuarios del sistema
         /// </summary>
         /// <remarks>
         /// PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
@@ -26,19 +26,19 @@ namespace MilenioApi.Controllers
         /// PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
         /// PARAMETRO: photo [STRING] <br />
         /// PARAMETRO: civilstatus  [STRING] <br />
-        /// PARAMETRO: blodtype [STRING] <br />
+        /// PARAMETRO: bloodtype [STRING] <br />
         /// PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
         /// PARAMETRO: address [STRING] <br />
         /// PARAMETRO: telephone  [STRING] <br />
         /// PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
         /// PARAMETRO: observation [STRING] <br />
         /// PARAMETRO: linktype [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
-        /// PARAMETRO: Login [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Password [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Email [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
-        /// PARAMETRO: photoabeas [STRING] <br />
+        /// PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+        /// PARAMETRO: login [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: password [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: email [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+        /// PARAMETRO: photohabeas [STRING] <br />
         /// PARAMETRO: typeprofessional  [GUID] <br />
         /// PARAMETRO: registryprofessional  [STRING] <br />        
         /// PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
@@ -54,26 +54,26 @@ namespace MilenioApi.Controllers
         }
 
         /// <summary>
-        /// Metodo crear usuarios del sistema dada una entidad
+        /// Metodo para editar una entidad
         /// </summary>
         /// <remarks>        
         /// PARAMETRO: gender [STRING] <br />
         /// PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
         /// PARAMETRO: photo [STRING] <br />
         /// PARAMETRO: civilstatus  [STRING] <br />
-        /// PARAMETRO: blodtype [STRING] <br />
+        /// PARAMETRO: bloodtype [STRING] <br />
         /// PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
         /// PARAMETRO: address [STRING] <br />
         /// PARAMETRO: telephone  [STRING] <br />
         /// PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
         /// PARAMETRO: observation [STRING] <br />
         /// PARAMETRO: linktype [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
-        /// PARAMETRO: Login [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Password [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: Email [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
-        /// PARAMETRO: photoabeas [STRING] <br />
+        /// PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+        /// PARAMETRO: login [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: password [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: email [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+        /// PARAMETRO: photohabeas [STRING] <br />
         /// PARAMETRO: typeprofessional  [GUID] <br />
         /// PARAMETRO: registryprofessional  [STRING] <br />        
         /// PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
@@ -182,11 +182,11 @@ namespace MilenioApi.Controllers
         /// Metodo editar el perfil del usuario
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: telephone [STRING]
-        /// PARAMETRO: Foto [STRING]
-        /// PARAMETRO: neighborhood [STRING]
-        /// PARAMETRO: address [STRING]
-        /// PARAMETRO: Email [STRING]
+        /// PARAMETRO: telephone [STRING] <br />
+        /// PARAMETRO: photo [STRING] <br />
+        /// PARAMETRO: neighborhood [STRING] <br />
+        /// PARAMETRO: address [STRING] <br />
+        /// PARAMETRO: Email [STRING] <br />
         /// PARAMETRO: civilstatus [STRING]
         /// </remarks>
         /// <returns>Regresa informacion completa del usuario </returns>

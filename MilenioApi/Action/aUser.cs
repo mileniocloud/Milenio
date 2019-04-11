@@ -517,31 +517,29 @@ namespace MilenioApi.Action
                             var r = (from t in vu
                                      select new
                                      {
-                                         t.Id_Tipo_Identificacion,
-                                         t.Numero_Identificacion,
-                                         t.Nombres,
-                                         t.Primer_Apellido,
-                                         t.Segundo_Apellido,
-                                         t.Sexo,
-                                         t.Fecha_Nacimiento,
-                                         t.Foto,
-                                         t.Estado_Civil,
-                                         t.Tipo_Sangre,
-                                         t.Poblado_Id,
-                                         t.Direccion,
-                                         t.Telefono,
-                                         t.Fecha_Contratacion,
-                                         t.Observaciones,
-                                         t.Tipo_Vinculacion,
-                                         t.Presta_Servicio,
+                                         typedocument = t.Id_Tipo_Identificacion,
+                                         document = t.Numero_Identificacion,
+                                         fullname = t.Nombres,
+                                         firstlastname = t.Primer_Apellido,
+                                         secondlastname = t.Segundo_Apellido,
+                                         gender = t.Sexo,
+                                         birthdate = t.Fecha_Nacimiento,
+                                         photo = t.Foto,
+                                         civilstatus = t.Estado_Civil,
+                                         bloodtype = t.Tipo_Sangre,
+                                         address = t.Direccion,
+                                         thelephone = t.Telefono,
+                                         dateofhire = t.Fecha_Contratacion,
+                                         linktype = t.Tipo_Vinculacion,
+                                         serviceprovider = t.Presta_Servicio,
                                          t.Email,
-                                         t.Acepta_ABEAS,
-                                         t.Foto_ABEAS,
-                                         Id_Tipo_Profesional = us.Tipo_Profesional.Nombre,
-                                         t.Registro_Profesional,
-                                         t.Poblado.Municipio_Id,
-                                         Departamento_Id = us.Poblado.Municipio.Departamento.Dane_Id,
-                                         Estado = us.Entidad_Usuario.Where(tt => tt.Id_Usuario == us.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado).SingleOrDefault()
+                                         habeas = t.Acepta_ABEAS,
+                                         //t.Foto_ABEAS,
+                                         typeprofessional = us.Tipo_Profesional.Nombre,
+                                         registryprofessional = t.Registro_Profesional,
+                                         neighborhood = t.Poblado.Poblado_Id,
+                                         municipality = us.Poblado.Municipio.Dane_Id,
+                                         departament = us.Poblado.Municipio.Departamento.Dane_Id
                                      }).SingleOrDefault();
 
                             rp.data = r;
@@ -551,7 +549,7 @@ namespace MilenioApi.Action
                     return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
@@ -582,12 +580,11 @@ namespace MilenioApi.Action
 
                     return autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                 }
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, ex.Message + "--token: " + model.token, null, HttpStatusCode.InternalServerError);
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
         #endregion

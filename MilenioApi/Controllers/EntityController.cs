@@ -11,6 +11,7 @@ namespace MilenioApi.Controllers
     {
         aUtilities ut = new aUtilities();
 
+
         [HttpPost]
         [AllowAnonymous]
         [Route("GetEntidades")]
@@ -29,6 +30,26 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetEntidadesEdit(t));
         }
 
+        // <summary>
+        // Metodo para crear entidades
+        // </summary>
+        // <remarks>
+        // PARAMETRO: nit [INT] [REQUERIDO]<br/>
+        // PARAMETRO: name [STRING] [REQUERIDO]<br/>
+        // PARAMETRO: organization [STRING] [REQUERIDO]<br/>
+        // PARAMETRO: neighborhood [STRING][REQUERIDO]<br/>
+        // PARAMETRO: address [STRING][REQUERIDO]<br/>
+        // PARAMETRO: email [STRING][REQUERIDO]<br/>
+        // PARAMETRO: entitycode [STRING][REQUERIDO]<br/>
+        // PARAMETRO: priorityatention [STRING][REQUERIDO]<br/>
+        // PARAMETRO: taxpayer [STRING][REQUERIDO]<br/>
+        // PARAMETRO: photo [STRING][REQUERIDO]<br/>
+        // PARAMETRO: opening [STRING][REQUERIDO]<br/>
+        // PARAMETRO: closing [STRING][REQUERIDO]<br/>
+        // PARAMETRO: status [STRING][REQUERIDO]<br/>
+
+        // </remarks>
+        /// <returns>Regresa informacion indicando el exito de la operacion </returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("CreateEntidad")]

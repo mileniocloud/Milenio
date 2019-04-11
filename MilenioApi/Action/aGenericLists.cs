@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Web;
 
@@ -18,35 +19,83 @@ namespace MilenioApi.Action
         ClaimsPrincipal cp = new ClaimsPrincipal();
         aUtilities autil = new aUtilities();
 
-        public PobladoModel GetPoblado(HttpRequest httpRequest)
+        #region Listas
+
+        public object GetDepartament(Basic model)
         {
-            PobladoModel pm = new PobladoModel();
+            Response rp = new Response();
             try
             {
-                cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
-                if (cp != null)
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    var pb = ent.Departamento.Select(l => new
                     {
-                        //List<Basic> dp = ent.Departamento.Select(l => new ComboModel { id = l.Codigo_Id, value = l.Nombre, codigo = l.Dane_Id.ToString() }).ToList();
-                        //List<Basic> mp = ent.Municipio.Select(l => new Basic { codigostring = l.Dane_Id.ToString(), value = l.Nombre, codigo = l.Departamento_Id.ToString() }).ToList();
-                        //List<Basic> pb = ent.Poblado.Select(l => new Basic { codigostring = l.Poblado_Id.ToString(), value = l.Nombre, codigo = l.Municipio_Id.ToString() }).ToList();
+                        code = l.Dane_Id,
+                        value = l.Nombre
+                    }).ToList();
 
-                        //pm.Departamento.AddRange(dp);
-                        //pm.Municipio.AddRange(mp);
-                        //pm.Poblado.AddRange(pb);
+                    rp.data = pb;
 
-                        return pm;
-                    }
+                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
-                else
-                    return pm;
             }
-
             catch (Exception ex)
             {
-                throw ex;
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
+        public object GetMunicipality(Basic model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    int id = int.Parse(model.id);
+                    var pb = ent.Municipio.Where(t => t.Departamento_Id == id).Select(l => new
+                    {
+                        code = l.Dane_Id,
+                        value = l.Nombre
+                    }).ToList();
+
+                    rp.data = pb;
+
+                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+        public object GetNeighborhood(Basic model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    int id = int.Parse(model.id);
+                    var pb = ent.Poblado.Where(t => t.Municipio_Id == id).Select(l => new
+                    {
+                        code = l.Poblado_Id,
+                        value = l.Nombre
+                    }).ToList();
+
+                    rp.data = pb;
+
+                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        #endregion
     }
 }

@@ -614,7 +614,7 @@
             </remarks>
             <returns>Regresa un objeto indicando el resultado de la operacion</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.DashboardController.Dashboard(MilenioApi.Models.DashboardModel)">
+        <member name="M:MilenioApi.Controllers.DashboardController.Dashboard">
             <summary>
             Metodo para construir el dashboard
             </summary>
@@ -622,6 +622,45 @@
             
             </remarks>
             <returns>Regresa el json con el menu </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.EntityController.CreateEntidad(MilenioApi.Models.EntidadModel)">
+            <summary>
+            Metodo para crear entidades
+            </summary>
+            <remarks>
+            PARAMETRO: nit [STRING] <br/>
+            PARAMETRO: nit [STRING] <br/>
+            PARAMETRO: nit [STRING] <br/>
+            PARAMETRO: token [STRING]
+            </remarks>
+            <returns>Regresa informacion si el usuario existe o no </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetDepartament">
+            <summary>
+            Metodo consultar los departamentos
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa lista con los departamentos </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetMunicipality(MilenioApi.Models.Basic)">
+            <summary>
+            Metodo consultar los municipios
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa una lista con los municipios </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetNeighborhood(MilenioApi.Models.Basic)">
+            <summary>
+            Metodo consultar todos los poblado o barrios
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa una lista con todos los poblados o barrios </returns>
         </member>
         <member name="M:MilenioApi.Controllers.SecurityController.Login(MilenioApi.Models.LoginModel)">
             <summary>
@@ -702,7 +741,7 @@
         </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>
-            Metodo crear usuarios del sistema dada una entidad
+            Metodo crear usuarios del sistema
             </summary>
             <remarks>
             PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
@@ -714,19 +753,19 @@
             PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
             PARAMETRO: photo [STRING] <br />
             PARAMETRO: civilstatus  [STRING] <br />
-            PARAMETRO: blodtype [STRING] <br />
+            PARAMETRO: bloodtype [STRING] <br />
             PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
             PARAMETRO: address [STRING] <br />
             PARAMETRO: telephone  [STRING] <br />
             PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
             PARAMETRO: observation [STRING] <br />
             PARAMETRO: linktype [STRING] [REQUERIDO]<br />
-            PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: Login [STRING] [REQUERIDO]<br />
-            PARAMETRO: Password [STRING] [REQUERIDO]<br />
-            PARAMETRO: Email [STRING] [REQUERIDO]<br />
-            PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: photoabeas [STRING] <br />
+            PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: login [STRING] [REQUERIDO]<br />
+            PARAMETRO: password [STRING] [REQUERIDO]<br />
+            PARAMETRO: email [STRING] [REQUERIDO]<br />
+            PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photohabeas [STRING] <br />
             PARAMETRO: typeprofessional  [GUID] <br />
             PARAMETRO: registryprofessional  [STRING] <br />        
             PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
@@ -735,26 +774,26 @@
         </member>
         <member name="M:MilenioApi.Controllers.UserController.EditUser(MilenioApi.Models.UserModel)">
             <summary>
-            Metodo crear usuarios del sistema dada una entidad
+            Metodo para editar una entidad
             </summary>
             <remarks>        
             PARAMETRO: gender [STRING] <br />
             PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
             PARAMETRO: photo [STRING] <br />
             PARAMETRO: civilstatus  [STRING] <br />
-            PARAMETRO: blodtype [STRING] <br />
+            PARAMETRO: bloodtype [STRING] <br />
             PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
             PARAMETRO: address [STRING] <br />
             PARAMETRO: telephone  [STRING] <br />
             PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
             PARAMETRO: observation [STRING] <br />
             PARAMETRO: linktype [STRING] [REQUERIDO]<br />
-            PARAMETRO: isservices [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: Login [STRING] [REQUERIDO]<br />
-            PARAMETRO: Password [STRING] [REQUERIDO]<br />
-            PARAMETRO: Email [STRING] [REQUERIDO]<br />
-            PARAMETRO: abeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
-            PARAMETRO: photoabeas [STRING] <br />
+            PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: login [STRING] [REQUERIDO]<br />
+            PARAMETRO: password [STRING] [REQUERIDO]<br />
+            PARAMETRO: email [STRING] [REQUERIDO]<br />
+            PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photohabeas [STRING] <br />
             PARAMETRO: typeprofessional  [GUID] <br />
             PARAMETRO: registryprofessional  [STRING] <br />        
             PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
@@ -802,7 +841,7 @@
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.UserController.UserProfile(MilenioApi.Models.UserModel)">
+        <member name="M:MilenioApi.Controllers.UserController.UserProfile">
             <summary>
             Metodo consultar el perfil del usuario
             </summary>
@@ -816,11 +855,11 @@
             Metodo editar el perfil del usuario
             </summary>
             <remarks>
-            PARAMETRO: telephone [STRING]
-            PARAMETRO: Foto [STRING]
-            PARAMETRO: neighborhood [STRING]
-            PARAMETRO: address [STRING]
-            PARAMETRO: Email [STRING]
+            PARAMETRO: telephone [STRING] <br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: neighborhood [STRING] <br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: Email [STRING] <br />
             PARAMETRO: civilstatus [STRING]
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>

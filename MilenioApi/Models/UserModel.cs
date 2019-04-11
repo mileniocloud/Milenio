@@ -70,22 +70,28 @@ namespace MilenioApi.Models
         [JsonProperty("linktype")]
         public string Tipo_Vinculacion { get; set; }
         [Required]
-        [Display(Name = "isservices")]
-        [JsonProperty("isservices")]
+        [Display(Name = "serviceprovider")]
+        [JsonProperty("serviceprovider")]
         public bool Presta_Servicio { get; set; }
         [Required]
+        [Display(Name = "login")]
+        [JsonProperty("login")]
         public string Login { get; set; }
         [Required]
+        [Display(Name = "password")]
+        [JsonProperty("password")]
         public string Password { get; set; }
         [Required]
         [EmailAddress]
+        [Display(Name = "email")]
+        [JsonProperty("email")]
         public string Email { get; set; }
         [Required]
-        [Display(Name = "abeas")]
-        [JsonProperty("abeas")]
+        [Display(Name = "habeas")]
+        [JsonProperty("habeas")]
         public bool Acepta_ABEAS { get; set; }
-        [Display(Name = "photoabeas")]
-        [JsonProperty("photoabeas")]
+        [Display(Name = "photohabeas")]
+        [JsonProperty("photohabeas")]
         public String Foto_ABEAS { get; set; }
         public int Acepta_ABEAS_Int { get; set; }
 
@@ -98,6 +104,7 @@ namespace MilenioApi.Models
         public int Estado { get; set; }
 
         [Required]
+               
         public int Presta_Servicio_Int { get; set; }
 
         [Display(Name = "municipality")]

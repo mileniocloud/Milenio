@@ -18,11 +18,12 @@ namespace MilenioApi.Controllers
         /// 
         /// </remarks>
         /// <returns>Regresa el json con el menu </returns>
-        [HttpPost]
+        [HttpGet]
         [Authorize]
         [Route("Dashboard")]
-        public HttpResponseMessage Dashboard(DashboardModel t)
+        public HttpResponseMessage Dashboard()
         {
+            DashboardModel t = new DashboardModel();
             aDashboard s = new aDashboard();
             return ut.ReturnResponse(s.Dashboard(t));
         }

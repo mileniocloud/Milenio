@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Web;
 
@@ -20,13 +20,8 @@ namespace MilenioApi.Action
         aUtilities autil = new aUtilities();
 
         #region Seccion de entidad
-
-        /// <summary>
-        /// Metodo permite la creacion de entidaddes
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public object CreateEntidad(EntidadModel model)
+              
+        public object CreateEntity(EntidadModel model)
         {
             Response rp = new Response();
             try
@@ -51,7 +46,7 @@ namespace MilenioApi.Action
                                 Entidad et = new Entidad();
                                 Copier.CopyPropertiesTo(model, et);
                                 //                               
-                                Guid identidad = Guid.NewGuid();
+                                Guid identidad = Guid.NewGuid();                                
                                 et.Id_Entidad = identidad;
                                 et.Fecha_Create = DateTime.Now;
                                 et.Fecha_Update = DateTime.Now;
@@ -59,8 +54,9 @@ namespace MilenioApi.Action
                                 //se envia a crear todo
 
                                 //se consulta en el webconfig el usuario SA y el rol SA
-                                Guid sauser = Guid.Parse(ConfigurationManager.AppSettings["idsuperuser"]);
+                                //Guid sauser = Guid.Parse(ConfigurationManager.AppSettings["idsuperuser"]);
                                 Guid sarol = Guid.Parse(ConfigurationManager.AppSettings["idrolsuperuser"]);
+                                Guid idtipovinculacion = Guid.Parse(ConfigurationManager.AppSettings["idtipovinculacion"]);
 
                                 //se genera un usuario para enviar por email a la entidad
                                 Guid idusuario = Guid.NewGuid();
@@ -68,17 +64,21 @@ namespace MilenioApi.Action
                                 um.Id_Usuario = idusuario;
                                 um.Nombres = et.Nombre.Replace(" ", "");
                                 um.Primer_Apellido = et.Nit.ToString().Replace(".", "").Replace(" ", "");
+                                um.Fecha_Nacimiento = DateTime.Now;
                                 um.Segundo_Apellido = et.Organizacion;
                                 um.Id_Tipo_Identificacion = "NIT";
                                 um.Numero_Identificacion = et.Nit.ToString().Replace(".", "").Replace(" ", "");
                                 um.Fecha_Contratacion = DateTime.Now;
-                                um.Tipo_Vinculacion = "NA";
+                                um.Id_Tipo_Vinculacion = idtipovinculacion;
                                 um.Presta_Servicio = false;
-                                um.Login = et.Nombre.Replace(" ", "");
+                                um.Login = et.Nit.ToString().Replace(".", "").Replace(" ", "");
                                 string password = autil.CreatePassword(8);
                                 um.Password = autil.Sha(password);
+                                um.Foto = model.Foto;
                                 um.Email = et.Email;
                                 um.Acepta_ABEAS = true;
+                                um.Fecha_Create = DateTime.Now;
+                                um.Fecha_Update = DateTime.Now;
                                 ent.Usuario.Add(um);
 
 
@@ -107,13 +107,15 @@ namespace MilenioApi.Action
 
                                 //se guarda todo
                                 ent.SaveChanges();
+                                autil.SendMail(et.Email, (SetWelcomeEmailBody(et.Nombre, um.Login, password)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
+                                
                                 //se genera el codigo del mensaje de retorno exitoso
                                 rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                             }
                             else
                             {
                                 //Nit EXISTE
-                                rp = autil.MensajeRetorno(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
+                                rp = autil.MensajeRetorno(ref rp, 36, string.Empty, null, HttpStatusCode.OK);
                             }
                         }
                         else
@@ -139,12 +141,35 @@ namespace MilenioApi.Action
             }
         }
 
-        /// <summary>
-        /// Metodo para editar entidades
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public object EditEntidad(EntidadModel model)
+        private AlternateView SetWelcomeEmailBody(string subject, string login, string password)
+        {
+            try
+            {
+                //se arma el correo que se envia para el ambio de clave
+                string plantilla = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["WelcomeTemplate"]);
+
+                var html = System.IO.File.ReadAllText(plantilla);
+                html = html.Replace("{{name}}", subject);
+                html = html.Replace("{{user}}", login);
+                html = html.Replace("{{password}}", password);
+
+                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
+
+                //create the LinkedResource (embedded image)
+                LinkedResource logo = new LinkedResource(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["LogoPath"]));
+                logo.ContentId = "companylogo";
+                //add the LinkedResource to the appropriate view
+                av.LinkedResources.Add(logo);
+
+                return av;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public object EditEntity(EntidadModel model)
         {
             Response rp = new Response();
             try
@@ -152,54 +177,45 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     cp = tvh.getprincipal(model.token);
-                    if (cp != null)
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
                     {
-                        List<ErrorFields> rel = autil.ValidateObject(model);
-                        if (rel.Count == 0)
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        //validamos que ese nit ya exista
+                        int vNit = ent.Entidad.Where(t => t.Nit == model.Nit && t.Id_Entidad != model.Id_Entidad).Count();
+                        if (vNit == 0)
                         {
-                            Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                            Entidad et = ent.Entidad.Where(en => en.Id_Entidad == model.Id_Entidad).SingleOrDefault();
+                            et.Nit = model.Nit;
+                            et.Nombre = model.Nombre;
+                            et.Organizacion = model.Organizacion;
+                            et.Poblado_Id = model.Poblado_Id;
+                            et.Direccion = model.Direccion;
+                            et.Email = model.Email;
+                            et.CodigoEntidad = model.CodigoEntidad;
+                            et.Atencion_Prioritaria = model.Atencion_Prioritaria;
+                            et.Contribuyente = model.Contribuyente;
+                            et.Hora_Desde = model.Hora_Desde;
+                            et.Hora_Hasta = model.Hora_Hasta;
+                            et.Fecha_Update = DateTime.Now;
+                            et.Foto = model.Foto;
 
-                            //validamos que ese nit ya exista
-                            int vNit = ent.Entidad.Where(t => t.Nit == model.Nit && t.Id_Entidad != model.Id_Entidad).Count();
-                            if (vNit == 0)
-                            {
-                                Entidad et = ent.Entidad.Where(en => en.Id_Entidad == model.Id_Entidad).SingleOrDefault();
-                                et.Nit = model.Nit;
-                                et.Nombre = model.Nombre;
-                                et.Organizacion = model.Organizacion;
-                                et.Poblado_Id = model.Poblado_Id;
-                                et.Direccion = model.Direccion;
-                                et.Email = model.Email;
-                                et.CodigoEntidad = model.CodigoEntidad;
-                                et.Atencion_Prioritaria = model.Atencion_Prioritaria;
-                                et.Contribuyente = model.Contribuyente;
-                                et.Hora_Desde = model.Hora_Desde;
-                                et.Hora_Hasta = model.Hora_Hasta;
-                                et.Fecha_Update = DateTime.Now;
-                                et.Foto = model.Foto;
-
-                                //se envia a editar todo
-                                ent.SaveChanges();
-                                //se genera el codigo del mensaje de retorno exitoso
-                                rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
-                            }
-                            else
-                            {
-                                //Nit EXISTE
-                                rp = autil.MensajeRetorno(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
-                            }
+                            //se envia a editar todo
+                            ent.SaveChanges();
+                            //se genera el codigo del mensaje de retorno exitoso
+                            rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
-                            //fallo campos requeridos
-                            return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                            //Nit EXISTE
+                            rp = autil.MensajeRetorno(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
-                        //token invalido
-                        rp = autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
-                        return rp;
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
                 }
                 return rp;
@@ -212,71 +228,69 @@ namespace MilenioApi.Action
             }
         }
 
-        public object GetEntidades(EntidadModel model)
+        public object GetEntity(EntidadModel model)
         {
             List<EntidadModel> rl = new List<EntidadModel>();
             Response rp = new Response();
             try
             {
-                cp = tvh.getprincipal(model.token);
-                if (cp != null)
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    IQueryable<Entidad> et = ent.Entidad;
+
+                    //consulta por nit
+                    if (model.Id_Entidad != Guid.Empty)
                     {
-                        IQueryable<Entidad> et = ent.Entidad;
-                        //consulta por nit
-                        if (model.Nit != 0)
-                        {
-                            et = et.Where(c => c.Nit == model.Nit);
-                        }
-
-                        //consulta por nombre
-                        if (!string.IsNullOrEmpty(model.Nombre))
-                        {
-                            et = et.Where(c => c.Nombre.Contains(model.Nombre));
-                        }
-
-                        //consulta por organizacion
-                        if (!string.IsNullOrEmpty(model.Organizacion))
-                        {
-                            et = et.Where(c => c.Organizacion.Contains(model.Organizacion));
-                        }
-
-                        //consulta por cofigo entidad
-                        if (!string.IsNullOrEmpty(model.CodigoEntidad))
-                        {
-                            et = et.Where(c => c.CodigoEntidad.Contains(model.CodigoEntidad));
-                        }
-
-                        //consulta por cofigo email
-                        if (!string.IsNullOrEmpty(model.Email))
-                        {
-                            et = et.Where(c => c.Email.Contains(model.Email));
-                        }
-
-                        rl = et.Select(u => new EntidadModel
-                        {
-                            Id_Entidad = u.Id_Entidad,
-                            Nit = u.Nit,
-                            Nombre = u.Nombre,
-                            Organizacion = u.Organizacion,
-                            Email = u.Email,
-                            CodigoEntidad = u.CodigoEntidad
-
-                        }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
-                        
-                        rp.data = rl;
-                        rp.cantidad = rl.Count();
+                        et = et.Where(c => c.Id_Entidad == model.Id_Entidad);
                     }
-                    //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+
+                    //consulta por nit
+                    if (!string.IsNullOrEmpty(model.Nit))
+                    {
+                        et = et.Where(c => c.Nit == model.Nit);
+                    }
+
+                    //consulta por nombre
+                    if (!string.IsNullOrEmpty(model.Nombre))
+                    {
+                        et = et.Where(c => c.Nombre.Contains(model.Nombre));
+                    }
+
+                    //consulta por organizacion
+                    if (!string.IsNullOrEmpty(model.Organizacion))
+                    {
+                        et = et.Where(c => c.Organizacion.Contains(model.Organizacion));
+                    }
+
+                    //consulta por codigo entidad
+                    if (!string.IsNullOrEmpty(model.CodigoEntidad))
+                    {
+                        et = et.Where(c => c.CodigoEntidad.Contains(model.CodigoEntidad));
+                    }
+
+                    //consulta por email
+                    if (!string.IsNullOrEmpty(model.Email))
+                    {
+                        et = et.Where(c => c.Email.Contains(model.Email));
+                    }
+
+
+                    var list = et.Select(u => new
+                    {
+                        identity = u.Id_Entidad,
+                        nit = u.Nit,
+                        name = u.Nombre,
+                        organization = u.Organizacion,
+                        email = u.Email,
+                        entitycode = u.CodigoEntidad
+
+                    }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
+
+                    rp.data = list;
+                    rp.cantidad = list.Count();
                 }
-                else
-                {
-                    //token invalido
-                    rp = autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
-                    return rp;
-                }
+                //retorna un response, con el campo data lleno con la respuesta.               
+                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
             }
 
             catch (Exception ex)
@@ -287,43 +301,39 @@ namespace MilenioApi.Action
             }
         }
 
-        public object GetEntidadesEdit(EntidadModel model)
+        public object GetEntityEdit(EntidadModel model)
         {
             List<EntidadModel> rl = new List<EntidadModel>();
             Response rp = new Response();
             try
             {
-                cp = tvh.getprincipal(model.token);
-                if (cp != null)
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    IQueryable<Entidad> et = ent.Entidad;
+
+                    //consulta por nit
+                    if (model.Id_Entidad != Guid.Empty)
                     {
-                        IQueryable<Entidad> et = ent.Entidad;
-
-                        //consulta por cofigo entidad
-                        if (model.Id_Entidad != Guid.Empty)
-                        {
-                            et = et.Where(c => c.Id_Entidad == model.Id_Entidad);
-                        }
-
-                        foreach (var i in et.ToList())
-                        {
-                            EntidadModel em = new EntidadModel();
-                            //em.Id_Municipio = i.Poblado.Municipio_Id;
-                            //em.Id_Departamento = i.Poblado.Municipio.Departamento_Id;
-                            Copier.CopyPropertiesTo(i, em);
-                            rl.Add(em);
-                        }
-
-                        return rl;
+                        et = et.Where(c => c.Id_Entidad == model.Id_Entidad);
                     }
+
+                    var list = et.Select(u => new
+                    {
+                        identity = u.Id_Entidad,
+                        nit = u.Nit,
+                        name = u.Nombre,
+                        organization = u.Organizacion,
+                        email = u.Email,
+                        entitycode = u.CodigoEntidad
+
+                    }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
+
+                    rp.data = list;
+                    rp.cantidad = list.Count();
                 }
-                else
-                {
-                    //token invalido
-                    rp = autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
-                    return rp;
-                }
+                //retorna un response, con el campo data lleno con la respuesta.               
+                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+
             }
 
             catch (Exception ex)
@@ -333,6 +343,7 @@ namespace MilenioApi.Action
                 return rp;
             }
         }
+
         #endregion
 
         #region Seccion Relacionadas
@@ -408,7 +419,7 @@ namespace MilenioApi.Action
 
                         if (ee != null)
                         {
-                            ee.Estado = model.Estado;
+                            ee.Estado = model.Estado.Value;
                             ee.Usuario_Update = usuario;
                             ee.Fecha_Update = DateTime.Now;
                             ent.SaveChanges();

@@ -18,9 +18,24 @@ using System;
 public partial class Tipo_Vinculacion
 {
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public Tipo_Vinculacion()
+    {
+
+        this.Usuario = new HashSet<Usuario>();
+
+    }
+
+
     public System.Guid Id_Tipo_Vinculacion { get; set; }
 
     public string Nombre { get; set; }
+
+
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Usuario> Usuario { get; set; }
 
 }
 

@@ -96,6 +96,145 @@ namespace MilenioApi.Action
             }
         }
 
+        public DepartamentList GetFullDepartament()
+        {
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    DepartamentList gl = new DepartamentList();
+                    gl.departament = ent.Departamento.Select(l => new BasicList
+                    {
+                        name = l.Dane_Id.ToString(),
+                        value = l.Nombre
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public MunicipalityList GetFullMunicipality()
+        {
+
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    MunicipalityList gl = new MunicipalityList();
+                    gl.municipality = ent.Municipio.Select(l => new BasicList
+                    {
+                        name = l.Dane_Id.ToString(),
+                        value = l.Nombre,
+                        keylink = l.Departamento_Id.ToString()
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public NeighborhoodList GetFullNeighborhood()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    NeighborhoodList gl = new NeighborhoodList();
+                    gl.neighborhood = ent.Poblado.Select(l => new BasicList
+                    {
+                        name = l.Poblado_Id.ToString(),
+                        value = l.Nombre,
+                        keylink = l.Municipio_Id.ToString()
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public ProfetionalTypeList GetProfetionalType()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    ProfetionalTypeList gl = new ProfetionalTypeList();
+                    gl.profetionaltype = ent.Tipo_Profesional.Select(l => new BasicList
+                    {
+                        name = l.Id_Tipo_Profesional.ToString(),
+                        value = l.Nombre
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public LinkTypeList GetLinkType()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    LinkTypeList gl = new LinkTypeList();
+                    gl.linktype = ent.Tipo_Vinculacion.Select(l => new BasicList
+                    {
+                        name = l.Id_Tipo_Vinculacion.ToString(),
+                        value = l.Nombre
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public RolList GetRolList()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    RolList gl = new RolList();
+                    gl.rollist = ent.Rol.Select(l => new BasicList
+                    {
+                        name = l.Id_Rol.ToString(),
+                        value = l.Nombre
+                    }).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
         #endregion
     }
 }

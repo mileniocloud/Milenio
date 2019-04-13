@@ -10,7 +10,6 @@ namespace MilenioApi.Models
     public class OfficeModel : Basic
     {
         public string list_Especialidad { get; set; }
-        public Guid Id_Entidad { get; set; }
 
         [Display(Name = "idoffice")]
         [JsonProperty("idoffice")]

@@ -184,7 +184,7 @@ namespace MilenioApi.Action
             }
             return System.Text.Encoding.Unicode.GetString(bytes);
         }
-        public void SendMail(string email, string token, string nombre, string login, AlternateView emailbody)
+        public void SendMail(string email, AlternateView emailbody, string Subject)
         {
             try
             {
@@ -212,7 +212,7 @@ namespace MilenioApi.Action
                     MailMessage message = new MailMessage();
 
                     message.From = new MailAddress(ConfigurationManager.AppSettings["SenderEmailAddress"], ConfigurationManager.AppSettings["SenderDisplayName"]);
-                    message.Subject = ConfigurationManager.AppSettings["EmailSubjec"];
+                    message.Subject = Subject;
                     message.IsBodyHtml = true;
                     message.AlternateViews.Add(emailbody);
                     message.To.Add(email);

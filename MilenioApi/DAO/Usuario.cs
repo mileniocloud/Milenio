@@ -61,7 +61,7 @@ public partial class Usuario
 
     public string Observaciones { get; set; }
 
-    public string Tipo_Vinculacion { get; set; }
+    public System.Guid Id_Tipo_Vinculacion { get; set; }
 
     public bool Presta_Servicio { get; set; }
 
@@ -104,6 +104,8 @@ public partial class Usuario
     public virtual Poblado Poblado { get; set; }
 
     public virtual Tipo_Profesional Tipo_Profesional { get; set; }
+
+    public virtual Tipo_Vinculacion Tipo_Vinculacion { get; set; }
 
 }
 

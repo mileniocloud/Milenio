@@ -68,7 +68,7 @@ namespace MilenioApi.Models
         [Required]
         [Display(Name = "linktype")]
         [JsonProperty("linktype")]
-        public string Tipo_Vinculacion { get; set; }
+        public Guid Tipo_Vinculacion { get; set; }
         [Required]
         [Display(Name = "serviceprovider")]
         [JsonProperty("serviceprovider")]

@@ -93,9 +93,9 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Ubicacion> Ubicacion { get; set; }
 
-    public virtual DbSet<Vistas> Vistas { get; set; }
-
     public virtual DbSet<Usuario> Usuario { get; set; }
+
+    public virtual DbSet<Vistas> Vistas { get; set; }
 
 
     public virtual int Validate_Create_User(string login, string identificacion, string email, string registroprofesional)

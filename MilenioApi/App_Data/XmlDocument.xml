@@ -39,20 +39,6 @@
             <param name="o"></param>
             <returns></returns>
         </member>
-        <member name="M:MilenioApi.Action.aEntity.CreateEntidad(MilenioApi.Models.EntidadModel)">
-            <summary>
-            Metodo permite la creacion de entidaddes
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MilenioApi.Action.aEntity.EditEntidad(MilenioApi.Models.EntidadModel)">
-            <summary>
-            Metodo para editar entidades
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
         <member name="P:MilenioApi.Startup.OAuthOptions">
             <summary>
             
@@ -623,17 +609,41 @@
             </remarks>
             <returns>Regresa el json con el menu </returns>
         </member>
-        <member name="M:MilenioApi.Controllers.EntityController.CreateEntidad(MilenioApi.Models.EntidadModel)">
+        <member name="M:MilenioApi.Controllers.EntityController.GetEntity(MilenioApi.Models.EntidadModel)">
+            <summary>
+            Metodo para consultar entidades
+            </summary>
+            <remarks>
+            PARAMETRO: nit [INT] [OPCIONAL]<br/>
+            PARAMETRO: name [STRING] [OPCIONAL]<br/>
+            PARAMETRO: organization [STRING] [OPCIONAL]<br/>        
+            PARAMETRO: email [STRING][OPCIONAL]<br/>
+            PARAMETRO: entitycode [STRING][OPCIONAL]<br/>
+            PARAMETRO: identity [STRING][OPCIONAL]<br/>
+            </remarks>
+            <returns>Regresa informacion con la lista de entidades filtradas por cada uno de los parametros que e envien </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.EntityController.CreateEntity(MilenioApi.Models.EntidadModel)">
             <summary>
             Metodo para crear entidades
             </summary>
             <remarks>
-            PARAMETRO: nit [STRING] <br/>
-            PARAMETRO: nit [STRING] <br/>
-            PARAMETRO: nit [STRING] <br/>
-            PARAMETRO: token [STRING]
+            PARAMETRO: nit [INT] [REQUERIDO]<br/>
+            PARAMETRO: name [STRING] [REQUERIDO]<br/>
+            PARAMETRO: organization [STRING] [REQUERIDO]<br/>
+            PARAMETRO: neighborhood [STRING][REQUERIDO]<br/>
+            PARAMETRO: address [STRING][REQUERIDO]<br/>
+            PARAMETRO: email [STRING][REQUERIDO]<br/>
+            PARAMETRO: telephone [STRING][REQUERIDO]<br/>
+            PARAMETRO: entitycode [STRING][REQUERIDO]<br/>
+            PARAMETRO: priorityatention [STRING][REQUERIDO]<br/>
+            PARAMETRO: taxpayer [STRING][REQUERIDO]<br/>
+            PARAMETRO: photo [STRING][REQUERIDO]<br/>
+            PARAMETRO: opening [STRING][REQUERIDO]<br/>
+            PARAMETRO: closing [STRING][REQUERIDO]<br/>
+            PARAMETRO: status [STRING][REQUERIDO]<br/>
             </remarks>
-            <returns>Regresa informacion si el usuario existe o no </returns>
+            <returns>Regresa informacion indicando el exito de la operacion </returns>
         </member>
         <member name="M:MilenioApi.Controllers.GenericListsController.GetDepartament">
             <summary>
@@ -646,10 +656,10 @@
         </member>
         <member name="M:MilenioApi.Controllers.GenericListsController.GetMunicipality(MilenioApi.Models.Basic)">
             <summary>
-            Metodo consultar los municipios
+            Metodo consultar los municipios dado un departamento
             </summary>
             <remarks>
-            
+            PARAMETRO: id [int] el id del departamento <br/>
             </remarks>
             <returns>Regresa una lista con los municipios </returns>
         </member>
@@ -658,7 +668,7 @@
             Metodo consultar todos los poblado o barrios
             </summary>
             <remarks>
-            
+            PARAMETRO: id [int] el id del municipio <br/>
             </remarks>
             <returns>Regresa una lista con todos los poblados o barrios </returns>
         </member>
@@ -738,6 +748,9 @@
             PARAMETRO: user [STRING] - el usuario que desea cambiar la clave
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>   
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.GetListsUserForm">
+            <returns>Regresa vrias listas con la infirmacion necesaria para el formulario de usuarios </returns>
         </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>

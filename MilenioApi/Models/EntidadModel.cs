@@ -4,13 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MilenioApi.Models
 {
-    public class EntidadModel: Basic
+    public class EntidadModel : Basic
     {
+        [Display(Name = "identity")]
+        [JsonProperty("identity")]
         public Guid Id_Entidad { get; set; }
         [Required]
         [Display(Name = "nit")]
         [JsonProperty("nit")]
-        public int Nit { get; set; }
+        public string Nit { get; set; }
 
         [Required]
         [Display(Name = "name")]
@@ -36,6 +38,11 @@ namespace MilenioApi.Models
         [Display(Name = "email")]
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "telephone")]
+        [JsonProperty("telephone")]
+        public string Telefono { get; set; }
 
         [Required]
         [Display(Name = "entitycode")]
@@ -66,11 +73,11 @@ namespace MilenioApi.Models
         [Display(Name = "closing")]
         [JsonProperty("closing")]
         public string Hora_Hasta { get; set; }
-        
+
         [Required]
         [Display(Name = "status")]
         [JsonProperty("status")]
-        public bool Estado { get; set; }
-        
+        public bool? Estado { get; set; }
+
     }
 }

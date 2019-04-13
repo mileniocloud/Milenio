@@ -251,7 +251,7 @@ namespace MilenioApi.Action
                             string user = p.Login;
 
                             //se envia el correo para cambio de clave
-                            autil.SendMail(p.Email, token, nombre, user, this.SetForgotEmailBody(user, token));
+                            autil.SendMail(p.Email, this.SetForgotEmailBody(user, token), ConfigurationManager.AppSettings["EmailSubjec"]);
 
                             //se guarda el toen que se genero para envirlo al url y luego
                             //cuando traten de cambiar la clave, se consulta con la base de datos y se compara

@@ -18,6 +18,38 @@ namespace MilenioApi.Action
 
         #region USER - Create - ActInactivate - lists
 
+        public object GetListsUserForm(Basic model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                    listas.Add(gl.GetFullDepartament());
+                    listas.Add(gl.GetFullMunicipality());
+                    listas.Add(gl.GetFullNeighborhood());                    
+                    listas.Add(gl.GetProfetionalType());
+                    listas.Add(gl.GetLinkType());
+                    listas.Add(gl.GetRolList());
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
         public object CreateUser(UserModel model)
         {
             string pasos = "0";
@@ -192,7 +224,7 @@ namespace MilenioApi.Action
                                     us.Estado_Civil = model.Estado_Civil;
                                     us.Tipo_Sangre = model.Tipo_Sangre;
                                     us.Fecha_Contratacion = model.Fecha_Contratacion.Value;
-                                    us.Tipo_Vinculacion = model.Tipo_Vinculacion;
+                                    us.Id_Tipo_Vinculacion = model.Tipo_Vinculacion;
                                     us.Observaciones = model.Observaciones;
 
                                     us.Acepta_ABEAS = model.Acepta_ABEAS;
@@ -492,7 +524,7 @@ namespace MilenioApi.Action
             }
         }
 
-
+       
         #endregion
 
         #region Profile
@@ -528,18 +560,18 @@ namespace MilenioApi.Action
                                          civilstatus = t.Estado_Civil,
                                          bloodtype = t.Tipo_Sangre,
                                          address = t.Direccion,
-                                         thelephone = t.Telefono,
+                                         telephone = t.Telefono,
                                          dateofhire = t.Fecha_Contratacion,
-                                         linktype = t.Tipo_Vinculacion,
+                                         linktype = t.Tipo_Vinculacion.Nombre,
                                          serviceprovider = t.Presta_Servicio,
-                                         t.Email,
+                                         email = t.Email,
                                          habeas = t.Acepta_ABEAS,
                                          //t.Foto_ABEAS,
                                          typeprofessional = us.Tipo_Profesional.Nombre,
                                          registryprofessional = t.Registro_Profesional,
                                          neighborhood = t.Poblado.Poblado_Id,
                                          municipality = us.Poblado.Municipio.Dane_Id,
-                                         departament = us.Poblado.Municipio.Departamento.Dane_Id
+                                         department = us.Poblado.Municipio.Departamento.Dane_Id
                                      }).SingleOrDefault();
 
                             rp.data = r;

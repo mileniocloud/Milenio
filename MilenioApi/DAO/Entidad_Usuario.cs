@@ -45,11 +45,11 @@ public partial class Entidad_Usuario
 
     public virtual Entidad Entidad { get; set; }
 
+    public virtual Usuario Usuario { get; set; }
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Rol_Usuario> Rol_Usuario { get; set; }
-
-    public virtual Usuario Usuario { get; set; }
 
 }
 

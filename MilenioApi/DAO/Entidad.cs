@@ -30,14 +30,14 @@ public partial class Entidad
 
         this.Rol_Vista_Entidad = new HashSet<Rol_Vista_Entidad>();
 
-        this.Telefono = new HashSet<Telefono>();
+        this.Telefono1 = new HashSet<Telefono>();
 
     }
 
 
     public System.Guid Id_Entidad { get; set; }
 
-    public int Nit { get; set; }
+    public string Nit { get; set; }
 
     public string Nombre { get; set; }
 
@@ -48,6 +48,8 @@ public partial class Entidad
     public Nullable<int> Poblado_Id { get; set; }
 
     public string Email { get; set; }
+
+    public string Telefono { get; set; }
 
     public string CodigoEntidad { get; set; }
 
@@ -89,7 +91,7 @@ public partial class Entidad
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Telefono> Telefono { get; set; }
+    public virtual ICollection<Telefono> Telefono1 { get; set; }
 
 }
 

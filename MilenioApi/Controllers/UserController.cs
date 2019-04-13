@@ -13,6 +13,22 @@ namespace MilenioApi.Controllers
 
         #region Create - ActInactivate - list
 
+        // <summary>
+        // Metodo para consultar lo basico del formulario de usuarios
+        // </summary>
+        // <remarks>
+        // </remarks>
+        /// <returns>Regresa vrias listas con la infirmacion necesaria para el formulario de usuarios </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsUserForm")]
+        public HttpResponseMessage GetListsUserForm()
+        {
+            aUser s = new aUser();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsUserForm(t));
+        }
+
         /// <summary>
         /// Metodo crear usuarios del sistema
         /// </summary>

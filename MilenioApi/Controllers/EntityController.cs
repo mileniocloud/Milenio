@@ -58,6 +58,7 @@ namespace MilenioApi.Controllers
         /// PARAMETRO: photo [STRING][REQUERIDO]<br/>
         /// PARAMETRO: opening [STRING][REQUERIDO]<br/>
         /// PARAMETRO: closing [STRING][REQUERIDO]<br/>
+        /// PARAMETRO: specialities [STRING][REQUERIDO]<br/>
         /// </remarks>
         /// <returns>Regresa informacion indicando el exito de la operacion </returns>
         [HttpPost]

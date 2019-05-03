@@ -169,6 +169,51 @@ namespace MilenioApi.Action
             }
         }
 
+        public object GetEditOffice(OfficeModel model)
+        {
+            List<Consultorio> lc = new List<Consultorio>();
+            List<OfficeModel> lcm = new List<OfficeModel>();
+            Response rp = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+                    if (cp != null)
+                    {
+                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        lc = ent.Consultorio.Where(t => t.Id_Entidad == entidad).ToList();
+
+                        if (lc.Count != 0)
+                        {
+                            var rl = lc.Where(o => o.Id_Consultorio == model.Id_Consultorio).Select(u => new
+                            {
+                                idoffice = u.Id_Consultorio,
+                                name = u.Nombre,
+                                description = u.Descripcion,
+                                status = u.Estado,
+                                especiality = u.Consultorio_Especialidad.Where(e=> e.Estado = true).Select(t=> t.Id_Especialidad)
+                            }).ToList();
+                            rp.cantidad = rl.Count();
+                            rp.pagina = 0;
+                            rp.data = rl;
+                        }
+                    }
+                    else
+                    {
+                        //token invalido
+                        return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                    }
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
+                }
+            }
+        }
         public object GetOffice(OfficeModel model)
         {
             List<Consultorio> lc = new List<Consultorio>();

@@ -19,7 +19,10 @@ namespace MilenioApi.Models
         [Required]
         public string Password { get; set; }
 
-        
+        [Display(Name = "changetoken")]
+        [JsonProperty("changetoken")]
+        public string changetoken { get; set; }
+
         public string OldPassword { get; set; }
         [EmailAddress]
         public string Email { get; set; }

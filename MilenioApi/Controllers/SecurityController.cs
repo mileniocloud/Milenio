@@ -1,6 +1,7 @@
 ﻿using MilenioApi.Action;
 using MilenioApi.Models;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace MilenioApi.Controllers
@@ -73,6 +74,7 @@ namespace MilenioApi.Controllers
             aSecurity s = new aSecurity();
             return ut.ReturnResponse(s.LoginEntidad(t));
         }
+        [HttpPost]
         /// <summary>
         /// Se usa para enviar un correo que le permitira cambiar la clave
         /// </summary>
@@ -106,13 +108,13 @@ namespace MilenioApi.Controllers
         }
 
         /// <summary>
-        /// Se usa para enviar un correo que le permitira cambiar la clave
+        /// Se usa para cambiar la clave
         /// </summary>
         /// <param name="t"></param>
         /// <remarks>
-        /// PARAMETRO: user [STRING] - el usuario que desea cambiar la clave
+        /// PARAMETRO: password [STRING] - el usuario que desea cambiar la clave
         /// </remarks>
-        /// <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>   
+        /// <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
         [Route("ResetPassword")]
         public HttpResponseMessage ResetPassword([FromBody] LoginModel t)
         {

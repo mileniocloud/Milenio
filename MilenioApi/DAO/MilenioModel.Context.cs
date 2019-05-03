@@ -41,6 +41,8 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<CIE> CIE { get; set; }
 
+    public virtual DbSet<Cita> Cita { get; set; }
+
     public virtual DbSet<Consultorio> Consultorio { get; set; }
 
     public virtual DbSet<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
@@ -75,6 +77,8 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Ocupacion> Ocupacion { get; set; }
 
+    public virtual DbSet<Paciente> Paciente { get; set; }
+
     public virtual DbSet<Poblado> Poblado { get; set; }
 
     public virtual DbSet<Rol> Rol { get; set; }
@@ -82,6 +86,8 @@ public partial class MilenioCloudEntities : DbContext
     public virtual DbSet<Rol_Usuario> Rol_Usuario { get; set; }
 
     public virtual DbSet<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
+
+    public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
 
     public virtual DbSet<Telefono> Telefono { get; set; }
 

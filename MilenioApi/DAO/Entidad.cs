@@ -22,6 +22,8 @@ public partial class Entidad
     public Entidad()
     {
 
+        this.Cita = new HashSet<Cita>();
+
         this.Entidad_Usuario = new HashSet<Entidad_Usuario>();
 
         this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
@@ -70,6 +72,10 @@ public partial class Entidad
     public Nullable<System.DateTime> Fecha_Create { get; set; }
 
 
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Cita> Cita { get; set; }
 
     public virtual Poblado Poblado { get; set; }
 

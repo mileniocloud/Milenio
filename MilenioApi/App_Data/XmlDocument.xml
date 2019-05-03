@@ -543,6 +543,13 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Metodo para crear la agenda general del medico
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para crear un consultorio
@@ -573,8 +580,19 @@
             <remarks>
             PARAMETRO: name [STRING] [OPTIONAL] (si se pasa este valor, se buscara consultorios con este nombre) <br />
             PARAMETRO: description [STRING] [OPTIONAL] (si se pasa este valor se buscara consultorios con esa descripcion)<br />
+            PARAMETRO: page [STRING] Este valor indica en que pagina del grid estamos actualmente<br />
+            PARAMETRO: pagesize [STRING] Este valor indica la cantidad de datos que queremos traer<br />
             </remarks>
             <returns>Regresa una lista con los consultorios que cumplan con los parametros de busqueda</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.GetEditOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: idoffice [STRING]
+            </remarks>
+            <returns>Regresa la data del consultorio consultado y una lista de las especialidades de ese consultorio</returns>
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
             <summary>
@@ -641,7 +659,7 @@
             PARAMETRO: photo [STRING][REQUERIDO]<br/>
             PARAMETRO: opening [STRING][REQUERIDO]<br/>
             PARAMETRO: closing [STRING][REQUERIDO]<br/>
-            PARAMETRO: status [STRING][REQUERIDO]<br/>
+            PARAMETRO: specialities [STRING][REQUERIDO]<br/>
             </remarks>
             <returns>Regresa informacion indicando el exito de la operacion </returns>
         </member>
@@ -718,16 +736,6 @@
              </remarks>
              <returns>Regresa el token + los roles asociados a esa entidad seleccionada</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.SecurityController.ForgotPassword(MilenioApi.Models.LoginModel)">
-            <summary>
-            Se usa para enviar un correo que le permitira cambiar la clave
-            </summary>
-            <param name="t"></param>
-            <remarks>
-            PARAMETRO: user [STRING]
-            </remarks>
-            <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>      
-        </member>
         <member name="M:MilenioApi.Controllers.SecurityController.ChangePassword(MilenioApi.Models.LoginModel)">
             <summary>
             Se usa para enviar un correo que le permitira cambiar la clave
@@ -741,16 +749,13 @@
         </member>
         <member name="M:MilenioApi.Controllers.SecurityController.ResetPassword(MilenioApi.Models.LoginModel)">
             <summary>
-            Se usa para enviar un correo que le permitira cambiar la clave
+            Se usa para cambiar la clave
             </summary>
             <param name="t"></param>
             <remarks>
-            PARAMETRO: user [STRING] - el usuario que desea cambiar la clave
+            PARAMETRO: password [STRING] - el usuario que desea cambiar la clave
             </remarks>
-            <returns>REGRESA UN MENSAJE INDICANDO QUE EL CORREO FUE ENVIADO</returns>   
-        </member>
-        <member name="M:MilenioApi.Controllers.UserController.GetListsUserForm">
-            <returns>Regresa vrias listas con la infirmacion necesaria para el formulario de usuarios </returns>
+            <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
         </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>
@@ -815,21 +820,21 @@
         </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateEntityUser(MilenioApi.Models.UserModel)">
             <summary>
-            Metodo para agregar un usuario exixtente a la entidd a la que se esta tratando de ingresar como usuario nuevo
+            Metodo para agregar un usuario existente a la entidad a la que se esta tratando de ingresar como usuario nuevo
             </summary>
             <remarks>
-            PARAMETRO: Numero_Identificacion [STRING]
-            PARAMETRO: token [STRING]
+            PARAMETRO: document [STRING] <br />
+            PARAMETRO: typedocument [STRING]
             </remarks>
-            <returns>Regresa informacion si el usuario existe o no </returns>
+            <returns>Regresa informacion indicando que el registro fue exitoso </returns>
         </member>
         <member name="M:MilenioApi.Controllers.UserController.ValidateUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo para validar si una cedula ya existe en alguna entidad para preguntar si desean agregarlo
             </summary>
             <remarks>
-            PARAMETRO: Numero_Identificacion [STRING]
-            PARAMETRO: token [STRING]
+            PARAMETRO: document [STRING] <br />
+            PARAMETRO: typedocument [STRING]
             </remarks>
             <returns>Regresa informacion si el usuario existe o no </returns>
         </member>
@@ -839,10 +844,16 @@
             
             </summary>
             <remarks>
-            PARAMETRO: Numero_Identificacion [STRING]
-            PARAMETRO: token [STRING]
+            PARAMETRO: iduser [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula <br/>
+            PARAMETRO: document [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula<br/>
+            PARAMETRO: fullname [STRING] [OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: firstlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: secondlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: login [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: email [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: dateofhire [DATE][OPCIONAL] si se pasa este dato, se filta por esa fecha formato DD/MM/YYYY  <br/>      
             </remarks>
-            <returns>Regresa informacion si el usuario existe o no </returns>
+            <returns>Regresa lista de usuarios dependiendo de los filtros </returns>
         </member>
         <member name="M:MilenioApi.Controllers.UserController.GetUserEdit(MilenioApi.Models.UserModel)">
             <summary>

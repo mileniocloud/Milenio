@@ -3,9 +3,13 @@ using MilenioApi.DAO;
 using MilenioApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
+using System.Text;
+using System.Web;
 
 namespace MilenioApi.Action
 {
@@ -16,59 +20,42 @@ namespace MilenioApi.Action
         ClaimsPrincipal cp = new ClaimsPrincipal();
         TokenValidationHandler tvh = new TokenValidationHandler();
 
-        #region USER - Create - ActInactivate - lists
-
-        public object GetListsUserForm(Basic model)
-        {
-            Response rp = new Response();
-            aGenericLists gl = new aGenericLists();
-            try
-            {
-                cp = tvh.getprincipal(Convert.ToString(model.token));
-
-                using (MilenioCloudEntities ent = new MilenioCloudEntities())
-                {
-                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                    List<object> listas = new List<object>();
-
-                    listas.Add(gl.GetFullDepartament());
-                    listas.Add(gl.GetFullMunicipality());
-                    listas.Add(gl.GetFullNeighborhood());                    
-                    listas.Add(gl.GetProfetionalType());
-                    listas.Add(gl.GetLinkType());
-                    listas.Add(gl.GetRolList());
-
-                    rp.data = listas;
-                    //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
-                }
-            }
-            catch (Exception ex)
-            {
-                //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
-            }
-        }
+        #region USER - Create - ActInactivate - lists      
 
         public object CreateUser(UserModel model)
         {
             string pasos = "0";
+
             Response rp = new Response();
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
                 try
                 {
-                    cp = tvh.getprincipal(Convert.ToString(model.token));
-
+                    pasos = pasos + "antes de validar los datos";
+                    //se setea una clave temporal
+                    model.Password = autil.Sha(autil.CreatePassword(8));
                     List<ErrorFields> rel = autil.ValidateObject(model);
+
                     if (rel.Count == 0)
                     {
+                        pasos = pasos + "1";
+                        cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                        //se coloca imagen por defecto
+                        if (string.IsNullOrEmpty(model.Foto))
+                            model.Foto = ConfigurationManager.AppSettings["userdefoultphoto"];
+
+                        pasos = pasos + "1.1";
+                        pasos = pasos + "2";
                         //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
                         //Y SE COPIA AL OBJETO USER
                         Usuario us = new Usuario();
+
+                        pasos = pasos + "3";
                         Copier.CopyPropertiesTo(model, us);
                         //
 
+                        pasos = pasos + "---4";
                         Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
@@ -89,6 +76,11 @@ namespace MilenioApi.Action
                                         Guid id_usuario = Guid.NewGuid();
                                         us.Id_Usuario = id_usuario;
 
+                                        //se genera el token que se coloca en la tabla para comparar
+                                        //string token = Convert.ToBase64String(Encoding.Unicode.GetBytes(tvh.GenerateToken(us.Login, id_usuario.ToString(), null, null)));
+                                        string token = tvh.GenerateToken(us.Login, id_usuario.ToString(), null, null);
+                                        us.Token_Password_Change = token;
+
                                         ///agregado el usuario a la entidad donde se esta creando
                                         Entidad_Usuario eu = new Entidad_Usuario();
                                         eu.Id_Entidad = entidad;
@@ -107,20 +99,20 @@ namespace MilenioApi.Action
                                         us.Usuario_Update = usuario;
                                         ent.Usuario.Add(us);
 
-                                        //seccion para obtener los roles que le estan agregando al usuario
-                                        string roles;
-                                        if (!string.IsNullOrEmpty(model.List_Roles))
+                                        //seccion para obtener los roles que le estan agregando al usuario                                      
+                                        if (model.List_Roles.Count > 0)
                                         {
-                                            roles = Convert.ToString(model.List_Roles);
-                                            string[] rolesArray = roles.Split(',');
                                             List<Rol_Usuario> lru = new List<Rol_Usuario>();
-                                            foreach (var r in rolesArray)
+                                            foreach (var r in model.List_Roles)
                                             {
                                                 //agregando la lista de usuarios
                                                 Rol_Usuario ru = new Rol_Usuario();
                                                 ru.Id_Entidad = entidad;
                                                 ru.Id_Usuario = id_usuario;
-                                                ru.Id_Rol = Guid.Parse(r);
+                                                ru.Estado = true;
+                                                ru.Id_Rol = Guid.Parse(r.id);
+                                                ru.Fecha_Create = DateTime.Now;
+                                                ru.Fecha_Update = DateTime.Now;
                                                 lru.Add(ru);
                                             }
 
@@ -133,6 +125,8 @@ namespace MilenioApi.Action
 
                                         //salvando todos los cambios
                                         ent.SaveChanges();
+                                        //se envia el correo de bienvenida
+                                        autil.SendMail(us.Email, (SetWelcomeEmail(us.Nombres + " " + us.Primer_Apellido + " " + us.Segundo_Apellido, token)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
                                         //se genera el codigo del mensaje de retorno exitoso
                                         rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                                     }
@@ -171,7 +165,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.MensajeRetorno(ref rp, 4, pasos, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -220,11 +214,14 @@ namespace MilenioApi.Action
                                     us.Poblado_Id = model.Poblado_Id;
                                     us.Sexo = model.Sexo;
                                     us.Fecha_Nacimiento = model.Fecha_Nacimiento;
-                                    us.Foto = model.Foto;
+
+                                    if (!string.IsNullOrEmpty(model.Foto))
+                                        us.Foto = model.Foto;
+
                                     us.Estado_Civil = model.Estado_Civil;
                                     us.Tipo_Sangre = model.Tipo_Sangre;
-                                    us.Fecha_Contratacion = model.Fecha_Contratacion.Value;
-                                    us.Id_Tipo_Vinculacion = model.Tipo_Vinculacion;
+                                    us.Fecha_Contratacion = model.Fecha_Contratacion;
+                                    us.Id_Tipo_Vinculacion = model.Id_Tipo_Vinculacion;
                                     us.Observaciones = model.Observaciones;
 
                                     us.Acepta_ABEAS = model.Acepta_ABEAS;
@@ -290,7 +287,7 @@ namespace MilenioApi.Action
                     cp = tvh.getprincipal(Convert.ToString(model.token));
 
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                    Entidad_Usuario us = ent.Entidad_Usuario.Where(t => t.Usuario.Numero_Identificacion == model.Numero_Identificacion).SingleOrDefault();
+                    Entidad_Usuario us = ent.Entidad_Usuario.Where(t => t.Usuario.Numero_Identificacion == model.Numero_Identificacion && t.Usuario.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion).SingleOrDefault();
 
                     if (us != null)
                     {
@@ -300,7 +297,7 @@ namespace MilenioApi.Action
                             rp = autil.MensajeRetorno(ref rp, 22, string.Empty, null, HttpStatusCode.OK);
                         else
                             ///Cedula existe en otra entidad
-                            rp = autil.MensajeRetorno(ref rp, 23, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.MensajeRetorno(ref rp, 23, string.Empty, null, @"api/User/CreateEntityUser", HttpStatusCode.OK);
                     }
                     else
                     {
@@ -331,7 +328,7 @@ namespace MilenioApi.Action
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                     Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                    Usuario us = ent.Usuario.Where(u => u.Numero_Identificacion == model.Numero_Identificacion).SingleOrDefault();
+                    Usuario us = ent.Usuario.Where(u => u.Numero_Identificacion == model.Numero_Identificacion && u.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion).SingleOrDefault();
                     if (us != null)
                     {
                         Entidad_Usuario eu = new Entidad_Usuario();
@@ -455,57 +452,86 @@ namespace MilenioApi.Action
                     {
                         us = us.Where(c => c.Numero_Identificacion.Contains(model.Numero_Identificacion));
                     }
-                    ///consulta por nombre
+                    //consulta por nombre
                     if (!string.IsNullOrEmpty(model.Nombres))
                     {
                         us = us.Where(c => c.Nombres.Contains(model.Nombres));
                     }
 
-                    ///consulta por primer apellido
+                    //consulta por primer apellido
                     if (!string.IsNullOrEmpty(model.Primer_Apellido))
                     {
                         us = us.Where(c => c.Primer_Apellido.Contains(model.Primer_Apellido));
                     }
 
-                    ///consulta por segundo apellido
+                    //consulta por segundo apellido
                     if (!string.IsNullOrEmpty(model.Segundo_Apellido))
                     {
                         us = us.Where(c => c.Segundo_Apellido.Contains(model.Segundo_Apellido));
                     }
 
-                    ///consulta por login
+                    //consulta por login
                     if (!string.IsNullOrEmpty(model.Login))
                     {
                         us = us.Where(c => c.Login.Contains(model.Login));
                     }
 
-                    ///consulta por email
+                    //consulta por email
                     if (!string.IsNullOrEmpty(model.Email))
                     {
                         us = us.Where(c => c.Email.Contains(model.Email));
                     }
 
-                    ///consulta por fecha contratacion
-                    if (!string.IsNullOrEmpty(model.Fecha_Contratacion.ToString()))
+                    //consulta por fecha contratacion
+                    if (model.Fecha_Contratacion.Year > 1900)
                     {
                         us = us.Where(c => c.Fecha_Contratacion == model.Fecha_Contratacion);
                     }
 
-                    //int pageSize = Convert.ToInt32(model.Form["pageSize"]);
-                    //int startingPageIndex = Convert.ToInt32(model.Form["startingPageIndex"]);
+
+                    int pageSize = model.Cant_Registros;
+                    int skip = (model.Pagina - 1) * pageSize;
                     var rl = us.Select(u => new
                     {
-                        u.Id_Usuario,
-                        u.Nombres,
-                        u.Primer_Apellido,
-                        u.Segundo_Apellido,
-                        u.Login,
-                        u.Fecha_Contratacion,
-                        u.Email
-                    }).ToList();
+                        iduser = u.Id_Usuario,
+                        fullname = u.Nombres,
+                        firstlastname = u.Primer_Apellido,
+                        secondlastname = u.Segundo_Apellido,
+                        login = u.Login,
+                        dateofhire = u.Fecha_Contratacion,
+                        email = u.Email,
 
+                        typedocument = u.Id_Tipo_Identificacion,
+                        document = u.Numero_Identificacion,
 
-                    //.OrderBy(o=> o.Nombres).Skip(startingPageIndex * pageSize).Take(pageSize).ToList();
+                        gender = u.Sexo,
+                        birthdate = u.Fecha_Nacimiento,
+                        photo = u.Foto,
+                        civilstatus = u.Estado_Civil,
+                        bloodtype = u.Tipo_Sangre,
+                        neighborhood = u.Poblado_Id,
+                        address = u.Direccion,
+                        telephone = u.Telefono,
+
+                        observation = u.Observaciones,
+                        linktype = u.Id_Tipo_Vinculacion,
+                        serviceprovider = u.Presta_Servicio,
+
+                        habeas = u.Acepta_ABEAS,
+                        photohabeas = u.Foto_ABEAS,
+                        typeprofessional = u.Id_Tipo_Profesional,
+                        registryprofessional = u.Registro_Profesional,
+                        Rol = ent.Rol_Usuario.Where(ru => ru.Id_Entidad == entidad && ru.Id_Usuario == u.Id_Usuario)
+                                                   .Select(r => new ComboModel
+                                                   {
+                                                       id = r.Id_Rol,
+                                                       value = r.Rol.Nombre
+                                                   }),
+                        u.Poblado.Municipio_Id,
+                        Departamento_Id = u.Poblado.Municipio.Departamento.Dane_Id,
+                        Estado = u.Entidad_Usuario.Where(tt => tt.Id_Usuario == u.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado)
+
+                    }).OrderBy(o => o.fullname).Skip(skip).Take(pageSize).ToList();
 
                     rp.cantidad = rl.Count();
                     rp.pagina = 0;
@@ -515,7 +541,6 @@ namespace MilenioApi.Action
                     return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
 
                 }
-
             }
             catch (Exception ex)
             {
@@ -523,8 +548,7 @@ namespace MilenioApi.Action
                 return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
-
-       
+        
         #endregion
 
         #region Profile
@@ -541,6 +565,9 @@ namespace MilenioApi.Action
                     Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
                     var vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).ToList();
+                    var nb = ent.Poblado.Select(t => new { id = t.Poblado_Id, value = t.Nombre, keylink = t.Municipio_Id.ToString() }).ToList();
+                    var mn = ent.Municipio.Select(t => new { id = t.Dane_Id, value = t.Nombre, keylink = t.Departamento_Id.ToString() }).ToList();
+                    var dp = ent.Departamento.Select(t => new { id = t.Dane_Id, value = t.Nombre }).ToList();
 
                     if (vu.Count > 0)
                     {
@@ -571,7 +598,11 @@ namespace MilenioApi.Action
                                          registryprofessional = t.Registro_Profesional,
                                          neighborhood = t.Poblado.Poblado_Id,
                                          municipality = us.Poblado.Municipio.Dane_Id,
-                                         department = us.Poblado.Municipio.Departamento.Dane_Id
+                                         department = us.Poblado.Municipio.Departamento.Dane_Id,
+                                         neighborhoodlist = nb,
+                                         municipalitylist = mn,
+                                         departmentlist = dp
+
                                      }).SingleOrDefault();
 
                             rp.data = r;
@@ -602,11 +633,13 @@ namespace MilenioApi.Action
                     Usuario vu = ent.Usuario.Where(t => t.Id_Usuario == usuario).SingleOrDefault();
 
                     vu.Telefono = model.Telefono;
-                    vu.Foto = model.Foto;
+
+                    if (!string.IsNullOrEmpty(model.Foto))
+                        vu.Foto = model.Foto;
+
                     vu.Poblado_Id = model.Poblado_Id;
                     vu.Direccion = model.Direccion;
                     vu.Email = model.Email;
-                    vu.Estado_Civil = model.Estado_Civil;
 
                     ent.SaveChanges();
 
@@ -620,5 +653,35 @@ namespace MilenioApi.Action
             }
         }
         #endregion
+        
+
+        private AlternateView SetWelcomeEmail(string subject, string token)
+        {
+            try
+            {
+                //se arma el correo que se envia para el ambio de clave
+                string plantilla = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["WelcomeUserTemplate"]);
+                string url = ConfigurationManager.AppSettings["EmailResetUrl"];
+
+                url = url + "?token=" + token;
+                var html = System.IO.File.ReadAllText(plantilla);
+                html = html.Replace("{{name}}", subject);
+                html = html.Replace("{{action_url}}", url);
+
+                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
+
+                //create the LinkedResource (embedded image)
+                LinkedResource logo = new LinkedResource(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["LogoPath"]));
+                logo.ContentId = "companylogo";
+                //add the LinkedResource to the appropriate view
+                av.LinkedResources.Add(logo);
+
+                return av;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

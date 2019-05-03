@@ -35,10 +35,13 @@ namespace MilenioApi.Models
         [Display(Name = "gender")]
         [JsonProperty("gender")]
         public string Sexo { get; set; }
+
         [Required]
         [Display(Name = "birthdate")]
         [JsonProperty("birthdate")]
+        [DataType(DataType.DateTime)]
         public DateTime Fecha_Nacimiento { get; set; }
+
         [Display(Name = "photo")]
         [JsonProperty("photo")]
         public String Foto { get; set; }
@@ -61,14 +64,17 @@ namespace MilenioApi.Models
         [Required]
         [Display(Name = "dateofhire")]
         [JsonProperty("dateofhire")]
-        public DateTime? Fecha_Contratacion { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime Fecha_Contratacion { get; set; }
         [Display(Name = "observation")]
         [JsonProperty("observation")]
         public string Observaciones { get; set; }
+
         [Required]
         [Display(Name = "linktype")]
         [JsonProperty("linktype")]
-        public Guid Tipo_Vinculacion { get; set; }
+        public Guid Id_Tipo_Vinculacion { get; set; }
+
         [Required]
         [Display(Name = "serviceprovider")]
         [JsonProperty("serviceprovider")]
@@ -103,8 +109,7 @@ namespace MilenioApi.Models
         [JsonProperty("status")]
         public int Estado { get; set; }
 
-        [Required]
-               
+        [Required]               
         public int Presta_Servicio_Int { get; set; }
 
         [Display(Name = "municipality")]
@@ -113,6 +118,8 @@ namespace MilenioApi.Models
         [Display(Name = "departament")]
         [JsonProperty("departament")]
         public int Id_Departamento { get; set; }
+
+        [Required]
         [Display(Name = "typeprofessional")]
         [JsonProperty("typeprofessional")]
         public Guid Id_Tipo_Profesional { get; set; }
@@ -123,6 +130,8 @@ namespace MilenioApi.Models
         [JsonProperty("idrole")]
         public Guid Id_Rol { get; set; }
 
-        public string List_Roles { get; set; }
+        [Display(Name = "rolelist")]
+        [JsonProperty("rolelist")]
+        public List<ComboListModel> List_Roles = new List<ComboListModel>();
     }
 }

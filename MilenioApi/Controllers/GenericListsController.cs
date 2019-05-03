@@ -61,5 +61,55 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetNeighborhood(t));
         }
 
+
+        // <summary>
+        // Metodo para consultar lo basico del formulario de usuarios
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa vrias listas con la informacion necesaria para el formulario de usuarios </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsUserForm")]
+        public HttpResponseMessage GetListsUserForm()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsUserForm(t));
+        }
+
+
+        // <summary>
+        // Metodo para consultar lo basico del formulario de usuarios
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa varias listas con la informacion necesaria para el formulario de entidades </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsEntityForm")]
+        public HttpResponseMessage GetListsEntityForm()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsEntityForm(t));
+        }
+
+
+        // <summary>
+        // Metodo para consultar los doctores de una entidad
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa una lista de Id - Value con los nombre de los prestadores de servicios de una entidad </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetServiceProviderList")]
+        public HttpResponseMessage GetServiceProviderList()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetServiceProviderList(t));
+        }
     }
 }

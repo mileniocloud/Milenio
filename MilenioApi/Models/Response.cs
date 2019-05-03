@@ -13,6 +13,7 @@ namespace MilenioApi.Models
         public string message { get; set; }
         public int cantidad { get; set; }
         public int pagina { get; set; }
+        public string rute { get; set; }
 
         public object data = new object();
         public List<object> error = new List<object>();

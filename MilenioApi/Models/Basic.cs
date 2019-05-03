@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Web;
 
 namespace MilenioApi.Models
@@ -11,6 +11,14 @@ namespace MilenioApi.Models
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
 
+        [Display(Name = "page")]
+        [JsonProperty("page")]
+        public int Pagina { get; set; } = 1;
+
+        [Display(Name = "pagesize")]
+        [JsonProperty("pagesize")]
+        public int Cant_Registros { get; set; } = int.Parse(ConfigurationManager.AppSettings["pagesize"]);
+
         public string _token { get; set; }
 
         public string token
@@ -20,8 +28,9 @@ namespace MilenioApi.Models
                 var httpRequest = HttpContext.Current.Request;
                 var token = httpRequest.RequestContext.HttpContext.Items;
 
-                if (((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter != null)
-                    _token = ((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter.ToString();
+                if (((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization != null)
+                    if (((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter != null)
+                        _token = ((System.Net.Http.HttpRequestMessage)(token["MS_HttpRequestMessage"])).Headers.Authorization.Parameter.ToString();
 
                 return _token;
             }

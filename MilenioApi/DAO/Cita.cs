@@ -15,30 +15,34 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Consultorio_Especialidad
+public partial class Cita
 {
 
-    public System.Guid Id_Consultorio { get; set; }
+    public System.Guid Id_Cita { get; set; }
 
-    public System.Guid Id_Especialidad { get; set; }
+    public System.Guid Id_Paciente { get; set; }
 
     public System.Guid Id_Entidad { get; set; }
 
-    public bool Estado { get; set; }
+    public Nullable<System.Guid> Id_Especialidad { get; set; }
 
-    public System.Guid Usuario_Create { get; set; }
+    public System.Guid Id_Cup { get; set; }
+
+    public System.Guid Id_Detalle_Agenda { get; set; }
+
+    public string Cod_Aprobacion { get; set; }
+
+    public bool Confirmada { get; set; }
 
     public System.DateTime Fecha_Create { get; set; }
 
-    public System.Guid Usuario_Update { get; set; }
-
-    public System.DateTime Fecha_Update { get; set; }
 
 
+    public virtual Detalle_Agenda Detalle_Agenda { get; set; }
 
-    public virtual Consultorio Consultorio { get; set; }
+    public virtual Entidad Entidad { get; set; }
 
-    public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
+    public virtual Paciente Paciente { get; set; }
 
 }
 

@@ -33,8 +33,6 @@ public partial class Agenda_Profesional
 
     public System.DateTime Fecha_Hasta { get; set; }
 
-    public System.Guid Id_Consultorio { get; set; }
-
     public System.Guid Id_Especialidad { get; set; }
 
     public System.Guid Id_Profesional { get; set; }
@@ -52,8 +50,6 @@ public partial class Agenda_Profesional
     public System.Guid Usuario_Update { get; set; }
 
 
-
-    public virtual Consultorio_Especialidad Consultorio_Especialidad { get; set; }
 
     public virtual Especialidad_Profesional Especialidad_Profesional { get; set; }
 

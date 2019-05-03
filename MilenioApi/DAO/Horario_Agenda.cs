@@ -31,9 +31,9 @@ public partial class Horario_Agenda
 
     public System.Guid Id_Agenda_Profesional { get; set; }
 
-    public System.TimeSpan Hora_Desde { get; set; }
+    public System.DateTime Hora_Desde { get; set; }
 
-    public System.TimeSpan Hora_Hasta { get; set; }
+    public System.DateTime Hora_Hasta { get; set; }
 
     public string Dia { get; set; }
 
@@ -46,6 +46,8 @@ public partial class Horario_Agenda
     public System.Guid Usuario_Create { get; set; }
 
     public System.Guid Usuario_Update { get; set; }
+
+    public bool Estado { get; set; }
 
 
 

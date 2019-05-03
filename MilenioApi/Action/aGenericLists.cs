@@ -33,7 +33,7 @@ namespace MilenioApi.Action
                     {
                         code = l.Dane_Id,
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     rp.data = pb;
 
@@ -58,7 +58,7 @@ namespace MilenioApi.Action
                     {
                         code = l.Dane_Id,
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     rp.data = pb;
 
@@ -83,7 +83,7 @@ namespace MilenioApi.Action
                     {
                         code = l.Poblado_Id,
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     rp.data = pb;
 
@@ -105,9 +105,9 @@ namespace MilenioApi.Action
                     DepartamentList gl = new DepartamentList();
                     gl.departament = ent.Departamento.Select(l => new BasicList
                     {
-                        name = l.Dane_Id.ToString(),
+                        id = l.Dane_Id.ToString(),
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -127,10 +127,10 @@ namespace MilenioApi.Action
                     MunicipalityList gl = new MunicipalityList();
                     gl.municipality = ent.Municipio.Select(l => new BasicList
                     {
-                        name = l.Dane_Id.ToString(),
+                        id = l.Dane_Id.ToString(),
                         value = l.Nombre,
                         keylink = l.Departamento_Id.ToString()
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -150,10 +150,10 @@ namespace MilenioApi.Action
                     NeighborhoodList gl = new NeighborhoodList();
                     gl.neighborhood = ent.Poblado.Select(l => new BasicList
                     {
-                        name = l.Poblado_Id.ToString(),
+                        id = l.Poblado_Id.ToString(),
                         value = l.Nombre,
                         keylink = l.Municipio_Id.ToString()
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -174,9 +174,9 @@ namespace MilenioApi.Action
                     ProfetionalTypeList gl = new ProfetionalTypeList();
                     gl.profetionaltype = ent.Tipo_Profesional.Select(l => new BasicList
                     {
-                        name = l.Id_Tipo_Profesional.ToString(),
+                        id = l.Id_Tipo_Profesional.ToString(),
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -197,9 +197,9 @@ namespace MilenioApi.Action
                     LinkTypeList gl = new LinkTypeList();
                     gl.linktype = ent.Tipo_Vinculacion.Select(l => new BasicList
                     {
-                        name = l.Id_Tipo_Vinculacion.ToString(),
+                        id = l.Id_Tipo_Vinculacion.ToString(),
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -220,9 +220,9 @@ namespace MilenioApi.Action
                     RolList gl = new RolList();
                     gl.rollist = ent.Rol.Select(l => new BasicList
                     {
-                        name = l.Id_Rol.ToString(),
+                        id = l.Id_Rol.ToString(),
                         value = l.Nombre
-                    }).ToList();
+                    }).OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -232,6 +232,127 @@ namespace MilenioApi.Action
                 throw;
             }
         }
+
+        public EspecialityList GetEspecialityList()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    EspecialityList gl = new EspecialityList();
+                    gl.specialities = ent.Especialidad.Select(l => new BasicList
+                    {
+                        id = l.Id_Especialidad.ToString(),
+                        value = l.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        public object GetListsEntityForm(Basic model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                    listas.Add(gl.GetFullDepartament());
+                    listas.Add(gl.GetFullMunicipality());
+                    listas.Add(gl.GetFullNeighborhood());
+                    listas.Add(gl.GetEspecialityList());
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+        public object GetListsUserForm(Basic model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                    listas.Add(gl.GetFullDepartament());
+                    listas.Add(gl.GetFullMunicipality());
+                    listas.Add(gl.GetFullNeighborhood());
+                    listas.Add(gl.GetProfetionalType());
+                    listas.Add(gl.GetLinkType());
+                    listas.Add(gl.GetRolList());
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object GetServiceProviderList(Basic model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+
+                    var docs = ent.Entidad_Usuario.Where(u => u.Id_Entidad == entidad && u.Estado == true && u.Usuario.Presta_Servicio == true)
+                                .Select(t => new
+                                {
+                                    id = t.Usuario.Id_Usuario,
+                                    value = t.Usuario.Nombres + " " + t.Usuario.Primer_Apellido + " " + t.Usuario.Segundo_Apellido
+                                }).OrderBy(o => o.value).ToList();
+
+                    rp.data = docs;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+
 
 
 

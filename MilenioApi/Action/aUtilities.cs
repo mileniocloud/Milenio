@@ -18,6 +18,45 @@ namespace MilenioApi.Action
 {
     public class aUtilities
     {
+        public Response MensajeRetorno(ref GenericError ge)
+        {
+            Response ret = new Response();
+            ret.status = HttpStatusCode.InternalServerError;
+            ret.response_code = ge.Codigo;
+            ret.message = ge.Message;
+            return ret;
+        }
+        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                GenericError ge = (from g in ent.GenericError
+                                   where g.codigo_id == idmensje
+                                   select g).SingleOrDefault();
+
+                ret.status = status;
+                ret.response_code = ge.Codigo;
+                ret.message = ge.Message + " " + custom;
+            }
+
+            return ret;
+        }
+        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, string rute, HttpStatusCode status = HttpStatusCode.OK)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                GenericError ge = (from g in ent.GenericError
+                                   where g.codigo_id == idmensje
+                                   select g).SingleOrDefault();
+
+                ret.status = status;
+                ret.response_code = ge.Codigo;
+                ret.message = ge.Message + " " + custom;
+                ret.rute = rute;
+            }
+
+            return ret;
+        }
         public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, List<ErrorFields> el, HttpStatusCode status = HttpStatusCode.OK)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -35,24 +74,8 @@ namespace MilenioApi.Action
 
             return ret;
         }
-
-        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
-        {
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                GenericError ge = (from g in ent.GenericError
-                                   where g.codigo_id == idmensje
-                                   select g).SingleOrDefault();
-
-                ret.status = status;
-                ret.response_code = ge.Codigo;
-                ret.message = ge.Message + " " + custom;
-            }
-
-            return ret;
-        }
-
-
+        
+        //***** TODO: borrar estos dos metodos
         public Basic MensajeRetorno(ref Basic ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
@@ -84,14 +107,7 @@ namespace MilenioApi.Action
 
             return ret;
         }
-        public Response MensajeRetorno(ref GenericError ge)
-        {
-            Response ret = new Response();
-            ret.status = HttpStatusCode.InternalServerError;
-            ret.response_code = ge.Codigo;
-            ret.message = ge.Message;
-            return ret;
-        }
+        //***************************
 
         public string Sha(string pass)
         {
@@ -124,27 +140,35 @@ namespace MilenioApi.Action
         {
             HttpResponseMessage httpResponseMessage = null;
             httpResponseMessage = new HttpResponseMessage(o.StatusCode);
-           
+
             return httpResponseMessage;
         }
 
         public List<ErrorFields> ValidateObject(object t)
         {
             List<ErrorFields> rl = new List<ErrorFields>();
-
-            ValidationContext context = new ValidationContext(t, null, null);
-            List<ValidationResult> results = new List<ValidationResult>();
-            bool valid = Validator.TryValidateObject(t, context, results, true);
-
-            if (!valid)
+            try
             {
-                foreach (ValidationResult vr in results)
+                ValidationContext context = new ValidationContext(t, null, null);
+                List<ValidationResult> results = new List<ValidationResult>();
+                bool valid = Validator.TryValidateObject(t, context, results, true);
+
+                if (!valid)
                 {
-                    ErrorFields r = new ErrorFields();
-                    // r.field = vr.MemberNames.First();
-                    r.message = vr.ErrorMessage;
-                    rl.Add(r);
+                    foreach (ValidationResult vr in results)
+                    {
+                        ErrorFields r = new ErrorFields();
+                        // r.field = vr.MemberNames.First();
+                        r.message = vr.ErrorMessage;
+                        rl.Add(r);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ErrorFields r = new ErrorFields();
+                r.message = ex.Message;
+                rl.Add(r);
             }
             return rl;
         }
@@ -184,7 +208,7 @@ namespace MilenioApi.Action
             }
             return System.Text.Encoding.Unicode.GetString(bytes);
         }
-        public void SendMail(string email, AlternateView emailbody, string Subject)
+        public bool SendMail(string email, AlternateView emailbody, string Subject)
         {
             try
             {
@@ -219,12 +243,12 @@ namespace MilenioApi.Action
 
                     smtp.Send(message);
                 }
+                return true;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
-        }
-        
+        }       
     }
 }

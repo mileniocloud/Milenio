@@ -15,11 +15,11 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Detalle_Agenda
+public partial class Paciente
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Detalle_Agenda()
+    public Paciente()
     {
 
         this.Cita = new HashSet<Cita>();
@@ -27,33 +27,23 @@ public partial class Detalle_Agenda
     }
 
 
-    public System.Guid Id_Detalle_Agenda { get; set; }
+    public System.Guid Id_Paciente { get; set; }
 
-    public System.Guid Id_Horario_Agenda { get; set; }
+    public string Nombres { get; set; }
 
-    public System.DateTime Hora_Desde { get; set; }
+    public string Apellidos { get; set; }
 
-    public System.DateTime Hora_Hasta { get; set; }
+    public System.DateTime Fecha_Nacimiento { get; set; }
 
-    public System.DateTime Fecha { get; set; }
+    public string Tipo_Documento { get; set; }
 
-    public System.Guid Id_Consultorio { get; set; }
-
-    public System.DateTime Fecha_Create { get; set; }
-
-    public System.DateTime Fecha_Update { get; set; }
-
-    public System.Guid Usuario_Create { get; set; }
-
-    public System.Guid Usuario_Update { get; set; }
+    public string Documento { get; set; }
 
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Cita> Cita { get; set; }
-
-    public virtual Horario_Agenda Horario_Agenda { get; set; }
 
 }
 

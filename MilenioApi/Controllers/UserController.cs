@@ -13,21 +13,7 @@ namespace MilenioApi.Controllers
 
         #region Create - ActInactivate - list
 
-        // <summary>
-        // Metodo para consultar lo basico del formulario de usuarios
-        // </summary>
-        // <remarks>
-        // </remarks>
-        /// <returns>Regresa vrias listas con la infirmacion necesaria para el formulario de usuarios </returns>
-        [HttpGet]
-        [Authorize]
-        [Route("GetListsUserForm")]
-        public HttpResponseMessage GetListsUserForm()
-        {
-            aUser s = new aUser();
-            Basic t = new Basic();
-            return ut.ReturnResponse(s.GetListsUserForm(t));
-        }
+        
 
         /// <summary>
         /// Metodo crear usuarios del sistema
@@ -105,13 +91,13 @@ namespace MilenioApi.Controllers
         }
 
         /// <summary>
-        /// Metodo para agregar un usuario exixtente a la entidd a la que se esta tratando de ingresar como usuario nuevo
+        /// Metodo para agregar un usuario existente a la entidad a la que se esta tratando de ingresar como usuario nuevo
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Numero_Identificacion [STRING]
-        /// PARAMETRO: token [STRING]
+        /// PARAMETRO: document [STRING] <br />
+        /// PARAMETRO: typedocument [STRING]
         /// </remarks>
-        /// <returns>Regresa informacion si el usuario existe o no </returns>
+        /// <returns>Regresa informacion indicando que el registro fue exitoso </returns>
         [HttpPost]
         [Authorize]
         [Route("CreateEntityUser")]
@@ -120,12 +106,13 @@ namespace MilenioApi.Controllers
             aUser s = new aUser();
             return ut.ReturnResponse(s.CreateEntityUser(t));
         }
+
         /// <summary>
         /// Metodo para validar si una cedula ya existe en alguna entidad para preguntar si desean agregarlo
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Numero_Identificacion [STRING]
-        /// PARAMETRO: token [STRING]
+        /// PARAMETRO: document [STRING] <br />
+        /// PARAMETRO: typedocument [STRING]
         /// </remarks>
         /// <returns>Regresa informacion si el usuario existe o no </returns>
         [HttpPost]
@@ -143,10 +130,16 @@ namespace MilenioApi.Controllers
         /// 
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: Numero_Identificacion [STRING]
-        /// PARAMETRO: token [STRING]
+        /// PARAMETRO: iduser [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula <br/>
+        /// PARAMETRO: document [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula<br/>
+        /// PARAMETRO: fullname [STRING] [OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+        /// PARAMETRO: firstlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+        /// PARAMETRO: secondlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+        /// PARAMETRO: login [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+        /// PARAMETRO: email [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+        /// PARAMETRO: dateofhire [DATE][OPCIONAL] si se pasa este dato, se filta por esa fecha formato DD/MM/YYYY  <br/>      
         /// </remarks>
-        /// <returns>Regresa informacion si el usuario existe o no </returns>
+        /// <returns>Regresa lista de usuarios dependiendo de los filtros </returns>
         [HttpPost]
         [Authorize]
         [Route("GetUser")]
@@ -164,7 +157,7 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa informacion completa del usuario </returns>
         [HttpPost]
-        [Authorize]
+        [Authorize]       
         [Route("GetUserEdit")]
         public HttpResponseMessage GetUserEdit(UserModel t)
         {

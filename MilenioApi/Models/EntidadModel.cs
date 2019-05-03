@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MilenioApi.Models
@@ -37,6 +38,7 @@ namespace MilenioApi.Models
         [Required]
         [Display(Name = "email")]
         [JsonProperty("email")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
@@ -59,7 +61,6 @@ namespace MilenioApi.Models
         [JsonProperty("taxpayer")]
         public bool Contribuyente { get; set; }
 
-        [Required]
         [Display(Name = "photo")]
         [JsonProperty("photo")]
         public string Foto { get; set; }
@@ -74,10 +75,10 @@ namespace MilenioApi.Models
         [JsonProperty("closing")]
         public string Hora_Hasta { get; set; }
 
-        [Required]
-        [Display(Name = "status")]
-        [JsonProperty("status")]
-        public bool? Estado { get; set; }
+        [Display(Name = "specialities")]
+        [JsonProperty("specialities")]
 
+        public List<ComboListModel> specialities = new List<ComboListModel>();
+        public List<ComboListModel> Notspecialities = new List<ComboListModel>();
     }
 }

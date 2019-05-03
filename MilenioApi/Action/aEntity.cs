@@ -20,7 +20,7 @@ namespace MilenioApi.Action
         aUtilities autil = new aUtilities();
 
         #region Seccion de entidad
-              
+
         public object CreateEntity(EntidadModel model)
         {
             Response rp = new Response();
@@ -46,12 +46,38 @@ namespace MilenioApi.Action
                                 Entidad et = new Entidad();
                                 Copier.CopyPropertiesTo(model, et);
                                 //                               
-                                Guid identidad = Guid.NewGuid();                                
+                                Guid identidad = Guid.NewGuid();
                                 et.Id_Entidad = identidad;
+
+                                if (string.IsNullOrEmpty(et.Foto))
+                                    et.Foto = ConfigurationManager.AppSettings["entitydefoultphoto"];
+
                                 et.Fecha_Create = DateTime.Now;
                                 et.Fecha_Update = DateTime.Now;
                                 ent.Entidad.Add(et);
-                                //se envia a crear todo
+
+                                //se controla las especialidades que se van a agregar
+                                if (model.specialities.Count > 0)
+                                {
+                                    List<Especialidad_Entidad> lee = new List<Especialidad_Entidad>();
+                                    foreach (var e in model.specialities)
+                                    {
+                                        Especialidad_Entidad ce = new Especialidad_Entidad();
+                                        ce.Id_Entidad = identidad;
+                                        ce.Id_Especialidad = Guid.Parse(e.id);
+                                        ce.Estado = true;
+                                        ce.Usuario_Create = usuario;
+                                        ce.Usuario_Update = usuario;
+                                        ce.Fecha_Create = DateTime.Now;
+                                        ce.Fecha_Update = DateTime.Now;
+                                        lee.Add(ce);
+                                    }
+                                    if (lee.Count > 0)
+                                    {
+                                        //si hay especialidades que agregar, las agrega
+                                        ent.Especialidad_Entidad.AddRange(lee);
+                                    }
+                                }
 
                                 //se consulta en el webconfig el usuario SA y el rol SA
                                 //Guid sauser = Guid.Parse(ConfigurationManager.AppSettings["idsuperuser"]);
@@ -107,10 +133,18 @@ namespace MilenioApi.Action
 
                                 //se guarda todo
                                 ent.SaveChanges();
-                                autil.SendMail(et.Email, (SetWelcomeEmailBody(et.Nombre, um.Login, password)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
-                                
-                                //se genera el codigo del mensaje de retorno exitoso
-                                rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+
+                                if (!autil.SendMail(et.Email, (SetWelcomeEmailBody(et.Nombre, um.Login, password)), ConfigurationManager.AppSettings["WelcomeSubjec"]))
+                                {
+                                    //se genera el codigo del mensaje indicando que se creo la entidad pero no se
+                                    //pudo eviar el correo.
+                                    rp = autil.MensajeRetorno(ref rp, 37, string.Empty, null, HttpStatusCode.OK);
+                                }
+                                else
+                                {
+                                    //se genera el codigo del mensaje de retorno exitoso
+                                    rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                                }
                             }
                             else
                             {
@@ -136,39 +170,11 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //error general
-                rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                rp = autil.MensajeRetorno(ref rp, 4, ex.Message + " " + ex.InnerException, null, HttpStatusCode.InternalServerError);
                 return rp;
             }
         }
-
-        private AlternateView SetWelcomeEmailBody(string subject, string login, string password)
-        {
-            try
-            {
-                //se arma el correo que se envia para el ambio de clave
-                string plantilla = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["WelcomeTemplate"]);
-
-                var html = System.IO.File.ReadAllText(plantilla);
-                html = html.Replace("{{name}}", subject);
-                html = html.Replace("{{user}}", login);
-                html = html.Replace("{{password}}", password);
-
-                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
-
-                //create the LinkedResource (embedded image)
-                LinkedResource logo = new LinkedResource(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["LogoPath"]));
-                logo.ContentId = "companylogo";
-                //add the LinkedResource to the appropriate view
-                av.LinkedResources.Add(logo);
-
-                return av;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
+ 
         public object EditEntity(EntidadModel model)
         {
             Response rp = new Response();
@@ -309,22 +315,39 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    IQueryable<Entidad> et = ent.Entidad;
+                    //todas las especialidades
+                    List<Especialidad> gall = ent.Especialidad.ToList();
+                    //trae todas las especialidades que SI tiene la entidad
+                    List<Especialidad> gesp = ent.Especialidad_Entidad.Where(t => t.Id_Entidad == model.Id_Entidad).Select(y => y.Especialidad).ToList();
 
-                    //consulta por nit
-                    if (model.Id_Entidad != Guid.Empty)
+                    //llena la lista que se regresa en el objeto con las especialidades que SI tiene
+                    EspecialityList gel = new EspecialityList();
+                    gel.specialities = gesp.Select(l => new BasicList
                     {
-                        et = et.Where(c => c.Id_Entidad == model.Id_Entidad);
-                    }
+                        id = l.Id_Especialidad.ToString(),
+                        value = l.Nombre
 
-                    var list = et.Select(u => new
+                    }).ToList();
+                 
+                    //esta es la lista de especialidades que NO tiene la entidad
+                    EspecialityList gnel = new EspecialityList();                
+                    gnel.specialities = gall.Except(gesp).Select(l => new BasicList
+                    {
+                        id = l.Id_Especialidad.ToString(),
+                        value = l.Nombre
+
+                    }).ToList();
+
+                    var list = ent.Entidad.Where(e=> e.Id_Entidad == model.Id_Entidad).Select(u => new
                     {
                         identity = u.Id_Entidad,
                         nit = u.Nit,
                         name = u.Nombre,
                         organization = u.Organizacion,
                         email = u.Email,
-                        entitycode = u.CodigoEntidad
+                        entitycode = u.CodigoEntidad,
+                        specialities = gel,
+                        notspecialities = gnel
 
                     }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
 
@@ -419,7 +442,7 @@ namespace MilenioApi.Action
 
                         if (ee != null)
                         {
-                            ee.Estado = model.Estado.Value;
+                            //ee.Estado = model.Estado.Value;
                             ee.Usuario_Update = usuario;
                             ee.Fecha_Update = DateTime.Now;
                             ent.SaveChanges();
@@ -450,6 +473,37 @@ namespace MilenioApi.Action
             }
         }
 
+        #endregion
+
+
+        #region Coreo
+        private AlternateView SetWelcomeEmailBody(string subject, string login, string password)
+        {
+            try
+            {
+                //se arma el correo que se envia para el ambio de clave
+                string plantilla = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["WelcomeTemplate"]);
+
+                var html = System.IO.File.ReadAllText(plantilla);
+                html = html.Replace("{{name}}", subject);
+                html = html.Replace("{{user}}", login);
+                html = html.Replace("{{password}}", password);
+
+                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
+
+                //create the LinkedResource (embedded image)
+                LinkedResource logo = new LinkedResource(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["LogoPath"]));
+                logo.ContentId = "companylogo";
+                //add the LinkedResource to the appropriate view
+                av.LinkedResources.Add(logo);
+
+                return av;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

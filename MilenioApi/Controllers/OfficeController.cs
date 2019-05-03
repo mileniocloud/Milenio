@@ -54,6 +54,8 @@ namespace MilenioApi.Controllers
         /// <remarks>
         /// PARAMETRO: name [STRING] [OPTIONAL] (si se pasa este valor, se buscara consultorios con este nombre) <br />
         /// PARAMETRO: description [STRING] [OPTIONAL] (si se pasa este valor se buscara consultorios con esa descripcion)<br />
+        /// PARAMETRO: page [STRING] Este valor indica en que pagina del grid estamos actualmente<br />
+        /// PARAMETRO: pagesize [STRING] Este valor indica la cantidad de datos que queremos traer<br />
         /// </remarks>
         /// <returns>Regresa una lista con los consultorios que cumplan con los parametros de busqueda</returns>
         [HttpPost]
@@ -63,6 +65,22 @@ namespace MilenioApi.Controllers
         {
             aOffice s = new aOffice();
             return ut.ReturnResponse(s.GetOffice(t));
+        }
+
+        /// <summary>
+        /// Metodo para consultar consultorios, 
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idoffice [STRING]
+        /// </remarks>
+        /// <returns>Regresa la data del consultorio consultado y una lista de las especialidades de ese consultorio</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetEditOffice")]
+        public HttpResponseMessage GetEditOffice(OfficeModel t)
+        {
+            aOffice s = new aOffice();
+            return ut.ReturnResponse(s.GetEditOffice(t));
         }
 
 

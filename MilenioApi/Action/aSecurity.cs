@@ -246,7 +246,8 @@ namespace MilenioApi.Action
                         if (!string.IsNullOrEmpty(p.Email))
                         {
                             //se genera un token que sera enviado al correo para validar cuando trate de cambiar la clave
-                            string token = Convert.ToBase64String(Encoding.Unicode.GetBytes(tvh.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null)));
+                            string token = tvh.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null);
+                            //string token = Convert.ToBase64String(Encoding.Unicode.GetBytes(tvh.GenerateToken(p.Login, p.Id_Usuario.ToString(), null, null)));
                             string nombre = p.Nombres + " " + p.Primer_Apellido + " " + p.Segundo_Apellido;
                             string user = p.Login;
 
@@ -358,7 +359,8 @@ namespace MilenioApi.Action
             Response ret = new Response();
             try
             {
-                cp = tvh.getprincipal(Convert.ToString(Encoding.Unicode.GetString(Convert.FromBase64String(model.token))));
+                cp = tvh.getprincipal(model.changetoken);
+                //cp = tvh.getprincipal(Convert.ToString(Encoding.Unicode.GetString(Convert.FromBase64String(model.changetoken))));
 
                 Guid? user_id = null;
                 string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
@@ -371,7 +373,7 @@ namespace MilenioApi.Action
 
                     if (p != null)
                     {
-                        if (p.Token_Password_Change == model.token)
+                        if (p.Token_Password_Change == model.changetoken)
                         {
                             p.Password = autil.Sha(model.Password);
                             p.Token_Password_Change = null;
@@ -398,9 +400,9 @@ namespace MilenioApi.Action
             }
         }
 
-        #endregion      
+        #endregion
 
-        
+
 
         #region metodos basicos
 

@@ -34,7 +34,12 @@ namespace MilenioApi.Models
         [Display(Name = "duration")]
         [JsonProperty("duration")]
         public int Duracion { get; set; }
-        
+
+        [Required]
+        [Display(Name = "idoffice")]
+        [JsonProperty("idoffice")]
+        public Guid Id_Consultorio { get; set; }
+
         [Display(Name = "status")]
         [JsonProperty("status")]
         public bool Estado { get; set; }

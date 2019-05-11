@@ -15,45 +15,31 @@ namespace MilenioApi.DAO
 using System;
     using System.Collections.Generic;
     
-public partial class Detalle_Agenda
+public partial class Menu
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Detalle_Agenda()
+    public Menu()
     {
 
-        this.Cita = new HashSet<Cita>();
+        this.Rol = new HashSet<Rol>();
 
     }
 
 
-    public System.Guid Id_Detalle_Agenda { get; set; }
+    public System.Guid Id_Menu { get; set; }
 
-    public System.Guid Id_Horario_Agenda { get; set; }
+    public string Titulo { get; set; }
 
-    public System.DateTime Hora_Desde { get; set; }
+    public string Ruta { get; set; }
 
-    public System.DateTime Hora_Hasta { get; set; }
-
-    public System.DateTime Fecha { get; set; }
-
-    public bool Asignada { get; set; }
-
-    public System.DateTime Fecha_Create { get; set; }
-
-    public System.DateTime Fecha_Update { get; set; }
-
-    public System.Guid Usuario_Create { get; set; }
-
-    public System.Guid Usuario_Update { get; set; }
+    public string Estilo { get; set; }
 
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Cita> Cita { get; set; }
-
-    public virtual Horario_Agenda Horario_Agenda { get; set; }
+    public virtual ICollection<Rol> Rol { get; set; }
 
 }
 

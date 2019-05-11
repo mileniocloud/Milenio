@@ -22,6 +22,8 @@ public partial class Usuario
     public Usuario()
     {
 
+        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
+
         this.Entidad_Usuario = new HashSet<Entidad_Usuario>();
 
         this.Especialidad_Profesional = new HashSet<Especialidad_Profesional>();
@@ -92,6 +94,10 @@ public partial class Usuario
     public string Token_Password_Change { get; set; }
 
 
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

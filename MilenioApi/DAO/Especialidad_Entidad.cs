@@ -22,6 +22,8 @@ public partial class Especialidad_Entidad
     public Especialidad_Entidad()
     {
 
+        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
+
         this.Consultorio_Especialidad = new HashSet<Consultorio_Especialidad>();
 
         this.Especialidad_Cup_Entidad = new HashSet<Especialidad_Cup_Entidad>();
@@ -46,6 +48,10 @@ public partial class Especialidad_Entidad
     public System.DateTime Fecha_Update { get; set; }
 
 
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

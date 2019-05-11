@@ -141,8 +141,8 @@ namespace MilenioApi.Controllers
         /// </remarks>
         /// <returns>Regresa lista de usuarios dependiendo de los filtros </returns>
         [HttpPost]
-        [Authorize]
-        [Route("GetUser")]
+        [Authorize(Roles = "sa")]
+        [Route("GetUser")]        
         public HttpResponseMessage GetUser(UserModel t)
         {
             aUser s = new aUser();

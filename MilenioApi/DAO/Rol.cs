@@ -26,6 +26,8 @@ public partial class Rol
 
         this.Rol_Vista_Entidad = new HashSet<Rol_Vista_Entidad>();
 
+        this.Menu = new HashSet<Menu>();
+
     }
 
 
@@ -50,6 +52,10 @@ public partial class Rol
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Rol_Vista_Entidad> Rol_Vista_Entidad { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Menu> Menu { get; set; }
 
 }
 

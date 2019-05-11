@@ -115,8 +115,8 @@ namespace MilenioApi.Models
         [Display(Name = "municipality")]
         [JsonProperty("municipality")]
         public int Id_Municipio { get; set; }
-        [Display(Name = "departament")]
-        [JsonProperty("departament")]
+        [Display(Name = "department")]
+        [JsonProperty("department")]
         public int Id_Departamento { get; set; }
 
         [Required]

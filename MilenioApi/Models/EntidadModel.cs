@@ -52,8 +52,8 @@ namespace MilenioApi.Models
         public string CodigoEntidad { get; set; }
 
         [Required]
-        [Display(Name = "priorityatention")]
-        [JsonProperty("priorityatention")]
+        [Display(Name = "priorityattention")]
+        [JsonProperty("priorityattention")]
         public bool Atencion_Prioritaria { get; set; }
 
         [Required]

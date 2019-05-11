@@ -182,6 +182,8 @@ namespace MilenioApi.Action
                     cp = tvh.getprincipal(Convert.ToString(model.token));
 
                     Response b = new Response();
+                    //se setea con valor el campo passwor para que no falle la validacion
+                    model.Password = "0";
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
@@ -203,7 +205,6 @@ namespace MilenioApi.Action
 
                                 if (regxist == 0)
                                 {
-
                                     Guid id_usuario = Guid.NewGuid();
 
                                     Usuario us = ent.Usuario.Where(u => u.Id_Usuario == model.Id_Usuario).SingleOrDefault();
@@ -240,6 +241,9 @@ namespace MilenioApi.Action
 
                                     ent.SaveChanges();
                                     //se genera el codigo del mensaje de retorno exitoso
+                                   
+                                    model = new UserModel();
+                                    rp.data = GetUser(model);
                                     rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                                 }
                                 else
@@ -287,16 +291,16 @@ namespace MilenioApi.Action
                     cp = tvh.getprincipal(Convert.ToString(model.token));
 
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                    Entidad_Usuario us = ent.Entidad_Usuario.Where(t => t.Usuario.Numero_Identificacion == model.Numero_Identificacion && t.Usuario.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion).SingleOrDefault();
+                    List<Entidad_Usuario> us = ent.Entidad_Usuario.Where(t => t.Usuario.Numero_Identificacion == model.Numero_Identificacion && t.Usuario.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion).ToList();
 
-                    if (us != null)
+                    if (us.Count() > 0)
                     {
                         //La cedula si existe
-                        if (us.Id_Entidad == entidad)
-                            ///Cedula existe en esta entidad
+                        if (us.Where(r => r.Id_Entidad == entidad).Count() != 0)
+                            //Cedula existe en esta entidad
                             rp = autil.MensajeRetorno(ref rp, 22, string.Empty, null, HttpStatusCode.OK);
                         else
-                            ///Cedula existe en otra entidad
+                            //Cedula existe en otra entidad
                             rp = autil.MensajeRetorno(ref rp, 23, string.Empty, null, @"api/User/CreateEntityUser", HttpStatusCode.OK);
                     }
                     else
@@ -521,17 +525,18 @@ namespace MilenioApi.Action
                         photohabeas = u.Foto_ABEAS,
                         typeprofessional = u.Id_Tipo_Profesional,
                         registryprofessional = u.Registro_Profesional,
-                        Rol = ent.Rol_Usuario.Where(ru => ru.Id_Entidad == entidad && ru.Id_Usuario == u.Id_Usuario)
+                        rolelist = ent.Rol_Usuario.Where(ru => ru.Id_Entidad == entidad && ru.Id_Usuario == u.Id_Usuario)
                                                    .Select(r => new ComboModel
                                                    {
                                                        id = r.Id_Rol,
                                                        value = r.Rol.Nombre
                                                    }),
-                        u.Poblado.Municipio_Id,
-                        Departamento_Id = u.Poblado.Municipio.Departamento.Dane_Id,
-                        Estado = u.Entidad_Usuario.Where(tt => tt.Id_Usuario == u.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado)
+                        municipality = u.Poblado.Municipio_Id,
+                        department = u.Poblado.Municipio.Departamento.Dane_Id,
+                        estatus = u.Entidad_Usuario.Where(tt => tt.Id_Usuario == u.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado),
+                        createdate = u.Fecha_Create
 
-                    }).OrderBy(o => o.fullname).Skip(skip).Take(pageSize).ToList();
+                    }).OrderByDescending(o => o.createdate).Skip(skip).Take(pageSize).ToList();
 
                     rp.cantidad = rl.Count();
                     rp.pagina = 0;
@@ -548,7 +553,7 @@ namespace MilenioApi.Action
                 return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
-        
+
         #endregion
 
         #region Profile
@@ -653,7 +658,7 @@ namespace MilenioApi.Action
             }
         }
         #endregion
-        
+
 
         private AlternateView SetWelcomeEmail(string subject, string token)
         {

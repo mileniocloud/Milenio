@@ -73,6 +73,8 @@ public partial class MilenioCloudEntities : DbContext
 
     public virtual DbSet<Medicamentos_Esenciales> Medicamentos_Esenciales { get; set; }
 
+    public virtual DbSet<Menu> Menu { get; set; }
+
     public virtual DbSet<Municipio> Municipio { get; set; }
 
     public virtual DbSet<Ocupacion> Ocupacion { get; set; }

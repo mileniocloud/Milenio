@@ -27,28 +27,29 @@ namespace MilenioApi.Action
                     List<MenuModel> lmenu = new List<MenuModel>();
                     MenuModel menu;
                     cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                     Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                    dm.foto = (ent.Usuario.Where(u=> u.Id_Usuario == usuario).Select(t=> t.Foto)).SingleOrDefault();
 
-                    menu = new MenuModel();
-                    menu.name = "Consultorio";
-                    menu.url = "office";
-                    menu.icon = "ti-clipboard";
-                    lmenu.Add(menu);
+                    Usuario us = ent.Usuario.Where(u => u.Id_Usuario == usuario).SingleOrDefault();
+                    dm.foto = us.Foto;
 
-                    menu = new MenuModel();
-                    menu.name = "Usuarios";
-                    menu.url = "user";
-                    menu.icon = "ti-user";
-                    lmenu.Add(menu);
+                    List<Menu> mn = (from m in ent.Menu
+                                     from r in m.Rol
+                                     from ru in r.Rol_Usuario
+                                     where ru.Id_Usuario == usuario
+                                     && ru.Id_Entidad == entidad
+                                     select m).Distinct().ToList();
 
-                    menu = new MenuModel();
-                    menu.name = "Entidades";
-                    menu.url = "entity";
-                    menu.icon = "ti-view-list";
-                    lmenu.Add(menu);
-
+                    foreach (var m in mn)
+                    {
+                        menu = new MenuModel();
+                        menu.name = m.Titulo;
+                        menu.url = m.Ruta;
+                        menu.icon = m.Estilo;
+                        lmenu.Add(menu);
+                    }
                     //se adjunta el menu
                     dm.menu.AddRange(lmenu);
 

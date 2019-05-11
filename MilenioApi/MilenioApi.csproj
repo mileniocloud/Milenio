@@ -361,6 +361,9 @@
     <Compile Include="DAO\Medicamentos_Esenciales.cs">
       <DependentUpon>MilenioModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAO\Menu.cs">
+      <DependentUpon>MilenioModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAO\MilenioModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -427,6 +430,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppointmentModel.cs" />
     <Compile Include="Models\ProfetionalScheduleModel.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\BasicList.cs" />

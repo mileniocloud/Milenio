@@ -545,10 +545,72 @@
         </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.CreateAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
             <summary>
-            Metodo para crear la agenda general del medico
+            Crea la agenda profesional para un medico, una entidad y una especialidad
             </summary>
+            <remarks>
+            PARAMETRO: fromdate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: todate [STRING] fecha fin del periodo <br />
+            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
             <param name="t"></param>
-            <returns></returns>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.EditAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Edita la agenda profesional para un medico, una entidad y una especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: fromdate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: todate [STRING] fecha fin del periodo <br />
+            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)">
+            <summary>
+            Crea los horarios de la agenda, dada una agenda propfesional
+            </summary>
+            <remarks>
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: idoffice [STRING] id del consultorio <br />
+            PARAMETRO: fromhour [STRING] hora desde <br />
+            PARAMETRO: tohour [STRING] hora hasta <br />
+            PARAMETRO: day [STRING] dia del horario <br />
+            PARAMETRO: duration [STRING] duracion de la cita <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.EditScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)">
+            <summary>
+            Edita los horarios de la agenda, dada una agenda profesional
+            </summary>
+            <remarks>
+            PARAMETRO: idscheduleagenda [STRING] id de horario agenda a modificar <br />
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: idoffice [STRING] id del consultorio <br />
+            PARAMETRO: fromhour [STRING] hora desde <br />
+            PARAMETRO: tohour [STRING] hora hasta <br />
+            PARAMETRO: day [STRING] dia del horario <br />
+            PARAMETRO: duration [STRING] duracion de la cita <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ScheduleDetailModel)">
+            <summary>
+            Crea los detalle de las agendas dado un horario de la tabla horario agenda
+            </summary>
+            <remarks>
+            PARAMETRO: idscheduleagenda [STRING] id horario agenda <br />
+            PARAMETRO: idoffice [STRING] id del consultorio
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o una lista con errores</returns>
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>

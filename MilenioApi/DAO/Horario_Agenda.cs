@@ -31,6 +31,8 @@ public partial class Horario_Agenda
 
     public System.Guid Id_Agenda_Profesional { get; set; }
 
+    public System.Guid Id_Consultorio { get; set; }
+
     public System.DateTime Hora_Desde { get; set; }
 
     public System.DateTime Hora_Hasta { get; set; }

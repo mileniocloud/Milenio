@@ -40,8 +40,6 @@ public partial class Cita
 
     public virtual Detalle_Agenda Detalle_Agenda { get; set; }
 
-    public virtual Entidad Entidad { get; set; }
-
     public virtual Paciente Paciente { get; set; }
 
 }

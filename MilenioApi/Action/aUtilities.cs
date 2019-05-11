@@ -74,40 +74,8 @@ namespace MilenioApi.Action
 
             return ret;
         }
-        
-        //***** TODO: borrar estos dos metodos
-        public Basic MensajeRetorno(ref Basic ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
-        {
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                GenericError ge = (from g in ent.GenericError
-                                   where g.codigo_id == idmensje
-                                   select g).SingleOrDefault();
 
 
-
-
-            }
-
-            return ret;
-        }
-
-        public Basic MensajeRetorno(ref Basic ret, int idmensje, string custom, Guid? id, List<ErrorFields> el, HttpStatusCode status = HttpStatusCode.OK)
-        {
-            using (MilenioCloudEntities ent = new MilenioCloudEntities())
-            {
-                GenericError ge = (from g in ent.GenericError
-                                   where g.codigo_id == idmensje
-                                   select g).SingleOrDefault();
-
-
-
-
-            }
-
-            return ret;
-        }
-        //***************************
 
         public string Sha(string pass)
         {
@@ -134,7 +102,6 @@ namespace MilenioApi.Action
             httpResponseMessage.Content = content;
             return httpResponseMessage;
         }
-
 
         public HttpResponseMessage ReturnResponseApi(HttpResponseMessage o)
         {
@@ -249,6 +216,23 @@ namespace MilenioApi.Action
             {
                 return false;
             }
-        }       
+        }
+
+        public void GetErrorDetail(ref List<ErrorFields> err, int idmensje, string proceso, DateTime fecha, DateTime horadesde, DateTime horahasta, string consultorio, string especialidad)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                GenericError ge = (from g in ent.GenericError
+                                   where g.codigo_id == idmensje
+                                   select g).SingleOrDefault();
+
+
+                ErrorFields ef = new ErrorFields();
+                ef.field = proceso;
+                string mensaje = string.Format(ge.Message, fecha.ToShortDateString(), horadesde.ToString("HH:mm"), horahasta.ToString("HH:mm"), consultorio, especialidad);
+                ef.message = mensaje;
+                err.Add(ef);
+            }
+        }
     }
 }

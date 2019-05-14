@@ -184,7 +184,7 @@ namespace MilenioApi.Action
                     //entre dos fechas
                     if (model.between)
                     {
-                        if (model.Fecha_Desde == null && model.Fecha_Hasta == null)
+                        if (model.Fecha_Desde.Year > 2000 && model.Fecha_Hasta.Year > 2000)
                         {
                             DateTime fecha_desde = model.Fecha_Desde;
                             DateTime fecha_hasta = model.Fecha_Hasta;
@@ -197,12 +197,12 @@ namespace MilenioApi.Action
                     else
                     {
                         //PARA BUSCAR POR FECHAS EN ESPECIFICO
-                        if (model.Fecha_Desde != null)
+                        if (model.Fecha_Desde.Year > 2000)
                         {
                             ap = ap.Where(t => t.Fecha_Desde == model.Fecha_Desde);
                         }
 
-                        if (model.Fecha_Hasta != null)
+                        if (model.Fecha_Hasta.Year > 2000)
                         {
                             ap = ap.Where(t => t.Fecha_Hasta == model.Fecha_Hasta);
                         }
@@ -213,10 +213,10 @@ namespace MilenioApi.Action
                         fromdate = a.Fecha_Desde,
                         todate = a.Fecha_Hasta,
                         idspeciality = a.Id_Especialidad,
-                        idusuario = a.Id_Profesional,
+                        idprofetional = a.Id_Profesional,
                         status = a.Estado,
                         speciality = a.Especialidad_Entidad.Especialidad.Nombre,
-                        prefetional = a.Usuario.Nombres + " " + a.Usuario.Primer_Apellido + " " + a.Usuario.Segundo_Apellido
+                        profetional = a.Usuario.Nombres + " " + a.Usuario.Primer_Apellido + " " + a.Usuario.Segundo_Apellido
 
                     }).ToList();
 
@@ -228,7 +228,7 @@ namespace MilenioApi.Action
                     return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //error general
                 return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);

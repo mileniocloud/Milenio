@@ -570,6 +570,20 @@
             <param name="t"></param>
             <returns>regresa un mensaje de exito o error</returns>
         </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Consulta las agendas profesionales de una entidad
+            </summary>
+            <remarks>
+            PARAMETRO: fromdate [DATE] fecha desde donde se quiere buscar [OPCIONAL] <br />
+            PARAMETRO: todate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: todate [STRING] fecha fin del periodo <br />
+            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa una lista con las agendas</returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)">
             <summary>
             Crea los horarios de la agenda, dada una agenda propfesional
@@ -926,6 +940,12 @@
             PARAMETRO: token [STRING]
             </remarks>
             <returns>Regresa informacion completa del usuario </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.GetServiceProviderUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para traer lista de usuarios que son prestadores de servicio
+            </summary>
+            <returns>Regresa lista de usuarios que son prestadores de servicios </returns>
         </member>
         <member name="M:MilenioApi.Controllers.UserController.UserProfile">
             <summary>

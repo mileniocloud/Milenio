@@ -127,6 +127,9 @@ namespace MilenioApi.Action
                                         ent.SaveChanges();
                                         //se envia el correo de bienvenida
                                         autil.SendMail(us.Email, (SetWelcomeEmail(us.Nombres + " " + us.Primer_Apellido + " " + us.Segundo_Apellido, token)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
+
+                                        model = new UserModel();
+                                        rp.data = GetUser(model);
                                         //se genera el codigo del mensaje de retorno exitoso
                                         rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                                     }
@@ -241,7 +244,7 @@ namespace MilenioApi.Action
 
                                     ent.SaveChanges();
                                     //se genera el codigo del mensaje de retorno exitoso
-                                   
+
                                     model = new UserModel();
                                     rp.data = GetUser(model);
                                     rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
@@ -443,6 +446,7 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
                     IQueryable<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad).Select(u => u.Usuario);
                     //consulta por id usuario
@@ -492,6 +496,80 @@ namespace MilenioApi.Action
                         us = us.Where(c => c.Fecha_Contratacion == model.Fecha_Contratacion);
                     }
 
+                    int pageSize = model.Cant_Registros;
+                    int skip = (model.Pagina - 1) * pageSize;
+                    var rl = us.Select(u => new
+                    {
+                        iduser = u.Id_Usuario,
+                        fullname = u.Nombres,
+                        firstlastname = u.Primer_Apellido,
+                        secondlastname = u.Segundo_Apellido,
+                        login = u.Login,
+                        dateofhire = u.Fecha_Contratacion,
+                        email = u.Email,
+
+                        typedocument = u.Id_Tipo_Identificacion,
+                        document = u.Numero_Identificacion,
+
+                        gender = u.Sexo,
+                        birthdate = u.Fecha_Nacimiento,
+                        photo = u.Foto,
+                        civilstatus = u.Estado_Civil,
+                        bloodtype = u.Tipo_Sangre,
+                        neighborhood = u.Poblado_Id,
+                        address = u.Direccion,
+                        telephone = u.Telefono,
+
+                        observation = u.Observaciones,
+                        linktype = u.Id_Tipo_Vinculacion,
+                        serviceprovider = u.Presta_Servicio,
+
+                        habeas = u.Acepta_ABEAS,
+                        photohabeas = u.Foto_ABEAS,
+                        typeprofessional = u.Id_Tipo_Profesional,
+                        registryprofessional = u.Registro_Profesional,
+                        rolelist = ent.Rol_Usuario.Where(ru => ru.Id_Entidad == entidad && ru.Id_Usuario == u.Id_Usuario)
+                                                   .Select(r => new ComboModel
+                                                   {
+                                                       id = r.Id_Rol,
+                                                       value = r.Rol.Nombre
+                                                   }),
+                        municipality = u.Poblado.Municipio_Id,
+                        department = u.Poblado.Municipio.Departamento.Dane_Id,
+                        estatus = u.Entidad_Usuario.Where(tt => tt.Id_Usuario == u.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado),
+                        createdate = u.Fecha_Create
+                    }).OrderBy(o => o.fullname).ToList();
+                    //}).OrderByDescending(o => o.createdate).Skip(skip).Take(pageSize).ToList();
+
+                    rp.cantidad = rl.Count();
+                    rp.pagina = 0;
+                    rp.data = rl;
+
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object GetServiceProviderUser(UserModel model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    IQueryable<Usuario> us = ent.Entidad_Usuario.Where(t => t.Id_Entidad == entidad && t.Usuario.Presta_Servicio == true).Select(u => u.Usuario);
 
                     int pageSize = model.Cant_Registros;
                     int skip = (model.Pagina - 1) * pageSize;
@@ -535,8 +613,7 @@ namespace MilenioApi.Action
                         department = u.Poblado.Municipio.Departamento.Dane_Id,
                         estatus = u.Entidad_Usuario.Where(tt => tt.Id_Usuario == u.Id_Usuario && tt.Id_Entidad == entidad).Select(tt => tt.Estado),
                         createdate = u.Fecha_Create
-
-                    }).OrderByDescending(o => o.createdate).Skip(skip).Take(pageSize).ToList();
+                    }).OrderBy(o => o.fullname).ToList();
 
                     rp.cantidad = rl.Count();
                     rp.pagina = 0;

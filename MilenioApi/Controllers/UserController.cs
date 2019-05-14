@@ -140,8 +140,7 @@ namespace MilenioApi.Controllers
         /// PARAMETRO: dateofhire [DATE][OPCIONAL] si se pasa este dato, se filta por esa fecha formato DD/MM/YYYY  <br/>      
         /// </remarks>
         /// <returns>Regresa lista de usuarios dependiendo de los filtros </returns>
-        [HttpPost]
-        [Authorize(Roles = "sa")]
+        [HttpPost]       
         [Route("GetUser")]        
         public HttpResponseMessage GetUser(UserModel t)
         {
@@ -164,7 +163,19 @@ namespace MilenioApi.Controllers
             aUser s = new aUser();
             return ut.ReturnResponse(s.GetUserEdit(t));
         }
-              
+
+        /// <summary>
+        /// Metodo para traer lista de usuarios que son prestadores de servicio
+        /// </summary>
+        /// <returns>Regresa lista de usuarios que son prestadores de servicios </returns>
+        [HttpPost]
+        [Route("GetServiceProviderUser")]
+        public HttpResponseMessage GetServiceProviderUser(UserModel t)
+        {
+            aUser s = new aUser();
+            return ut.ReturnResponse(s.GetServiceProviderUser(t));
+        }
+
         #endregion
 
         #region Profile

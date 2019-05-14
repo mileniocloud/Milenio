@@ -155,90 +155,83 @@ namespace MilenioApi.Action
             }
         }
 
-        public List<ProfetionalScheduleModel> GetAgendaProfesional(HttpRequest httpRequest)
+        public object GetAgendaProfesional(ProfetionalScheduleModel model)
         {
-            List<ProfetionalScheduleModel> apm = new List<ProfetionalScheduleModel>();
-            List<Agenda_Profesional> ap = new List<Agenda_Profesional>();
+            Response rp = new Response();
+            cp = tvh.getprincipal(Convert.ToString(model.token));
             try
             {
-                cp = tvh.getprincipal(Convert.ToString(httpRequest.Form["token"]));
-                if (cp != null)
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+
+                    IQueryable<Agenda_Profesional> ap = ent.Agenda_Profesional.Where(a => a.Id_Entidad == entidad);
+
+                    //busca por id profesional
+                    if (model.Id_Profesional != Guid.Empty)
                     {
-                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
-                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
-                        bool between = Convert.ToBoolean(int.Parse(httpRequest.Form["between"]));
+                        ap = ap.Where(t => t.Id_Profesional == model.Id_Profesional);
+                    }
 
-                        ap = ent.Agenda_Profesional.Where(a => a.Id_Entidad == entidad).ToList();
+                    //por especialidad
+                    if (model.Id_Especialidad != Guid.Empty)
+                    {
+                        ap = ap.Where(t => t.Id_Especialidad == model.Id_Especialidad);
+                    }
 
-                        if (ap.Count != 0)
+                    //entre dos fechas
+                    if (model.between)
+                    {
+                        if (model.Fecha_Desde == null && model.Fecha_Hasta == null)
                         {
-                            //busca por nombre
-                            if (!string.IsNullOrEmpty(httpRequest.Form["idprofesional"]))
-                            {
-                                Guid idprofesional = Guid.Parse(httpRequest.Form["idprofesional"]);
-                                ap = ap.Where(t => t.Id_Profesional == idprofesional).ToList();
-                            }
-
-                            if (!string.IsNullOrEmpty(httpRequest.Form["idespecialidad"]))
-                            {
-                                Guid idespecialidad = Guid.Parse(httpRequest.Form["idespecialidad"]);
-                                ap = ap.Where(t => t.Id_Especialidad == idespecialidad).ToList();
-                            }
-
-                            if (!string.IsNullOrEmpty(httpRequest.Form["estado"]))
-                            {
-                                bool estado = Convert.ToBoolean(int.Parse(httpRequest.Form["estado"]));
-                                ap = ap.Where(t => t.Estado == estado).ToList();
-                            }
-
-                            if (between)
-                            {
-                                if (!string.IsNullOrEmpty(httpRequest.Form["fechadesde"]) && !string.IsNullOrEmpty(httpRequest.Form["fechahasta"]))
-                                {
-                                    DateTime fecha_desde = Convert.ToDateTime(httpRequest.Form["fechadesde"]);
-                                    DateTime fecha_hasta = Convert.ToDateTime(httpRequest.Form["fechahasta"]);
-                                    ap = ap.Where(f =>
-                                                f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde
-                                                || f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta
-                                                || f.Fecha_Desde >= fecha_desde && f.Fecha_Hasta <= fecha_hasta).ToList();
-                                }
-                            }
-                            else
-                            {
-                                //PARA BUSCAR POR FECHAS EN ESPECIFICO
-                                if (!string.IsNullOrEmpty(httpRequest.Form["fechadesde"]))
-                                {
-                                    DateTime fecha_desde = Convert.ToDateTime(httpRequest.Form["fechadesde"]);
-                                    ap = ap.Where(t => t.Fecha_Desde == fecha_desde).ToList();
-                                }
-
-                                if (!string.IsNullOrEmpty(httpRequest.Form["fechahasta"]))
-                                {
-                                    DateTime fecha_hasta = Convert.ToDateTime(httpRequest.Form["fechahasta"]);
-                                    ap = ap.Where(t => t.Fecha_Hasta == fecha_hasta).ToList();
-                                }
-                            }
-
-                            foreach (var i in ap)
-                            {
-                                ProfetionalScheduleModel apmm = new ProfetionalScheduleModel();
-                                Copier.CopyPropertiesTo(i, apmm);
-                                apm.Add(apmm);
-                            }
-
+                            DateTime fecha_desde = model.Fecha_Desde;
+                            DateTime fecha_hasta = model.Fecha_Hasta;
+                            ap = ap.Where(f =>
+                                        f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde
+                                        || f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta
+                                        || f.Fecha_Desde >= fecha_desde && f.Fecha_Hasta <= fecha_hasta);
+                        }
+                    }
+                    else
+                    {
+                        //PARA BUSCAR POR FECHAS EN ESPECIFICO
+                        if (model.Fecha_Desde != null)
+                        {
+                            ap = ap.Where(t => t.Fecha_Desde == model.Fecha_Desde);
                         }
 
+                        if (model.Fecha_Hasta != null)
+                        {
+                            ap = ap.Where(t => t.Fecha_Hasta == model.Fecha_Hasta);
+                        }
                     }
-                    return apm;
+
+                    var agenda = ap.Select(a => new
+                    {
+                        fromdate = a.Fecha_Desde,
+                        todate = a.Fecha_Hasta,
+                        idspeciality = a.Id_Especialidad,
+                        idusuario = a.Id_Profesional,
+                        status = a.Estado,
+                        speciality = a.Especialidad_Entidad.Especialidad.Nombre,
+                        prefetional = a.Usuario.Nombres + " " + a.Usuario.Primer_Apellido + " " + a.Usuario.Segundo_Apellido
+
+                    }).ToList();
+
+                    rp.cantidad = agenda.Count();
+                    rp.pagina = 0;
+                    rp.data = agenda;
+
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
-                else
-                    return apm;
             }
             catch (Exception)
             {
-                return apm;
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -580,20 +573,30 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
-                        var daa = (from e in ent.Detalle_Agenda
-                                                    where e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Codigo == model.Codigo_Especilidad
-                                                    && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
-                                                    && e.Asignada == false
-                                                    && e.Fecha >= DateTime.Today
-                                                    && e.Fecha.Month == model.Mes
-                                                    select new {
-                                                        fecha = e.Fecha,
-                                                        fromhour = e.Hora_Desde,
-                                                        tohour = e.Hora_Desde,
-                                                        doctor = e.Horario_Agenda.Agenda_Profesional
-                                                    }).ToList();
-                       
+                        List<Detalle_Agenda> DAA = ent.Detalle_Agenda.ToList();
 
+                        var lista = (from e in ent.Detalle_Agenda
+                                     where e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Codigo == model.Codigo_Especilidad
+                                     && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
+                                     && e.Asignada == false
+                                     && e.Fecha >= DateTime.Today
+                                     && e.Fecha.Month == model.Mes
+                                     select new
+                                     {
+                                         idagenda = e.Id_Detalle_Agenda,
+                                         fecha = e.Fecha,
+                                         start = e.Hora_Desde,
+                                         end = e.Hora_Hasta,
+                                         color = new { primary = "#ad2121", secondary = "#FAE3E3" },
+                                         draggable = "false",
+                                         resizable = new { beforeStart = "true", afterEnd = "true" },
+                                         doctor = e.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + e.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + e.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido,
+                                         iddoctor = e.Horario_Agenda.Agenda_Profesional.Usuario.Id_Usuario
+                                     }).ToList();
+
+
+
+                        rep.data = lista;
                         return rep;
                     }
                     else

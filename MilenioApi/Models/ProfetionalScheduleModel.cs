@@ -45,5 +45,7 @@ namespace MilenioApi.Models
         [Display(Name = "status")]
         [JsonProperty("status")]
         public bool Estado { get; set; }
+
+        public bool between { get; set; }
     }
 }

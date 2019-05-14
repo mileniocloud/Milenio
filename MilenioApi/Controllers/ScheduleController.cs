@@ -54,14 +54,25 @@ namespace MilenioApi.Controllers
         }
 
 
-        //TODO: acomodar este metoco completo
+        /// <summary>
+        /// Consulta las agendas profesionales de una entidad
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: fromdate [DATE] fecha desde donde se quiere buscar [OPCIONAL] <br />
+        /// PARAMETRO: todate [STRING] fecha desde cuando inicia el periodo <br />
+        /// PARAMETRO: todate [STRING] fecha fin del periodo <br />
+        /// PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+        /// PARAMETRO: idprofetional [STRING] id del medico <br />
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>regresa una lista con las agendas</returns>
         [HttpPost]
         [Authorize]
         [Route("GetAgendaProfesional")]
-        public HttpResponseMessage GetAgendaProfesional()
+        public HttpResponseMessage GetAgendaProfesional(ProfetionalScheduleModel t)
         {
             aSchedule s = new aSchedule();
-            return ut.ReturnResponse(s.GetAgendaProfesional(HttpContext.Current.Request));
+            return ut.ReturnResponse(s.GetAgendaProfesional(t));
         }
         #endregion
 

@@ -188,6 +188,66 @@ namespace MilenioApi.Action
                     {
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
+                        List<ComboListModel> listEnt = ent.Especialidad_Entidad.Where(ee => ee.Id_Entidad == model.Id_Entidad).Select(x=> new ComboListModel { id= x.Id_Especialidad.ToString(), value =x.Especialidad.Nombre }).ToList();
+
+                     
+                        if (listEnt.Count > 0)
+                        {
+                            var list = listEnt.Where(t => !model.specialities.Any(t2 => t2.id == t.id)).ToList();
+
+                            foreach (var ee in list)
+                            {
+                                Guid idesp = Guid.Parse(ee.id);
+                                Especialidad_Entidad ce = ent.Especialidad_Entidad.Where(en => en.Id_Entidad == model.Id_Entidad && en.Id_Especialidad == idesp).SingleOrDefault();
+                                if (ce.Estado == true)
+                                {
+                                    ce.Estado = false;
+                                    ce.Usuario_Update = usuario;
+                                    ce.Fecha_Update = DateTime.Now;
+                                }
+                            }
+                        }
+
+
+                        if (model.specialities.Count > 0)
+                        {
+                            List<Especialidad_Entidad> lee = new List<Especialidad_Entidad>();
+                            foreach (var e in model.specialities)
+                            {
+                                Guid idespeciality = Guid.Parse(e.id);
+                                List<Especialidad_Entidad> espId = ent.Especialidad_Entidad.Where(en => en.Id_Entidad == model.Id_Entidad && en.Id_Especialidad == idespeciality).ToList();
+                                if (espId.Count == 0)
+                                {
+                                    Especialidad_Entidad ce = new Especialidad_Entidad();
+
+                                    ce.Id_Entidad = model.Id_Entidad;
+                                    ce.Id_Especialidad = Guid.Parse(e.id);
+                                    ce.Estado = true;
+                                    ce.Usuario_Create = usuario;
+                                    ce.Usuario_Update = usuario;
+                                    ce.Fecha_Create = DateTime.Now;
+                                    ce.Fecha_Update = DateTime.Now;
+                                    lee.Add(ce);
+                                }
+                                else if(espId.Where(en => en.Estado ==false).ToList().Count > 0)
+                                {
+                                    
+                                    Especialidad_Entidad ce = ent.Especialidad_Entidad.Where(en => en.Id_Entidad == model.Id_Entidad && en.Id_Especialidad == idespeciality).SingleOrDefault();
+                                    ce.Estado = true;
+                                    ce.Usuario_Update = usuario;
+                                    ce.Fecha_Update = DateTime.Now;
+                                }
+                                
+                                
+                                
+                            }
+                            if (lee.Count > 0)
+                            {
+                                //si hay especialidades que agregar, las agrega
+                                ent.Especialidad_Entidad.AddRange(lee);
+                            }
+                        }
+
                         //validamos que ese nit ya exista
                         int vNit = ent.Entidad.Where(t => t.Nit == model.Nit && t.Id_Entidad != model.Id_Entidad).Count();
                         if (vNit == 0)
@@ -206,7 +266,7 @@ namespace MilenioApi.Action
                             et.Hora_Hasta = model.Hora_Hasta;
                             et.Fecha_Update = DateTime.Now;
                             et.Foto = model.Foto;
-
+                            et.Telefono = model.Telefono;
                             //se envia a editar todo
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
@@ -279,7 +339,7 @@ namespace MilenioApi.Action
                     {
                         et = et.Where(c => c.Email.Contains(model.Email));
                     }
-
+                    
 
                     var list = et.Select(u => new
                     {
@@ -287,9 +347,27 @@ namespace MilenioApi.Action
                         nit = u.Nit,
                         name = u.Nombre,
                         organization = u.Organizacion,
+                        address = u.Direccion,
+                        neighborhood = u.Poblado_Id,
                         email = u.Email,
-                        entitycode = u.CodigoEntidad
+                        telephone = u.Telefono,
+                        entitycode = u.CodigoEntidad,
+                        priorityatention = u.Atencion_Prioritaria,
+                        taxpayer = u.Contribuyente,
+                        photo = u.Foto,
+                        opening = u.Hora_Desde,
+                        closing = u.Hora_Hasta,
+                        specialities = (from specialities_ in ent.Especialidad
+                                        join entityEsp in ent.Especialidad_Entidad on specialities_.Id_Especialidad equals entityEsp.Id_Especialidad
+                                        where entityEsp.Id_Entidad == u.Id_Entidad && entityEsp.Estado == true
+                                        select new
+                                        {
+                                            id = specialities_.Id_Especialidad,
+                                            value = specialities_.Nombre
+                                        }).ToList(),
+                        notspecialities = ent.Especialidad.Select(es => new ComboModel { id = es.Id_Especialidad, value =es.Nombre }).ToList()
 
+                       
                     }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
 
                     rp.data = list;
@@ -322,21 +400,21 @@ namespace MilenioApi.Action
 
                     //llena la lista que se regresa en el objeto con las especialidades que SI tiene
                     EspecialityList gel = new EspecialityList();
-                    gel.specialities = gesp.Select(l => new BasicList
-                    {
-                        id = l.Id_Especialidad.ToString(),
-                        value = l.Nombre
+                    //gel.specialities = gesp.Select(l => new ComboListModel
+                    //{
+                    //    id = l.Id_Especialidad.ToString(),
+                    //    value = l.Nombre
 
-                    }).ToList();
+                    //}).ToList();
                  
-                    //esta es la lista de especialidades que NO tiene la entidad
-                    EspecialityList gnel = new EspecialityList();                
-                    gnel.specialities = gall.Except(gesp).Select(l => new BasicList
-                    {
-                        id = l.Id_Especialidad.ToString(),
-                        value = l.Nombre
+                    ////esta es la lista de especialidades que NO tiene la entidad
+                    //EspecialityList gnel = new EspecialityList();                
+                    //gnel.specialities = gall.Except(gesp).Select(l => new ComboListModel
+                    //{
+                    //    id = l.Id_Especialidad.ToString(),
+                    //    value = l.Nombre
 
-                    }).ToList();
+                    //}).ToList();
 
                     var list = ent.Entidad.Where(e=> e.Id_Entidad == model.Id_Entidad).Select(u => new
                     {
@@ -346,8 +424,8 @@ namespace MilenioApi.Action
                         organization = u.Organizacion,
                         email = u.Email,
                         entitycode = u.CodigoEntidad,
-                        specialities = gel,
-                        notspecialities = gnel
+                        specialities = gel
+                        //notspecialities = gnel
 
                     }).ToList();//.Take(pageSize).Skip(startingPageIndex * pageSize)
 

@@ -233,17 +233,17 @@ namespace MilenioApi.Action
             }
         }
 
-        public EspecialityList GetEspecialityList()
+        public object GetEspecialityList()
         {
             Response rp = new Response();
             try
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    EspecialityList gl = new EspecialityList();
-                    gl.specialities = ent.Especialidad.Select(l => new BasicList
+                    //EspecialityList gl = new EspecialityList();
+                     var gl = ent.Especialidad.Select(l => new ComboModel
                     {
-                        id = l.Id_Especialidad.ToString(),
+                        id = l.Id_Especialidad,
                         value = l.Nombre
 
                     }).OrderBy(o => o.value).ToList();

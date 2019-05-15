@@ -60,8 +60,9 @@ namespace MilenioApi.Controllers
         /// <remarks>
         /// PARAMETRO: fromdate [DATE] fecha desde donde se quiere buscar [OPCIONAL] <br />
         /// PARAMETRO: todate [STRING] fecha desde cuando inicia el periodo <br />
-        /// PARAMETRO: todate [STRING] fecha fin del periodo <br />
-        /// PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+        /// PARAMETRO: idprofetional [STRING] id del medico del que queremos ver la agenda <br />
+        /// PARAMETRO: between [BOOL] indica si se va a buscar por un between entre dos fechas <br />
+        /// PARAMETRO: idspeciality [STRING] is de la especialidad que vamos a filtrar <br />
         /// PARAMETRO: idprofetional [STRING] id del medico <br />
         /// </remarks> 
         /// <param name="t"></param>

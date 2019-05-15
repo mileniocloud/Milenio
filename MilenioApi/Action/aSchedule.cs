@@ -465,14 +465,19 @@ namespace MilenioApi.Action
                         if (fallavalidacion)
                             break;
 
+                        //seteamos las horas con la fehca de hoy para que solo tome la parte de tiempo y no fecha.
+                        DateTime t1 = DateTime.Today.AddHours(ha.Hora_Desde.Hour).AddMinutes(ha.Hora_Desde.Minute);
+                        DateTime t2 = DateTime.Today.AddHours(ha.Hora_Hasta.Hour).AddMinutes(ha.Hora_Hasta.Minute);
+
                         //se saca la cantidad de minutos disponibles
-                        TimeSpan td = ha.Hora_Hasta.Subtract(ha.Hora_Desde);
+                        TimeSpan td = t2.Subtract(t1);
                         //se divide la cantidad de minutos disponibles para saber cuantas citas puede atender
                         double cant_consultas = td.TotalMinutes / ha.Duracion;
 
-                        //consultamos el nobre del consultorio y de la especialidad
+                        //consultamos el nombre del consultorio y de la especialidad
                         string especialidad = ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Nombre;
                         string consultorio = ent.Consultorio.Where(t => t.Id_Consultorio == ha.Id_Consultorio).Select(s => s.Nombre).SingleOrDefault();
+                        Guid id_especialidad = ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad;
 
                         //lista donde se almacenan los errores
                         List<DateTime> fechas = new List<DateTime>();
@@ -500,6 +505,8 @@ namespace MilenioApi.Action
                                         Detalle_Agenda da = ent.Detalle_Agenda.Where(
                                                         d => d.Horario_Agenda.Agenda_Profesional.Id_Entidad == entidad
                                                         && d.Fecha == date
+                                                        && d.Horario_Agenda.Id_Consultorio == ha.Id_Consultorio
+                                                        && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == id_especialidad
                                                         && (
                                                         (d.Hora_Desde <= hdesde && d.Hora_Hasta >= hhasta)
                                                         || (d.Hora_Desde <= hdesde && d.Hora_Hasta >= hhasta)
@@ -575,28 +582,35 @@ namespace MilenioApi.Action
 
                         List<Detalle_Agenda> DAA = ent.Detalle_Agenda.ToList();
 
-                        var lista = (from e in ent.Detalle_Agenda
-                                     where e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Codigo == model.Codigo_Especilidad
-                                     && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
-                                     && e.Asignada == false
-                                     && e.Fecha >= DateTime.Today
-                                     && e.Fecha.Month == model.Mes
-                                     select new
-                                     {
-                                         idagenda = e.Id_Detalle_Agenda,
-                                         fecha = e.Fecha,
-                                         start = e.Hora_Desde,
-                                         end = e.Hora_Hasta,
-                                         color = new { primary = "#ad2121", secondary = "#FAE3E3" },
-                                         draggable = "false",
-                                         resizable = new { beforeStart = "true", afterEnd = "true" },
-                                         doctor = e.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + e.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + e.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido,
-                                         iddoctor = e.Horario_Agenda.Agenda_Profesional.Usuario.Id_Usuario
-                                     }).ToList();
+                        List<Detalle_Agenda> lista = (from e in ent.Detalle_Agenda
+                                                      where e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad == model.Id_Especialidad
+                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
+                                                      && e.Asignada == false
+                                                      && e.Fecha >= DateTime.Today
+                                                      && e.Fecha.Month == model.Mes
+                                                      select e).ToList();
 
+                        List<CalendarModel> lcm = new List<CalendarModel>();
+                        foreach (var i in lista.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, g.Horario_Agenda.Agenda_Profesional.Id_Especialidad }))
+                        {
+                            CalendarModel cm = new CalendarModel();
+                            cm.fecha = i.Key.Fecha;
+                            cm.start = i.Key.Hora_Desde.ToString("HH:mm");
+                            cm.end = i.Key.Hora_Hasta.ToString("HH:mm");
+                            cm.draggable = "false";
+                            cm.resizable = "beforeStart = 'true', afterEnd = 'true'";
+                            cm.color = "primary = '#ad2121', secondary = '#FAE3E3'";
+                            cm.profetional = lista.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
+                                .Select(u => new ComboModel
+                                {
+                                    id = u.Horario_Agenda.Agenda_Profesional.Usuario.Id_Usuario,
+                                    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
+                                }).ToList();
 
+                            lcm.Add(cm);
+                        }
 
-                        rep.data = lista;
+                        rep.data = lcm;
                         return rep;
                     }
                     else

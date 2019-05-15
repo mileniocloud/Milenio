@@ -431,6 +431,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppointmentModel.cs" />
+    <Compile Include="Models\CalendarModel.cs" />
     <Compile Include="Models\ProfetionalScheduleModel.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\BasicList.cs" />

@@ -150,6 +150,14 @@ namespace MilenioApi.Controllers
 
         #region citas
 
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
         [HttpPost]
         [Authorize]
         [Route("GetAppointment")]

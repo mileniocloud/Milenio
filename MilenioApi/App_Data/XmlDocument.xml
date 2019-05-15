@@ -577,8 +577,9 @@
             <remarks>
             PARAMETRO: fromdate [DATE] fecha desde donde se quiere buscar [OPCIONAL] <br />
             PARAMETRO: todate [STRING] fecha desde cuando inicia el periodo <br />
-            PARAMETRO: todate [STRING] fecha fin del periodo <br />
-            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico del que queremos ver la agenda <br />
+            PARAMETRO: between [BOOL] indica si se va a buscar por un between entre dos fechas <br />
+            PARAMETRO: idspeciality [STRING] is de la especialidad que vamos a filtrar <br />
             PARAMETRO: idprofetional [STRING] id del medico <br />
             </remarks> 
             <param name="t"></param>
@@ -625,6 +626,16 @@
             </remarks> 
             <param name="t"></param>
             <returns>regresa un mensaje de exito o una lista con errores</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAppointment(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>

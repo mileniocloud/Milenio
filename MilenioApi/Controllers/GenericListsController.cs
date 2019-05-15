@@ -111,5 +111,23 @@ namespace MilenioApi.Controllers
             Basic t = new Basic();
             return ut.ReturnResponse(s.GetServiceProviderList(t));
         }
+
+
+
+        // <summary>
+        // Metodo para consultar las especialidades de una entidad
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa una lista de Id - Value con las especialidades de una entidad </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetEspecialityListByEntity")]
+        public HttpResponseMessage GetEspecialityListByEntity()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetEspecialityListByEntity(t));
+        }
     }
 }

@@ -38,5 +38,7 @@ namespace MilenioApi.Models
         [Display(Name = "month")]
         [JsonProperty("month")]
         public int Mes { get; set; }
+
+        public Guid id { get; set; }
     }
 }

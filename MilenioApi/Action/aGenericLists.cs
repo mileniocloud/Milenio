@@ -257,6 +257,29 @@ namespace MilenioApi.Action
             }
         }
 
+        public object GetEspecialityListByEntity(Basic model)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entity = Guid.Parse(model.id);
+                    var gl = ent.Especialidad_Entidad.Where(e=> e.Id_Entidad == entity && e.Estado == true).Select(l => new ComboModel
+                    {
+                        id = l.Id_Especialidad,
+                        value = l.Especialidad.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public object GetListsEntityForm(Basic model)
         {

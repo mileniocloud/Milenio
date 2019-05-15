@@ -561,9 +561,8 @@ namespace MilenioApi.Action
             return rp;
         }
         #endregion
-
-
-        #region citas
+        
+        #region citas // sale a pruebas
 
         public object GetAppointment(AppointmentModel model)
         {
@@ -572,8 +571,7 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    cp = tvh.getprincipal(Convert.ToString(model.token));
-                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid entidad = model.id;
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
@@ -583,7 +581,9 @@ namespace MilenioApi.Action
                         List<Detalle_Agenda> DAA = ent.Detalle_Agenda.ToList();
 
                         List<Detalle_Agenda> lista = (from e in ent.Detalle_Agenda
-                                                      where e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad == model.Id_Especialidad
+                                                      where 
+                                                      e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad == model.Id_Especialidad
+                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Estado == true
                                                       && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
                                                       && e.Asignada == false
                                                       && e.Fecha >= DateTime.Today

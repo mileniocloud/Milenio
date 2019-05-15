@@ -133,7 +133,8 @@ namespace MilenioApi.Action
 
                                 //se guarda todo
                                 ent.SaveChanges();
-
+                                model = new EntidadModel();
+                                rp.data = GetEntity(model);
                                 if (!autil.SendMail(et.Email, (SetWelcomeEmailBody(et.Nombre, um.Login, password)), ConfigurationManager.AppSettings["WelcomeSubjec"]))
                                 {
                                     //se genera el codigo del mensaje indicando que se creo la entidad pero no se
@@ -270,6 +271,8 @@ namespace MilenioApi.Action
                             //se envia a editar todo
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
+                            model = new EntidadModel();
+                            rp.data = GetEntity(model);
                             rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                         }
                         else

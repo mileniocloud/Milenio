@@ -287,7 +287,8 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    var gl = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entity && e.Estado == true && e.Especialidad_Profesional.Count() >= 1).Select(l => new ComboModel
+                    EspecialityList gl = new EspecialityList();
+                    gl.specialities = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entity && e.Estado == true && e.Especialidad_Profesional.Count() >= 1).Select(l => new ComboModel
                     {
                         id = l.Id_Especialidad,
                         value = l.Especialidad.Nombre
@@ -311,7 +312,8 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    var gl = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new BasicList
+                    ProfetionalSpecialtyList gl = new ProfetionalSpecialtyList();
+                    gl.profetionalspecialty = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new BasicList
                     {
                         id = l.Id_Usuario.ToString(),
                         value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido,

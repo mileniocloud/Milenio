@@ -451,6 +451,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PobladoModel.cs" />
     <Compile Include="Models\ProfesionalModel.cs" />
+    <Compile Include="Models\ProfetionalSpecialtyList.cs" />
     <Compile Include="Models\ProfetionalTypeList.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\RolList.cs" />

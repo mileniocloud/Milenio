@@ -134,13 +134,12 @@ namespace MilenioApi.Controllers
         // <remarks>
         // </remarks>
         // <returns>Regresa una lista de Id - Value con las especialidades de una entidad </returns>
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         [Route("GetEspecialityListByEntity")]
-        public HttpResponseMessage GetEspecialityListByEntity()
+        public HttpResponseMessage GetEspecialityListByEntity(Basic t)
         {
             aGenericLists s = new aGenericLists();
-            Basic t = new Basic();
             return ut.ReturnResponse(s.GetEspecialityListByEntity(t));
         }
     }

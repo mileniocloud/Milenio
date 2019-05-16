@@ -280,6 +280,52 @@ namespace MilenioApi.Action
                 throw;
             }
         }
+        public object GetEspecialityListByEntity(Guid entity)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    var gl = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entity && e.Estado == true && e.Especialidad_Profesional.Count() >= 1).Select(l => new ComboModel
+                    {
+                        id = l.Id_Especialidad,
+                        value = l.Especialidad.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        public object GetProfessionalListByEntity(Guid entity)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    var gl = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new BasicList
+                    {
+                        id = l.Id_Usuario.ToString(),
+                        value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido,
+                        keylink = l.Id_Especialidad.ToString()
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public object GetListsEntityForm(Basic model)
         {
@@ -311,6 +357,34 @@ namespace MilenioApi.Action
             }
         }
 
+        public object GetListsSheduleForm(Basic model)
+        {
+
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                    listas.Add(gl.GetEspecialityListByEntity(entidad));
+                    listas.Add(gl.GetProfessionalListByEntity(entidad));
+                    
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
 
         public object GetListsUserForm(Basic model)
         {

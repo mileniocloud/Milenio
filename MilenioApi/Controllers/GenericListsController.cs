@@ -94,7 +94,21 @@ namespace MilenioApi.Controllers
             Basic t = new Basic();
             return ut.ReturnResponse(s.GetListsEntityForm(t));
         }
-
+        // <summary>
+        // Metodo para consultar lo basico del formulario de agenda
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa varias listas con la informacion necesaria para el formulario de agenda </returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsSheduleForm")]
+        public HttpResponseMessage GetListsSheduleForm()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsSheduleForm(t));
+        }
 
         // <summary>
         // Metodo para consultar los doctores de una entidad

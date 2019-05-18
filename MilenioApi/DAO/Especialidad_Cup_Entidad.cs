@@ -38,6 +38,10 @@ public partial class Especialidad_Cup_Entidad
 
     public virtual Cups Cups { get; set; }
 
+    public virtual Entidad Entidad { get; set; }
+
+    public virtual Especialidad Especialidad { get; set; }
+
     public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
 
 }

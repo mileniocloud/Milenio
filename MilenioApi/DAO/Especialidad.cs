@@ -22,6 +22,8 @@ public partial class Especialidad
     public Especialidad()
     {
 
+        this.Especialidad_Cup_Entidad = new HashSet<Especialidad_Cup_Entidad>();
+
         this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
 
     }
@@ -34,6 +36,10 @@ public partial class Especialidad
     public string Nombre { get; set; }
 
 
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Especialidad_Cup_Entidad> Especialidad_Cup_Entidad { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

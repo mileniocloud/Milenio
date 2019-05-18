@@ -604,6 +604,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Especialidad_Cup_Entidad" Type="Self.Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Especialidad">
+          <End Role="Especialidad" Type="Self.Especialidad" Multiplicity="1" />
+          <End Role="Especialidad_Cup_Entidad" Type="Self.Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad">
+              <PropertyRef Name="Id_Especialidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
           <End Role="Especialidad_Entidad" Type="Self.Especialidad_Entidad" Multiplicity="1" />
           <End Role="Especialidad_Cup_Entidad" Type="Self.Especialidad_Cup_Entidad" Multiplicity="*" />
@@ -963,6 +987,14 @@
             <End Role="Cups" EntitySet="Cups" />
             <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Entidad" Association="Self.FK_Especialidad_Cup_Entidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Especialidad" Association="Self.FK_Especialidad_Cup_Entidad_Especialidad">
+            <End Role="Especialidad" EntitySet="Especialidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Cup_Entidad_Especialidad_Entidad" Association="Self.FK_Especialidad_Cup_Entidad_Especialidad_Entidad">
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
             <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
@@ -1146,6 +1178,10 @@
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
           </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Entidad" Association="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
+          </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Entidad_Entidad" Association="MilenioCloudModel.FK_Especialidad_Entidad_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
@@ -1169,6 +1205,10 @@
           <AssociationSet Name="FK_Rol_Usuario_Entidad_Usuario" Association="MilenioCloudModel.FK_Rol_Usuario_Entidad_Usuario">
             <End Role="Entidad_Usuario" EntitySet="Entidad_Usuario" />
             <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Especialidad_Cup_Entidad_Especialidad" Association="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad">
+            <End Role="Especialidad" EntitySet="Especialidad" />
+            <End Role="Especialidad_Cup_Entidad" EntitySet="Especialidad_Cup_Entidad" />
           </AssociationSet>
           <AssociationSet Name="FK_Especialidad_Entidad_Especialidad" Association="MilenioCloudModel.FK_Especialidad_Entidad_Especialidad">
             <End Role="Especialidad" EntitySet="Especialidad" />
@@ -1368,6 +1408,7 @@
           <Property Name="Fecha_Create" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Poblado" Relationship="MilenioCloudModel.FK_Entidad_Poblado" FromRole="Entidad" ToRole="Poblado" />
           <NavigationProperty Name="Entidad_Usuario" Relationship="MilenioCloudModel.FK_Entidad_Usuario_Entidad" FromRole="Entidad" ToRole="Entidad_Usuario" />
+          <NavigationProperty Name="Especialidad_Cup_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Entidad" FromRole="Entidad" ToRole="Especialidad_Cup_Entidad" />
           <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Entidad" FromRole="Entidad" ToRole="Especialidad_Entidad" />
           <NavigationProperty Name="Licencia" Relationship="MilenioCloudModel.FK_LEntidad" FromRole="Entidad" ToRole="Licencia" />
           <NavigationProperty Name="Rol_Vista_Entidad" Relationship="MilenioCloudModel.FK_Rol_Vista_Entidad_Entidad" FromRole="Entidad" ToRole="Rol_Vista_Entidad" />
@@ -1396,6 +1437,7 @@
           <Property Name="Id_Especialidad" Type="Guid" Nullable="false" />
           <Property Name="Codigo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Especialidad_Cup_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad" FromRole="Especialidad" ToRole="Especialidad_Cup_Entidad" />
           <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Entidad_Especialidad" FromRole="Especialidad" ToRole="Especialidad_Entidad" />
         </EntityType>
         <EntityType Name="Especialidad_Cup_Entidad">
@@ -1413,6 +1455,8 @@
           <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
           <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Cups" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Cups" FromRole="Especialidad_Cup_Entidad" ToRole="Cups" />
+          <NavigationProperty Name="Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Entidad" FromRole="Especialidad_Cup_Entidad" ToRole="Entidad" />
+          <NavigationProperty Name="Especialidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad" FromRole="Especialidad_Cup_Entidad" ToRole="Especialidad" />
           <NavigationProperty Name="Especialidad_Entidad" Relationship="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Especialidad_Entidad" FromRole="Especialidad_Cup_Entidad" ToRole="Especialidad_Entidad" />
         </EntityType>
         <EntityType Name="Especialidad_Entidad">
@@ -1892,6 +1936,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Entidad">
+          <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Cup_Entidad" Role="Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Entidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Especialidad_Entidad_Entidad">
           <End Type="MilenioCloudModel.Entidad" Role="Entidad" Multiplicity="1" />
           <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="*" />
@@ -1967,6 +2023,18 @@
             <Dependent Role="Rol_Usuario">
               <PropertyRef Name="Id_Entidad" />
               <PropertyRef Name="Id_Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Especialidad_Cup_Entidad_Especialidad">
+          <End Type="MilenioCloudModel.Especialidad" Role="Especialidad" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Especialidad_Cup_Entidad" Role="Especialidad_Cup_Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especialidad">
+              <PropertyRef Name="Id_Especialidad" />
+            </Principal>
+            <Dependent Role="Especialidad_Cup_Entidad">
+              <PropertyRef Name="Id_Especialidad" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

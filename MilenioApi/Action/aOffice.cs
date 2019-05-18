@@ -34,17 +34,15 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
                         ////
-
-                        //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
-                        //Y SE COPIA AL OBJETO USER
-                        Consultorio cons = new Consultorio();
-
-                        //
+                     
                         //VALIDAMOS SI EL CONSULTORIO YA EXISTE
                         Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
 
                         if (c == null)
                         {
+                            //AQUI SE TOMA EL OBJETO ENVIADO DESDE EL FRONT
+                            //Y SE COPIA AL OBJETO CONSULTORIO
+                            Consultorio cons = new Consultorio();
                             Copier.CopyPropertiesTo(model, cons);
                             Guid id_Consultorio = Guid.NewGuid();
                             cons.Id_Consultorio = id_Consultorio;

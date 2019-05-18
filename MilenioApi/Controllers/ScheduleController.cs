@@ -158,8 +158,7 @@ namespace MilenioApi.Controllers
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost]        
         [Route("GetAppointment")]
         public HttpResponseMessage GetAppointment(AppointmentModel t)
         {

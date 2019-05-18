@@ -241,7 +241,7 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     //EspecialityList gl = new EspecialityList();
-                     var gl = ent.Especialidad.Select(l => new ComboModel
+                    var gl = ent.Especialidad.Select(l => new ComboModel
                     {
                         id = l.Id_Especialidad,
                         value = l.Nombre
@@ -265,19 +265,20 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     Guid entity = Guid.Parse(model.id);
-                    var gl = ent.Especialidad_Entidad.Where(e=> e.Id_Entidad == entity && e.Estado == true).Select(l => new ComboModel
+                    EspecialityList esp = new EspecialityList();
+                    esp.specialities = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new ComboModel
                     {
                         id = l.Id_Especialidad,
                         value = l.Especialidad.Nombre
 
                     }).OrderBy(o => o.value).ToList();
 
-                    return gl;
+                    return esp;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
         public object GetEspecialityListByEntity(Guid entity)
@@ -374,7 +375,7 @@ namespace MilenioApi.Action
 
                     listas.Add(gl.GetEspecialityListByEntity(entidad));
                     listas.Add(gl.GetProfessionalListByEntity(entidad));
-                    
+
 
                     rp.data = listas;
                     //retorna un response, con el campo data lleno con la respuesta.               

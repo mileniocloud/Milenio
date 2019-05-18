@@ -561,8 +561,8 @@ namespace MilenioApi.Action
             return rp;
         }
         #endregion
-        
-        #region citas // sale a pruebas
+
+        #region Disponibilidad // sale a pruebas
 
         public object GetAppointment(AppointmentModel model)
         {
@@ -578,13 +578,14 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
-                        List<Detalle_Agenda> DAA = ent.Detalle_Agenda.ToList();
-
                         List<Detalle_Agenda> lista = (from e in ent.Detalle_Agenda
-                                                      where 
+                                                      from c in e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Consultorio_Especialidad
+                                                      where
                                                       e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad == model.Id_Especialidad
-                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Estado == true
                                                       && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
+                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Estado == true
+                                                      && c.Consultorio.Estado == true
+                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Profesional.Estado == true
                                                       && e.Asignada == false
                                                       && e.Fecha >= DateTime.Today
                                                       && e.Fecha.Month == model.Mes
@@ -594,12 +595,15 @@ namespace MilenioApi.Action
                         foreach (var i in lista.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, g.Horario_Agenda.Agenda_Profesional.Id_Especialidad }))
                         {
                             CalendarModel cm = new CalendarModel();
-                            cm.fecha = i.Key.Fecha;
-                            cm.start = i.Key.Hora_Desde.ToString("HH:mm");
-                            cm.end = i.Key.Hora_Hasta.ToString("HH:mm");
+                            cm.title = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Desde.ToString("HH:mm");
+                            //cm.fecha = i.Key.Fecha;
+                            cm.start = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Desde.ToString("HH:mm");
+                            cm.end = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Hasta.ToString("HH:mm");
                             cm.draggable = "false";
-                            cm.resizable = "beforeStart = 'true', afterEnd = 'true'";
-                            cm.color = "primary = '#ad2121', secondary = '#FAE3E3'";
+                            cm.resizable.afterEnd = "true";
+                            cm.resizable.beforeStart = "true";
+                            cm.color.primary = "#ad2121";
+                            cm.color.secondary = "#FAE3E3";
                             cm.profetional = lista.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
                                 .Select(u => new ComboModel
                                 {
@@ -610,7 +614,48 @@ namespace MilenioApi.Action
                             lcm.Add(cm);
                         }
 
-                        rep.data = lcm;
+                        rep.data = lcm.OrderBy(t => t.start);
+                        return rep;
+                    }
+                    else
+                    {
+                        //fallo campos requeridos
+                        return autil.MensajeRetorno(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Citas
+
+        public object TakeAppointment(AppointmentModel model)
+        {
+            Response rep = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    Guid entidad = model.id;
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
+                    {
+                        Guid idcup = ent.Especialidad_Cup_Entidad.Where(g => g.Id_Especialidad == model.Id_Especialidad && g.Id_Entidad == model.Id_Entidad && g.Cups.Codigo == model.Codigo_Cup).Select(t => t.Id_Cups).SingleOrDefault();
+
+                        Cita c = new Cita();
+                        c.Id_Cita = Guid.NewGuid();
+                        c.Id_Entidad = model.Id_Entidad;
+                        c.Id_Especialidad = model.Id_Especialidad;
+                        c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
+                        c.Id_Cup = idcup;
+
                         return rep;
                     }
                     else

@@ -37,13 +37,13 @@ namespace MilenioApi.Action
 
                 }
                 //retorna un response, con el campo data lleno con la respuesta.               
-                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
             }
 
             catch (Exception ex)
             {
                 //error general               
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
         /// <summary>
@@ -68,13 +68,13 @@ namespace MilenioApi.Action
                 }
 
                 //retorna un response, con el campo data lleno con la respuesta.
-                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
             }
 
             catch (Exception ex)
             {
                 //error general               
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -102,7 +102,7 @@ namespace MilenioApi.Action
             {
                 //error general
                 Response rp = new Response();
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -148,13 +148,13 @@ namespace MilenioApi.Action
 
                     ent.SaveChanges();
                     //se genera el codigo del mensaje de retorno exitoso
-                    return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                    return rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
 
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.OK);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.OK);
                     return rp;
                 }
             }
@@ -185,13 +185,13 @@ namespace MilenioApi.Action
                         ent.SaveChanges();
                     }
                     //se genera el codigo del mensaje de retorno exitoso
-                    return autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
 
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }

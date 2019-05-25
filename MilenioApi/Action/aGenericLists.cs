@@ -37,12 +37,12 @@ namespace MilenioApi.Action
 
                     rp.data = pb;
 
-                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
         public object GetMunicipality(Basic model)
@@ -62,12 +62,12 @@ namespace MilenioApi.Action
 
                     rp.data = pb;
 
-                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
         public object GetNeighborhood(Basic model)
@@ -87,12 +87,12 @@ namespace MilenioApi.Action
 
                     rp.data = pb;
 
-                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -140,6 +140,7 @@ namespace MilenioApi.Action
                 throw;
             }
         }
+
         public NeighborhoodList GetFullNeighborhood()
         {
             Response rp = new Response();
@@ -305,7 +306,6 @@ namespace MilenioApi.Action
             }
         }
 
-
         public object GetProfessionalListByEntity(Guid entity)
         {
             Response rp = new Response();
@@ -350,13 +350,13 @@ namespace MilenioApi.Action
 
                     rp.data = listas;
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -379,13 +379,13 @@ namespace MilenioApi.Action
 
                     rp.data = listas;
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -411,13 +411,13 @@ namespace MilenioApi.Action
 
                     rp.data = listas;
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -442,19 +442,45 @@ namespace MilenioApi.Action
 
                     rp.data = docs;
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
+        public object GetEntityByMunicipality()
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
 
+                    List<EntityByZone> en = ent.Poblado.Where(p => p.Entidad.Count() > 0)
+                                 .Select(e => new EntityByZone
+                                 {
+                                     group = e.Municipio.Nombre,
+                                     entities = e.Entidad.Select(t => new BasicList
+                                     {
+                                         id = t.Nombre,
+                                         value = t.Id_Entidad.ToString()
+                                     }).ToList()
+                                 }).ToList();
 
-
+                    return rp.data = en;
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
 
         #endregion
     }

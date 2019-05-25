@@ -84,25 +84,25 @@ namespace MilenioApi.Action
                             }
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
-                            return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //consultorio existe
-                            return rp = autil.MensajeRetorno(ref rp, 25, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.ReturnMesagge(ref rp, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
                     return rp;
                 }
             }
@@ -143,25 +143,25 @@ namespace MilenioApi.Action
 
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso
-                            rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null);
+                            rp = autil.ReturnMesagge(ref rp, 20, string.Empty, null);
                         }
                         else
                         {
                             //consultorio existe
-                            rp = autil.MensajeRetorno(ref rp, 25, string.Empty, null);
+                            rp = autil.ReturnMesagge(ref rp, 25, string.Empty, null);
                         }
                         return rp;
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel);
+                        return autil.ReturnMesagge(ref b, 33, string.Empty, null, rel);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null);
                     return rp;
                 }
             }
@@ -202,13 +202,13 @@ namespace MilenioApi.Action
                     else
                     {
                         //token invalido
-                        return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
                     }
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
                 catch (Exception ex)
                 {
-                    return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
+                    return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
                 }
             }
         }
@@ -257,13 +257,13 @@ namespace MilenioApi.Action
                     else
                     {
                         //token invalido
-                        return autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 1, string.Empty, null, HttpStatusCode.OK);
                     }
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
                 catch (Exception ex)
                 {
-                    return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
+                    return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.BadRequest);
                 }
             }
         }
@@ -333,18 +333,18 @@ namespace MilenioApi.Action
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
+                            ret = autil.ReturnMesagge(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //Retorna consultorio ya existente
-                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
+                            return ret = autil.ReturnMesagge(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
+                        ret = autil.ReturnMesagge(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
 
                     }
                     return ret;
@@ -352,7 +352,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    ret = autil.ReturnMesagge(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return ret;
                 }
             }
@@ -415,18 +415,18 @@ namespace MilenioApi.Action
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            ret = autil.MensajeRetorno(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
+                            ret = autil.ReturnMesagge(ref ret, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //Retorna consultorio no existente
-                            return ret = autil.MensajeRetorno(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
+                            return ret = autil.ReturnMesagge(ref ret, 25, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //token invalido
-                        ret = autil.MensajeRetorno(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
+                        ret = autil.ReturnMesagge(ref ret, 1, string.Empty, null, HttpStatusCode.OK);
 
                     }
                     return ret;
@@ -434,7 +434,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    ret = autil.MensajeRetorno(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    ret = autil.ReturnMesagge(ref ret, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return ret;
                 }
             }

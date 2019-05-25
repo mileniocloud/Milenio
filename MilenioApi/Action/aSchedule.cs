@@ -65,24 +65,24 @@ namespace MilenioApi.Action
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //ya existen fechas iguales creadas
-                            return rp = autil.MensajeRetorno(ref rp, 26, string.Empty, null, HttpStatusCode.OK);
+                            return rp = autil.ReturnMesagge(ref rp, 26, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -132,24 +132,24 @@ namespace MilenioApi.Action
                             ent.SaveChanges();
 
                             //se genera el codigo del mensaje de retorno exitoso
-                            return rep = autil.MensajeRetorno(ref rep, 2, string.Empty, null, HttpStatusCode.OK);
+                            return rep = autil.ReturnMesagge(ref rep, 2, string.Empty, null, HttpStatusCode.OK);
                         }
                         else
                         {
                             //ya existen fechas iguales creadas
-                            return rep = autil.MensajeRetorno(ref rep, 26, string.Empty, null, HttpStatusCode.OK);
+                            return rep = autil.ReturnMesagge(ref rep, 26, string.Empty, null, HttpStatusCode.OK);
                         }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rep = autil.MensajeRetorno(ref rep, 4, ex.Message, null);
+                    rep = autil.ReturnMesagge(ref rep, 4, ex.Message, null);
                     return rep;
                 }
             }
@@ -225,13 +225,13 @@ namespace MilenioApi.Action
                     rp.data = agenda;
 
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -304,39 +304,39 @@ namespace MilenioApi.Action
                                     ent.Horario_Agenda.Add(ha);
                                     ent.SaveChanges();
                                     //se genera el codigo del mensaje de retorno exitoso
-                                    return rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null);
+                                    return rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null);
                                 }
                                 else
                                 {
                                     //fechas iguales
-                                    rp = autil.MensajeRetorno(ref rp, 40, string.Empty, null);
+                                    rp = autil.ReturnMesagge(ref rp, 40, string.Empty, null);
                                     return rp;
                                 }
                             }
                             else
                             {
                                 //se avisa que la cantidad de consultas disponible no coinciden
-                                rp = autil.MensajeRetorno(ref rp, 38, string.Empty, null, HttpStatusCode.OK);
+                                rp = autil.ReturnMesagge(ref rp, 38, string.Empty, null, HttpStatusCode.OK);
                                 return rp;
                             }
                         }
                         else
                         {
                             //se avisa que el consultorio no contiene esa especialidad asignada
-                            rp = autil.MensajeRetorno(ref rp, 39, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 39, string.Empty, null, HttpStatusCode.OK);
                             return rp;
                         }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -400,40 +400,40 @@ namespace MilenioApi.Action
 
                                     ent.SaveChanges();
                                     //se genera el codigo del mensaje de retorno exitoso
-                                    return rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null);
+                                    return rp = autil.ReturnMesagge(ref rp, 20, string.Empty, null);
                                 }
                                 else
                                 {
                                     //fechas iguales
-                                    rp = autil.MensajeRetorno(ref rp, 40, string.Empty, null);
+                                    rp = autil.ReturnMesagge(ref rp, 40, string.Empty, null);
                                     return rp;
                                 }
                             }
                             else
                             {
                                 //se avisa que la cantidad de consultas disponible no coinciden
-                                rp = autil.MensajeRetorno(ref rp, 38, string.Empty, null, HttpStatusCode.OK);
+                                rp = autil.ReturnMesagge(ref rp, 38, string.Empty, null, HttpStatusCode.OK);
                                 return rp;
                             }
                         }
                         else
                         {
                             //se avisa que el consultorio no contiene esa especialidad asignada
-                            rp = autil.MensajeRetorno(ref rp, 39, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 39, string.Empty, null, HttpStatusCode.OK);
                             return rp;
                         }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -533,7 +533,7 @@ namespace MilenioApi.Action
                                         }
                                         else
                                         {
-                                            autil.GetErrorDetail(ref er, 29, "Detalle Agenda", date, hdesde, hhasta, consultorio, especialidad);
+                                            autil.GetAgendaErrorDetail(ref er, 29, "Detalle Agenda", date, hdesde, hhasta, consultorio, especialidad);
                                             //se coloca como hora desde, la hora hasta donde se termino la cita anterior.
                                             // se coloca aqui tambien por si da error, mueva las horas
                                             // hdesde = hhasta;
@@ -553,10 +553,10 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                 }
             }
-            rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null);
+            rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null);
             rp.data = er;
             return rp;
         }
@@ -578,25 +578,39 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
-                        List<Detalle_Agenda> lista = (from e in ent.Detalle_Agenda
-                                                      from c in e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Consultorio_Especialidad
-                                                      where
-                                                      e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad == model.Id_Especialidad
-                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Id_Entidad == entidad
-                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Entidad.Estado == true
-                                                      && c.Consultorio.Estado == true
-                                                      && e.Horario_Agenda.Agenda_Profesional.Especialidad_Profesional.Estado == true
-                                                      && e.Asignada == false
-                                                      && e.Fecha >= DateTime.Today
-                                                      && e.Fecha.Month == model.Mes
-                                                      select e).ToList();
+                        //List<Consultorio_Especialidad> lce = (from ce in ent.Consultorio_Especialidad
+                        //                                      where
+                        //                                      ce.Estado == true
+                        //                                      && ce.Consultorio.Estado == true
+                        //                                      && ce.Id_Especialidad == model.Id_Especialidad
+                        //                                      && ce.Id_Entidad == entidad
+                        //                                      select ce).ToList();
+
+
+                        List<Detalle_Agenda> ldet = (from ap in ent.Agenda_Profesional
+                                                     from ha in ap.Horario_Agenda
+                                                     from da in ha.Detalle_Agenda
+                                                     join ce in ent.Consultorio_Especialidad
+                                                     on new { ap.Id_Especialidad, ap.Id_Entidad }
+                                                     equals new { ce.Id_Especialidad, ce.Id_Entidad }
+                                                     where
+                                                     ap.Estado == true
+                                                     && ap.Id_Entidad == entidad
+                                                     && ha.Estado == true
+                                                     && da.Asignada == false
+                                                     && da.Fecha >= DateTime.Today
+                                                     && da.Fecha.Month == model.Mes
+                                                     && ap.Especialidad_Entidad.Estado == true
+                                                     && ce.Consultorio.Estado == true
+                                                     && ce.Estado == true
+                                                     select da).OrderBy(d => d.Hora_Desde).ToList();                       
 
                         List<CalendarModel> lcm = new List<CalendarModel>();
-                        foreach (var i in lista.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, g.Horario_Agenda.Agenda_Profesional.Id_Especialidad }))
+                        foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, g.Horario_Agenda.Agenda_Profesional.Id_Especialidad }))
                         {
                             CalendarModel cm = new CalendarModel();
-                            cm.title = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Desde.ToString("HH:mm");
-                            //cm.fecha = i.Key.Fecha;
+                            cm.title = i.Key.Fecha.ToString("dd/MM/yyyy") + " " + i.Key.Hora_Desde.ToString("HH:mm");
+                            cm.fecha = i.Key.Fecha.ToString("dd/MM/yyyy");
                             cm.start = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Desde.ToString("HH:mm");
                             cm.end = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Hasta.ToString("HH:mm");
                             cm.draggable = "false";
@@ -604,35 +618,48 @@ namespace MilenioApi.Action
                             cm.resizable.beforeStart = "true";
                             cm.color.primary = "#ad2121";
                             cm.color.secondary = "#FAE3E3";
-                            cm.profetional = lista.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
+                            cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
                                 .Select(u => new ComboModel
                                 {
-                                    id = u.Horario_Agenda.Agenda_Profesional.Usuario.Id_Usuario,
+                                    id = u.Id_Detalle_Agenda,
                                     value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
                                 }).ToList();
 
                             lcm.Add(cm);
                         }
 
-                        rep.data = lcm.OrderBy(t => t.start);
-                        return rep;
+                        lcm = lcm.OrderBy(t => t.start).ToList();
+                        if (lcm.Count() != 0)
+                        {
+                            //si tiene agenda e infrorma los resultados
+                            rep.data = lcm;
+                            autil.ReturnMesagge(ref rep, 41, string.Empty, null, rel, HttpStatusCode.OK);
+                            List<string> list = new List<string>();
+                            list.Add(lcm[0].fecha);
+                            rep.message = autil.ReplaceCustomMesaggeText(list, rep.message);
+                            return rep;
+                        }
+                        else
+                        {
+                            //informa que no hay disponibilidad
+                            return autil.ReturnMesagge(ref rep, 42, string.Empty, null, rel, HttpStatusCode.OK);
+                        }
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw ex;
                 }
             }
         }
 
         #endregion
-
 
         #region Citas
 
@@ -661,7 +688,7 @@ namespace MilenioApi.Action
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
 
                 }

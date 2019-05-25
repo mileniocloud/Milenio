@@ -18,15 +18,7 @@ namespace MilenioApi.Action
 {
     public class aUtilities
     {
-        public Response MensajeRetorno(ref GenericError ge)
-        {
-            Response ret = new Response();
-            ret.status = HttpStatusCode.InternalServerError;
-            ret.response_code = ge.Codigo;
-            ret.message = ge.Message;
-            return ret;
-        }
-        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
+        public Response ReturnMesagge(ref Response ret, int idmensje, string custom, Guid? id, HttpStatusCode status = HttpStatusCode.OK)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
@@ -41,7 +33,7 @@ namespace MilenioApi.Action
 
             return ret;
         }
-        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, string rute, HttpStatusCode status = HttpStatusCode.OK)
+        public Response ReturnMesagge(ref Response ret, int idmensje, string custom, Guid? id, string rute, HttpStatusCode status = HttpStatusCode.OK)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
@@ -57,7 +49,17 @@ namespace MilenioApi.Action
 
             return ret;
         }
-        public Response MensajeRetorno(ref Response ret, int idmensje, string custom, Guid? id, List<ErrorFields> el, HttpStatusCode status = HttpStatusCode.OK)
+        /// <summary>
+        /// Se usa para indicar los errores de validacion de un objeto
+        /// </summary>
+        /// <param name="ret">una referencia del objeto que se llenara</param>
+        /// <param name="idmensje">id del mensaje que se consultara en la tabla de generic error</param>
+        /// <param name="custom">un mensaje customisado para mostrar</param>
+        /// <param name="id">no se usa</param>
+        /// <param name="el">lista de errores de validacion</param>
+        /// <param name="status">indica el estado de la transaccion</param>
+        /// <returns></returns>
+        public Response ReturnMesagge(ref Response ret, int idmensje, string custom, Guid? id, List<ErrorFields> el, HttpStatusCode status = HttpStatusCode.OK)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
@@ -74,8 +76,22 @@ namespace MilenioApi.Action
 
             return ret;
         }
+        /// <summary>
+        /// este metodo trae el mensaje de error de la lista.
+        /// </summary>
+        /// <param name="idmensje">el id del mensaje de error de la tabla generic error</param>
+        /// <returns></returns>
+        public string GetErrorMensaje(int idmensje)
+        {
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                GenericError ge = (from g in ent.GenericError
+                                   where g.codigo_id == idmensje
+                                   select g).SingleOrDefault();
 
-
+                return ge.Message;
+            }
+        }
 
         public string Sha(string pass)
         {
@@ -91,7 +107,6 @@ namespace MilenioApi.Action
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
-
         public HttpResponseMessage ReturnResponse(object o)
         {
             HttpResponseMessage httpResponseMessage = null;
@@ -218,7 +233,7 @@ namespace MilenioApi.Action
             }
         }
 
-        public void GetErrorDetail(ref List<ErrorFields> err, int idmensje, string proceso, DateTime fecha, DateTime horadesde, DateTime horahasta, string consultorio, string especialidad)
+        public void GetAgendaErrorDetail(ref List<ErrorFields> err, int idmensje, string proceso, DateTime fecha, DateTime horadesde, DateTime horahasta, string consultorio, string especialidad)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
@@ -233,6 +248,19 @@ namespace MilenioApi.Action
                 ef.message = mensaje;
                 err.Add(ef);
             }
+        }
+
+
+        public string ReplaceCustomMesaggeText(List<string> list, string custom)
+        {
+            int g = 0;
+            foreach (var i in list)
+            {
+                string change = "{" + g + "}";
+                custom = custom.Replace(change, i);
+                g = g++;
+            }
+            return custom;
         }
     }
 }

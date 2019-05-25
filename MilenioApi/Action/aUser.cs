@@ -131,44 +131,44 @@ namespace MilenioApi.Action
                                         model = new UserModel();
                                         rp.data = GetUser(model);
                                         //se genera el codigo del mensaje de retorno exitoso
-                                        rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                                        rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                                     }
                                     else
                                     {
                                         //Registro profesional existe
-                                        return rp = autil.MensajeRetorno(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
+                                        return rp = autil.ReturnMesagge(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
                                     }
                                 }
                                 else
                                 {
                                     //Email existe
-                                    return rp = autil.MensajeRetorno(ref rp, 6, string.Empty, null, HttpStatusCode.OK);
+                                    return rp = autil.ReturnMesagge(ref rp, 6, string.Empty, null, HttpStatusCode.OK);
                                 }
                             }
                             else
                             {
                                 //Cedula existe
-                                return rp = autil.MensajeRetorno(ref rp, 5, string.Empty, null, HttpStatusCode.OK);
+                                return rp = autil.ReturnMesagge(ref rp, 5, string.Empty, null, HttpStatusCode.OK);
                             }
                         }
                         else
                         {
                             //usuario ya existe
-                            rp = autil.MensajeRetorno(ref rp, 7, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 7, string.Empty, null, HttpStatusCode.OK);
                         }
                         return rp;
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref rp, 33, string.Empty, null, rel, HttpStatusCode.OK);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, pasos, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, pasos, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -247,38 +247,38 @@ namespace MilenioApi.Action
 
                                     model = new UserModel();
                                     rp.data = GetUser(model);
-                                    rp = autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
+                                    rp = autil.ReturnMesagge(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                                 }
                                 else
                                 {
                                     ///Registro profesional existe
-                                    return rp = autil.MensajeRetorno(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
+                                    return rp = autil.ReturnMesagge(ref rp, 3, string.Empty, null, HttpStatusCode.OK);
                                 }
                             }
                             else
                             {
                                 ///Email existe
-                                return rp = autil.MensajeRetorno(ref rp, 6, string.Empty, null, HttpStatusCode.OK);
+                                return rp = autil.ReturnMesagge(ref rp, 6, string.Empty, null, HttpStatusCode.OK);
                             }
                         }
                         else
                         {
                             //usuario ya existe
-                            rp = autil.MensajeRetorno(ref rp, 7, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 7, string.Empty, null, HttpStatusCode.OK);
                         }
                         return rp;
                     }
                     else
                     {
                         //fallo campos requeridos
-                        return autil.MensajeRetorno(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                        return autil.ReturnMesagge(ref b, 33, string.Empty, null, rel, HttpStatusCode.OK);
 
                     }
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -301,15 +301,15 @@ namespace MilenioApi.Action
                         //La cedula si existe
                         if (us.Where(r => r.Id_Entidad == entidad).Count() != 0)
                             //Cedula existe en esta entidad
-                            rp = autil.MensajeRetorno(ref rp, 22, string.Empty, null, HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 22, string.Empty, null, HttpStatusCode.OK);
                         else
                             //Cedula existe en otra entidad
-                            rp = autil.MensajeRetorno(ref rp, 23, string.Empty, null, @"api/User/CreateEntityUser", HttpStatusCode.OK);
+                            rp = autil.ReturnMesagge(ref rp, 23, string.Empty, null, @"api/User/CreateEntityUser", HttpStatusCode.OK);
                     }
                     else
                     {
                         ///Cedula NO existe                            
-                        rp = autil.MensajeRetorno(ref rp, 24, string.Empty, null, HttpStatusCode.OK);
+                        rp = autil.ReturnMesagge(ref rp, 24, string.Empty, null, HttpStatusCode.OK);
                     }
                     return rp;
 
@@ -317,7 +317,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -351,7 +351,7 @@ namespace MilenioApi.Action
                         ent.SaveChanges();
 
                         //Exitoso
-                        rp = autil.MensajeRetorno(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
+                        rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null, HttpStatusCode.OK);
                     }
                     return rp;
 
@@ -359,7 +359,7 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                     return rp;
                 }
             }
@@ -425,14 +425,14 @@ namespace MilenioApi.Action
                         }
                     }
 
-                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
 
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -546,14 +546,14 @@ namespace MilenioApi.Action
                     rp.data = rl;
 
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
 
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -620,14 +620,14 @@ namespace MilenioApi.Action
                     rp.data = rl;
 
                     //retorna un response, con el campo data lleno con la respuesta.               
-                    return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
 
                 }
             }
             catch (Exception ex)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -691,12 +691,12 @@ namespace MilenioApi.Action
                         }
                     }
 
-                    return autil.MensajeRetorno(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 9, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception)
             {
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
 
@@ -725,13 +725,13 @@ namespace MilenioApi.Action
 
                     ent.SaveChanges();
 
-                    return autil.MensajeRetorno(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 20, string.Empty, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception)
             {
                 //error general
-                return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
         #endregion

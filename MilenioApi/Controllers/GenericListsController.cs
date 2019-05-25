@@ -141,5 +141,19 @@ namespace MilenioApi.Controllers
             aGenericLists s = new aGenericLists();
             return ut.ReturnResponse(s.GetEspecialityListByEntity(t));
         }
+
+        // <summary>
+        // Metodo para consultar las especialidades agrupadas por municipio
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa una lista agrupada de entidades</returns>
+        [HttpPost]
+        [Route("GetEntityByMunicipality")]
+        public HttpResponseMessage GetEntityByMunicipality()
+        {
+            aGenericLists s = new aGenericLists();
+            return ut.ReturnResponse(s.GetEntityByMunicipality());
+        }
     }
 }

@@ -32,6 +32,25 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:MilenioApi.Action.aUtilities.ReturnMesagge(MilenioApi.Models.Response@,System.Int32,System.String,System.Nullable{System.Guid},System.Collections.Generic.List{MilenioApi.Models.ErrorFields},System.Net.HttpStatusCode)">
+            <summary>
+            Se usa para indicar los errores de validacion de un objeto
+            </summary>
+            <param name="ret">una referencia del objeto que se llenara</param>
+            <param name="idmensje">id del mensaje que se consultara en la tabla de generic error</param>
+            <param name="custom">un mensaje customisado para mostrar</param>
+            <param name="id">no se usa</param>
+            <param name="el">lista de errores de validacion</param>
+            <param name="status">indica el estado de la transaccion</param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aUtilities.GetErrorMensaje(System.Int32)">
+            <summary>
+            este metodo trae el mensaje de error de la lista.
+            </summary>
+            <param name="idmensje">el id del mensaje de error de la tabla generic error</param>
+            <returns></returns>
+        </member>
         <member name="M:MilenioApi.Action.aUtilities.ReturnResponse(System.Object)">
             <summary>
             Metodo que convierte la respuesta en un HttpResponseMessage

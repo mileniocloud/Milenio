@@ -58,11 +58,11 @@ namespace MilenioApi.Action
                 catch (Exception ex)
                 {
                     //error general
-                    return autil.MensajeRetorno(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+                    return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
                 }
 
                 //retorna un response, con el campo data lleno con la respuesta.               
-                return autil.MensajeRetorno(ref rp, 9, null, null, HttpStatusCode.OK);
+                return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
             }
         }
 

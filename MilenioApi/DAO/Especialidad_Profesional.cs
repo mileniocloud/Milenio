@@ -18,15 +18,6 @@ using System;
 public partial class Especialidad_Profesional
 {
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Especialidad_Profesional()
-    {
-
-        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
-
-    }
-
-
     public System.Guid Id_Usuario { get; set; }
 
     public System.Guid Id_Especialidad { get; set; }
@@ -44,10 +35,6 @@ public partial class Especialidad_Profesional
     public System.DateTime Fecha_Update { get; set; }
 
 
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
 
     public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
 

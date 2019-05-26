@@ -55,6 +55,8 @@ public partial class Horario_Agenda
 
     public virtual Agenda_Profesional Agenda_Profesional { get; set; }
 
+    public virtual Consultorio Consultorio { get; set; }
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Detalle_Agenda> Detalle_Agenda { get; set; }

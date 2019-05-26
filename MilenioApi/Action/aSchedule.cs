@@ -215,7 +215,7 @@ namespace MilenioApi.Action
                         idspeciality = a.Id_Especialidad,
                         idprofetional = a.Id_Profesional,
                         status = a.Estado,
-                        speciality = a.Especialidad_Entidad.Especialidad.Nombre,
+                       // speciality = a.Especialidad_Entidad.Especialidad.Nombre,
                         profetional = a.Usuario.Nombres + " " + a.Usuario.Primer_Apellido + " " + a.Usuario.Segundo_Apellido
 
                     }).ToList();
@@ -475,9 +475,9 @@ namespace MilenioApi.Action
                         double cant_consultas = td.TotalMinutes / ha.Duracion;
 
                         //consultamos el nombre del consultorio y de la especialidad
-                        string especialidad = ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Nombre;
+                        string especialidad = "";//ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Nombre;
                         string consultorio = ent.Consultorio.Where(t => t.Id_Consultorio == ha.Id_Consultorio).Select(s => s.Nombre).SingleOrDefault();
-                        Guid id_especialidad = ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad;
+                        Guid id_especialidad = Guid.Empty;//ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad;
 
                         //lista donde se almacenan los errores
                         List<DateTime> fechas = new List<DateTime>();
@@ -600,7 +600,7 @@ namespace MilenioApi.Action
                                                      && da.Asignada == false
                                                      && da.Fecha >= DateTime.Today
                                                      && da.Fecha.Month == model.Mes
-                                                     && ap.Especialidad_Entidad.Estado == true
+                                                     //&& ap.Especialidad_Entidad.Estado == true
                                                      && ce.Consultorio.Estado == true
                                                      && ce.Estado == true
                                                      select da).OrderBy(d => d.Hora_Desde).ToList();                       

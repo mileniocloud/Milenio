@@ -24,6 +24,8 @@ public partial class Agenda_Profesional
 
         this.Horario_Agenda = new HashSet<Horario_Agenda>();
 
+        this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
+
     }
 
 
@@ -51,8 +53,6 @@ public partial class Agenda_Profesional
 
 
 
-    public virtual Especialidad_Entidad Especialidad_Entidad { get; set; }
-
     public virtual Especialidad_Profesional Especialidad_Profesional { get; set; }
 
     public virtual Usuario Usuario { get; set; }
@@ -60,6 +60,10 @@ public partial class Agenda_Profesional
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Horario_Agenda> Horario_Agenda { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Especialidad_Entidad> Especialidad_Entidad { get; set; }
 
 }
 

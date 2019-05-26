@@ -24,6 +24,8 @@ public partial class Consultorio
 
         this.Consultorio_Especialidad = new HashSet<Consultorio_Especialidad>();
 
+        this.Horario_Agenda = new HashSet<Horario_Agenda>();
+
     }
 
 
@@ -50,6 +52,10 @@ public partial class Consultorio
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Horario_Agenda> Horario_Agenda { get; set; }
 
 }
 

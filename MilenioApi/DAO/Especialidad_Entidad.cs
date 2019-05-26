@@ -22,13 +22,13 @@ public partial class Especialidad_Entidad
     public Especialidad_Entidad()
     {
 
-        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
-
         this.Consultorio_Especialidad = new HashSet<Consultorio_Especialidad>();
 
         this.Especialidad_Cup_Entidad = new HashSet<Especialidad_Cup_Entidad>();
 
         this.Especialidad_Profesional = new HashSet<Especialidad_Profesional>();
+
+        this.Agenda_Profesional = new HashSet<Agenda_Profesional>();
 
     }
 
@@ -51,10 +51,6 @@ public partial class Especialidad_Entidad
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
     public virtual ICollection<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
 
     public virtual Entidad Entidad { get; set; }
@@ -68,6 +64,10 @@ public partial class Especialidad_Entidad
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Especialidad_Profesional> Especialidad_Profesional { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Agenda_Profesional> Agenda_Profesional { get; set; }
 
 }
 

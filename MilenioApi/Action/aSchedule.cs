@@ -40,7 +40,7 @@ namespace MilenioApi.Action
                                                 f.Id_Profesional == model.Id_Profesional
                                                 && f.Id_Entidad == entidad
                                                 && f.Estado == true
-                                               // && f.Id_Especialidad == model.Id_Especialidad
+                                                // && f.Id_Especialidad == model.Id_Especialidad
                                                 && (
                                                 (f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde)
                                                 || (f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta)
@@ -52,7 +52,7 @@ namespace MilenioApi.Action
                             ap.Id_Agenda_Profesional = Guid.NewGuid();
                             ap.Fecha_Desde = fecha_desde;
                             ap.Fecha_Hasta = fecha_hasta;
-                          //  ap.Id_Especialidad = model.Id_Especialidad;
+                            //  ap.Id_Especialidad = model.Id_Especialidad;
                             ap.Id_Profesional = model.Id_Profesional;
                             ap.Id_Entidad = entidad;
                             ap.Estado = true;
@@ -111,7 +111,7 @@ namespace MilenioApi.Action
                                                 && f.Id_Agenda_Profesional != model.Id_Agenda_Profesional
                                                 && f.Id_Entidad == entidad
                                                 && f.Estado == true
-                                              //  && f.Id_Especialidad == model.Id_Especialidad
+                                                //  && f.Id_Especialidad == model.Id_Especialidad
                                                 && (
                                                 (f.Fecha_Desde <= fecha_desde && f.Fecha_Hasta >= fecha_desde)
                                                 || (f.Fecha_Desde <= fecha_hasta && f.Fecha_Hasta >= fecha_hasta)
@@ -122,7 +122,7 @@ namespace MilenioApi.Action
                             Agenda_Profesional ap = ent.Agenda_Profesional.Where(t => t.Id_Agenda_Profesional == model.Id_Agenda_Profesional).Single();
                             ap.Fecha_Desde = fecha_desde;
                             ap.Fecha_Hasta = fecha_hasta;
-                           // ap.Id_Especialidad = model.Id_Especialidad;
+                            // ap.Id_Especialidad = model.Id_Especialidad;
                             ap.Id_Profesional = model.Id_Profesional;
                             ap.Id_Entidad = entidad;
                             ap.Estado = model.Estado;
@@ -212,10 +212,10 @@ namespace MilenioApi.Action
                     {
                         fromdate = a.Fecha_Desde,
                         todate = a.Fecha_Hasta,
-                       // idspeciality = a.Id_Especialidad,
+                        // idspeciality = a.Id_Especialidad,
                         idprofetional = a.Id_Profesional,
                         status = a.Estado,
-                       // speciality = a.Especialidad_Entidad.Especialidad.Nombre,
+                        // speciality = a.Especialidad_Entidad.Especialidad.Nombre,
                         profetional = a.Usuario.Nombres + " " + a.Usuario.Primer_Apellido + " " + a.Usuario.Segundo_Apellido
 
                     }).ToList();
@@ -474,10 +474,8 @@ namespace MilenioApi.Action
                         //se divide la cantidad de minutos disponibles para saber cuantas citas puede atender
                         double cant_consultas = td.TotalMinutes / ha.Duracion;
 
-                        //consultamos el nombre del consultorio y de la especialidad
-                        string especialidad = "";//ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Nombre;
-                        string consultorio = ent.Consultorio.Where(t => t.Id_Consultorio == ha.Id_Consultorio).Select(s => s.Nombre).SingleOrDefault();
-                        Guid id_especialidad = Guid.Empty;//ha.Agenda_Profesional.Especialidad_Entidad.Especialidad.Id_Especialidad;
+                        //consultamos el nombre del consultorio para mostrarlo en caso de errror
+                        string consultorio = ha.Consultorio.Nombre;// ent.Consultorio.Where(t => t.Id_Consultorio == ha.Id_Consultorio).Select(s => s.Nombre).SingleOrDefault();
 
                         //lista donde se almacenan los errores
                         List<DateTime> fechas = new List<DateTime>();
@@ -506,7 +504,6 @@ namespace MilenioApi.Action
                                                         d => d.Horario_Agenda.Agenda_Profesional.Id_Entidad == entidad
                                                         && d.Fecha == date
                                                         && d.Horario_Agenda.Id_Consultorio == ha.Id_Consultorio
-                                                      // && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == id_especialidad
                                                         && (
                                                         (d.Hora_Desde <= hdesde && d.Hora_Hasta >= hhasta)
                                                         || (d.Hora_Desde <= hdesde && d.Hora_Hasta >= hhasta)
@@ -533,7 +530,7 @@ namespace MilenioApi.Action
                                         }
                                         else
                                         {
-                                            autil.GetAgendaErrorDetail(ref er, 29, "Detalle Agenda", date, hdesde, hhasta, consultorio, especialidad);
+                                            autil.GetAgendaErrorDetail(ref er, 29, "Detalle Agenda", date, hdesde, hhasta, consultorio);
                                             //se coloca como hora desde, la hora hasta donde se termino la cita anterior.
                                             // se coloca aqui tambien por si da error, mueva las horas
                                             // hdesde = hhasta;
@@ -548,15 +545,20 @@ namespace MilenioApi.Action
 
                     //se coloca aqui porque si falla alguna validacion, no se guardara nada
                     if (!fallavalidacion)
+                    {
                         ent.SaveChanges();
+                        rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null);
+                    }
+                    else
+                        rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null);
+
                 }
                 catch (Exception ex)
                 {
                     //error general
-                    rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                    return rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
                 }
             }
-            rp = autil.ReturnMesagge(ref rp, 2, string.Empty, null);
             rp.data = er;
             return rp;
         }
@@ -586,14 +588,32 @@ namespace MilenioApi.Action
                         //                                      && ce.Id_Entidad == entidad
                         //                                      select ce).ToList();
 
+                        List<Detalle_Agenda> ldet22 = (from ee in ent.Especialidad_Entidad
+                                                           from ap in ee.Agenda_Profesional
+                                                           from ha in ap.Horario_Agenda
+                                                           from da in ha.Detalle_Agenda
+                                                           //join ce in ent.Consultorio_Especialidad
+                                                           //on new { ee.Id_Especialidad, ee.Id_Entidad }
+                                                           //equals new { ce.Id_Especialidad, ce.Id_Entidad }
+                                                           where
+                                                           ee.Id_Especialidad == model.Id_Especialidad
+                                                           && ee.Id_Entidad == entidad
+                                                           && ap.Estado == true
+                                                           && ha.Estado == true
+                                                           && da.Asignada == false
+                                                           && da.Fecha >= DateTime.Today
+                                                           && da.Fecha.Month == model.Mes
+                                                           && ha.Consultorio.Estado == true
+                                                           select da).ToList();
 
                         List<Detalle_Agenda> ldet = (from ap in ent.Agenda_Profesional
                                                      from ha in ap.Horario_Agenda
                                                      from da in ha.Detalle_Agenda
-                                                     //join ce in ent.Consultorio_Especialidad
-                                                     //on new { ap.Id_Especialidad, ap.Id_Entidad }
-                                                     //equals new { ce.Id_Especialidad, ce.Id_Entidad }
+                                                         //join ce in ent.Consultorio_Especialidad
+                                                         //on new { ap.Id_Especialidad, ap.Id_Entidad }
+                                                         //equals new { ce.Id_Especialidad, ce.Id_Entidad }
                                                      where
+
                                                      ap.Estado == true
                                                      && ap.Id_Entidad == entidad
                                                      && ha.Estado == true
@@ -603,7 +623,7 @@ namespace MilenioApi.Action
                                                      //&& ap.Especialidad_Entidad.Estado == true
                                                      //&& ce.Consultorio.Estado == true
                                                      //&& ce.Estado == true
-                                                     select da).OrderBy(d => d.Hora_Desde).ToList();                       
+                                                     select da).OrderBy(d => d.Hora_Desde).ToList();
 
                         List<CalendarModel> lcm = new List<CalendarModel>();
                         foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, /*g.Horario_Agenda.Agenda_Profesional.Id_Especialidad*/ }))
@@ -619,11 +639,11 @@ namespace MilenioApi.Action
                             cm.color.primary = "#ad2121";
                             cm.color.secondary = "#FAE3E3";
                             //cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
-                                //.Select(u => new ComboModel
-                                //{
-                                //    id = u.Id_Detalle_Agenda,
-                                //    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
-                                //}).ToList();
+                            //.Select(u => new ComboModel
+                            //{
+                            //    id = u.Id_Detalle_Agenda,
+                            //    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
+                            //}).ToList();
 
                             lcm.Add(cm);
                         }
@@ -660,6 +680,8 @@ namespace MilenioApi.Action
         }
 
         #endregion
+
+
 
         #region Citas
 

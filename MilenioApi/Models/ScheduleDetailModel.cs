@@ -18,6 +18,10 @@ namespace MilenioApi.Models
         [JsonProperty("idscheduleagenda")]
         public Guid Id_Horario_Agenda { get; set; }
 
+        [Display(Name = "idspeciality")]
+        [JsonProperty("idspeciality")]
+        public Guid Id_Speciality { get; set; }
+
         [Display(Name = "fromhour")]
         [JsonProperty("fromhour")]
         public DateTime Hora_Desde { get; set; }

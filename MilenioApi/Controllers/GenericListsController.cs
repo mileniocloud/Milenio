@@ -132,6 +132,7 @@ namespace MilenioApi.Controllers
         // Metodo para consultar las especialidades de una entidad
         // </summary>
         // <remarks>
+        // PARAMETRO: id [STRING] el id de la entidad 
         // </remarks>
         // <returns>Regresa una lista de Id - Value con las especialidades de una entidad </returns>
         [HttpPost]
@@ -155,5 +156,8 @@ namespace MilenioApi.Controllers
             aGenericLists s = new aGenericLists();
             return ut.ReturnResponse(s.GetEntityByMunicipality());
         }
+
+       
+        
     }
 }

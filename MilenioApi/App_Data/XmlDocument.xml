@@ -700,6 +700,15 @@
             </remarks>
             <returns>Regresa la data del consultorio consultado y una lista de las especialidades de ese consultorio</returns>
         </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.DeleteOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: idoffice [STRING]
+            </remarks>
+            <returns>Regresa info indicando que se elimino el registro o que no se pudo</returns>
+        </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
             <summary>
             Metodo para agregar una especialidad a un consultorio

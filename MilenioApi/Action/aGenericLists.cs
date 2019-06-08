@@ -460,19 +460,28 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
+                    var en = (from e in ent.Entidad
+                              select new
+                              {
+                                  grup = e.Poblado.Municipio.Nombre,
+                                  entities = new
+                                  {
+                                      id = e.Id_Entidad,
+                                      value = e.Nombre
+                                  }
+                              }).ToList();
+                    List<Object> r = new List<object>();
+                    foreach (var i in en.Select(t => t.grup).Distinct())
+                    {
+                        var t = new
+                        {
+                            group = i,
+                            entities = en.Where(y => y.grup == i).Select(s => s.entities).ToList()
+                        };
+                        r.Add(t);
+                    }
 
-                    List<EntityByZone> en = ent.Poblado.Where(p => p.Entidad.Count() > 0)
-                                 .Select(e => new EntityByZone
-                                 {
-                                     group = e.Municipio.Nombre,
-                                     entities = e.Entidad.Select(t => new BasicList
-                                     {
-                                         id = t.Nombre,
-                                         value = t.Id_Entidad.ToString()
-                                     }).ToList()
-                                 }).ToList();
-
-                    return rp.data = en;
+                    return rp.data = r;
                 }
             }
             catch (Exception ex)
@@ -480,7 +489,7 @@ namespace MilenioApi.Action
                 //error general
                 return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
-        }     
+        }
 
         #endregion
     }

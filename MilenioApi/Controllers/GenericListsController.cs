@@ -149,7 +149,7 @@ namespace MilenioApi.Controllers
         // <remarks>
         // </remarks>
         // <returns>Regresa una lista agrupada de entidades</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("GetEntityByMunicipality")]
         public HttpResponseMessage GetEntityByMunicipality()
         {

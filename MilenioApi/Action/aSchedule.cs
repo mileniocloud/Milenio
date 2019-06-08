@@ -580,53 +580,27 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
-                        //List<Consultorio_Especialidad> lce = (from ce in ent.Consultorio_Especialidad
-                        //                                      where
-                        //                                      ce.Estado == true
-                        //                                      && ce.Consultorio.Estado == true
-                        //                                      && ce.Id_Especialidad == model.Id_Especialidad
-                        //                                      && ce.Id_Entidad == entidad
-                        //                                      select ce).ToList();
+                        List<Consultorio> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O=> O.Consultorio).ToList();
 
-                        List<Detalle_Agenda> ldet22 = (from ee in ent.Especialidad_Entidad
-                                                           from ap in ee.Agenda_Profesional
-                                                           from ha in ap.Horario_Agenda
-                                                           from da in ha.Detalle_Agenda
-                                                           //join ce in ent.Consultorio_Especialidad
-                                                           //on new { ee.Id_Especialidad, ee.Id_Entidad }
-                                                           //equals new { ce.Id_Especialidad, ce.Id_Entidad }
-                                                           where
-                                                           ee.Id_Especialidad == model.Id_Especialidad
-                                                           && ee.Id_Entidad == entidad
-                                                           && ap.Estado == true
-                                                           && ha.Estado == true
-                                                           && da.Asignada == false
-                                                           && da.Fecha >= DateTime.Today
-                                                           && da.Fecha.Month == model.Mes
-                                                           && ha.Consultorio.Estado == true
-                                                           select da).ToList();
-
-                        List<Detalle_Agenda> ldet = (from ap in ent.Agenda_Profesional
+                        List<Detalle_Agenda> ldet = (from ee in ent.Especialidad_Entidad
+                                                     from ap in ee.Agenda_Profesional
                                                      from ha in ap.Horario_Agenda
                                                      from da in ha.Detalle_Agenda
-                                                         //join ce in ent.Consultorio_Especialidad
-                                                         //on new { ap.Id_Especialidad, ap.Id_Entidad }
-                                                         //equals new { ce.Id_Especialidad, ce.Id_Entidad }
                                                      where
-
-                                                     ap.Estado == true
-                                                     && ap.Id_Entidad == entidad
+                                                     ee.Id_Especialidad == model.Id_Especialidad
+                                                     && ee.Id_Entidad == entidad
+                                                     && ap.Estado == true
                                                      && ha.Estado == true
                                                      && da.Asignada == false
                                                      && da.Fecha >= DateTime.Today
                                                      && da.Fecha.Month == model.Mes
-                                                     //&& ap.Especialidad_Entidad.Estado == true
-                                                     //&& ce.Consultorio.Estado == true
-                                                     //&& ce.Estado == true
+                                                     && ha.Consultorio.Estado == true
+                                                     && ce.Contains(ha.Consultorio)
                                                      select da).OrderBy(d => d.Hora_Desde).ToList();
 
+
                         List<CalendarModel> lcm = new List<CalendarModel>();
-                        foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta, /*g.Horario_Agenda.Agenda_Profesional.Id_Especialidad*/ }))
+                        foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta }))
                         {
                             CalendarModel cm = new CalendarModel();
                             cm.title = i.Key.Fecha.ToString("dd/MM/yyyy") + " " + i.Key.Hora_Desde.ToString("HH:mm");
@@ -638,12 +612,12 @@ namespace MilenioApi.Action
                             cm.resizable.beforeStart = "true";
                             cm.color.primary = "#ad2121";
                             cm.color.secondary = "#FAE3E3";
-                            //cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta && d.Horario_Agenda.Agenda_Profesional.Id_Especialidad == i.Key.Id_Especialidad)
-                            //.Select(u => new ComboModel
-                            //{
-                            //    id = u.Id_Detalle_Agenda,
-                            //    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
-                            //}).ToList();
+                            cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
+                            .Select(u => new ComboModel
+                            {
+                                id = u.Id_Detalle_Agenda,
+                                value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
+                            }).ToList();
 
                             lcm.Add(cm);
                         }
@@ -680,8 +654,6 @@ namespace MilenioApi.Action
         }
 
         #endregion
-
-
 
         #region Citas
 

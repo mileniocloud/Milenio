@@ -29,15 +29,25 @@ public partial class Paciente
 
     public System.Guid Id_Paciente { get; set; }
 
+    public System.Guid Id_Tipo_Identificacion { get; set; }
+
+    public string Numero_Identificacion { get; set; }
+
     public string Nombres { get; set; }
 
     public string Apellidos { get; set; }
 
     public System.DateTime Fecha_Nacimiento { get; set; }
 
-    public string Tipo_Documento { get; set; }
+    public string Celular { get; set; }
 
-    public string Documento { get; set; }
+    public string Telefono { get; set; }
+
+    public string Email { get; set; }
+
+    public string Direccion { get; set; }
+
+    public bool Confirmado { get; set; }
 
 
 

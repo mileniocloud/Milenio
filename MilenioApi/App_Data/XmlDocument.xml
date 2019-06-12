@@ -562,6 +562,50 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:MilenioApi.Controllers.PatientController.ValidatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para consultar si un paciente existe, regresa null si no existe
+            </summary>
+            <remarks>
+            PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
+            PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
+            </remarks>
+            <returns>Regresa un id del paciente </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreateTemporalPatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
+            PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
+            PARAMETRO: nombres [STRING] [REQUERIDO] <br />   
+            PARAMETRO: apellidos [STRING] [REQUERIDO] <br />   
+            PARAMETRO: fechanacimiento [DATE] [REQUERIDO] <br />   
+            PARAMETRO: celular [STRING] [REQUERIDO] <br />   
+            PARAMETRO: telefono [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: direccion [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
+            PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
+            PARAMETRO: nombres [STRING] [REQUERIDO] <br />   
+            PARAMETRO: apellidos [STRING] [REQUERIDO] <br />   
+            PARAMETRO: fechanacimiento [DATE] [REQUERIDO] <br />   
+            PARAMETRO: celular [STRING] [REQUERIDO] <br />   
+            PARAMETRO: telefono [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: direccion [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.CreateAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
             <summary>
             Crea la agenda profesional para un medico, una entidad y una especialidad

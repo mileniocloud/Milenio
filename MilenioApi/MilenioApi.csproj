@@ -249,6 +249,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action\aPatient.cs" />
     <Compile Include="Action\aSchedule.cs" />
     <Compile Include="Action\aOffice.cs" />
     <Compile Include="Action\aDashboard.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\OfficeController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -433,6 +435,7 @@
     <Compile Include="Models\AppointmentModel.cs" />
     <Compile Include="Models\CalendarModel.cs" />
     <Compile Include="Models\EntityByZone.cs" />
+    <Compile Include="Models\PatientModel.cs" />
     <Compile Include="Models\ProfetionalScheduleModel.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\BasicList.cs" />

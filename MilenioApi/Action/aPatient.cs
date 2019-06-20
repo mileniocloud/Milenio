@@ -68,8 +68,7 @@ namespace MilenioApi.Action
                         return rp = autil.ReturnMesagge(ref rp, 45, string.Empty, null, HttpStatusCode.OK);
                     }
 
-                    //retorna un mensaje de exito
-                    return autil.ReturnMesagge(ref rp, 2, null, null, HttpStatusCode.OK);
+                   return this.ValidatePatient(model);
                 }
             }
             catch (Exception ex)
@@ -147,9 +146,29 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
-                    Guid? idpaciente = ent.Paciente.Where(p => p.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion && p.Numero_Identificacion == model.Numero_Identificacion).Select(u => u.Id_Paciente).SingleOrDefault();
+                    List<object> response = new List<object>();
 
-                    rp.data = idpaciente;
+                    var paciente = ent.Paciente.Where(p => p.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion && p.Numero_Identificacion == model.Numero_Identificacion)
+                                          .Select(c => new
+                                          {
+                                              idpatient = c.Id_Paciente,
+                                              typedocument = c.Id_Tipo_Identificacion,
+                                              document = c.Numero_Identificacion,
+                                              names = c.Nombres,
+                                              lastnames = c.Apellidos
+                                          }).ToList();
+                    response.Add(paciente);
+                    if (response.Count != 0)
+                    {
+                        aSchedule sh = new aSchedule();
+                        AppointmentModel am = new AppointmentModel();
+                        am.id = Guid.Parse(model.id);
+                        am.Id_Especialidad = model.Id_Especialidad;
+                        var ap = sh.GetAppointment(am);
+                        response.Add(((MilenioApi.Models.Response)ap).data);
+                    }
+
+                    rp.data = response;
 
                     //retorna un response, con el id del paciente
                     return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);

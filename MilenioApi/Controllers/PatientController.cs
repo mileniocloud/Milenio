@@ -14,11 +14,11 @@ namespace MilenioApi.Controllers
         /// Metodo para consultar si un paciente existe, regresa null si no existe
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: document [STRING] [REQUERIDO] <br />   
         /// </remarks>
         /// <returns>Regresa un id del paciente </returns>
-        [HttpGet]
+        [HttpPost]
         [Route("ValidatePatient")]
         public HttpResponseMessage ValidatePatient(PatientModel t)
         {
@@ -30,15 +30,15 @@ namespace MilenioApi.Controllers
         /// Metodo para crear pacientes
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: nombres [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: apellidos [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: fechanacimiento [DATE] [REQUERIDO] <br />   
-        /// PARAMETRO: celular [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: telefono [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: document [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: names [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+        /// PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: phone [STRING] [REQUERIDO] <br />   
         /// PARAMETRO: email [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: direccion [STRING] [REQUERIDO] <br />
+        /// PARAMETRO: address [STRING] [REQUERIDO] <br />
         /// </remarks>
         /// <returns>Regresa informacion indicando que sucedio </returns>
         [HttpPost]        
@@ -53,15 +53,15 @@ namespace MilenioApi.Controllers
         /// Metodo para crear pacientes
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: tipoidentificacion [STRING] [REQUERIDO]<br />
-        /// PARAMETRO: identificacion [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: nombres [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: apellidos [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: fechanacimiento [DATE] [REQUERIDO] <br />   
-        /// PARAMETRO: celular [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: telefono [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: identificationtype [STRING] [REQUERIDO]<br />
+        /// PARAMETRO: identification [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: names [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+        /// PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+        /// PARAMETRO: phone [STRING] [REQUERIDO] <br />   
         /// PARAMETRO: email [STRING] [REQUERIDO] <br />   
-        /// PARAMETRO: direccion [STRING] [REQUERIDO] <br />
+        /// PARAMETRO: address [STRING] [REQUERIDO] <br />
         /// </remarks>
         /// <returns>Regresa informacion indicando que sucedio </returns>
         [HttpPost]
@@ -71,6 +71,6 @@ namespace MilenioApi.Controllers
         {
             aPatient s = new aPatient();
             return ut.ReturnResponse(s.CreatePatient(t));
-        }
+        }                      
     }
 }

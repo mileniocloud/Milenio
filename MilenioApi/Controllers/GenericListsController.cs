@@ -157,7 +157,19 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetEntityByMunicipality());
         }
 
-       
-        
+        // <summary>
+        // Metodo para consultar los cups dada una entidad y una especialidad
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa una lista de cups</returns>
+        [HttpPost]
+        [Route("GetCupsByEspeciality")]
+        public HttpResponseMessage GetCupsByEspeciality(PatientModel t)
+        {
+            aGenericLists s = new aGenericLists();
+            return ut.ReturnResponse(s.GetCupsByEspeciality(t));
+        }
+
     }
 }

@@ -294,7 +294,7 @@
             <PropertyRef Name="Id_Paciente" />
           </Key>
           <Property Name="Id_Paciente" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Id_Tipo_Identificacion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Tipo_Identificacion" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="Numero_Identificacion" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="Nombres" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Apellidos" Type="nvarchar" MaxLength="100" Nullable="false" />
@@ -918,12 +918,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="Validate_Create_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="login" Type="nvarchar" Mode="In" />
-          <Parameter Name="identificacion" Type="nvarchar" Mode="In" />
-          <Parameter Name="email" Type="nvarchar" Mode="In" />
-          <Parameter Name="registroprofesional" Type="nvarchar" Mode="In" />
-        </Function>
         <EntityContainer Name="MilenioCloudModelStoreContainer">
           <EntitySet Name="Actividad_Economica" EntityType="Self.Actividad_Economica" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Agenda_Especialidad" EntityType="Self.Agenda_Especialidad" Schema="dbo" store:Type="Tables" />
@@ -1613,7 +1607,7 @@
             <PropertyRef Name="Id_Paciente" />
           </Key>
           <Property Name="Id_Paciente" Type="Guid" Nullable="false" />
-          <Property Name="Id_Tipo_Identificacion" Type="Guid" Nullable="false" />
+          <Property Name="Id_Tipo_Identificacion" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Numero_Identificacion" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Nombres" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Apellidos" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -2217,7 +2211,6 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="MilenioCloudModelStoreContainer" CdmEntityContainer="MilenioCloudEntities">
-          <FunctionImportMapping FunctionImportName="Validate_Create_User" FunctionName="MilenioCloudModel.Store.Validate_Create_User" />
           <EntitySetMapping Name="Actividad_Economica">
             <EntityTypeMapping TypeName="MilenioCloudModel.Actividad_Economica">
               <MappingFragment StoreEntitySet="Actividad_Economica">
@@ -2701,7 +2694,7 @@
               <ScalarProperty Name="Id_Menu" ColumnName="Id_Menu" />
             </EndProperty>
           </AssociationSetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->

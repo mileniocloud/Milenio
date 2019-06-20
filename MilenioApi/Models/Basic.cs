@@ -8,6 +8,9 @@ namespace MilenioApi.Models
     public class Basic
     {
         public string id { get; set; }
+
+        [Display(Name = "name")]
+        [JsonProperty("name")]
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
 

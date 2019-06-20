@@ -7,49 +7,53 @@ namespace MilenioApi.Models
 {
     public class PatientModel: Basic
     {
-        [Display(Name = "idpaciente")]
-        [JsonProperty("idpaciente")]
+        [Display(Name = "idpatient")]
+        [JsonProperty("idpatient")]
         public Guid Id_Paciente { get; set; }
 
-        [Display(Name = "tipoidentificacion")]
-        [JsonProperty("tipoidentificacion")]
-        public Guid Id_Tipo_Identificacion { get; set; }
+        [Display(Name = "typedocument")]
+        [JsonProperty("typedocument")]
+        public string Id_Tipo_Identificacion { get; set; }
 
-        [Display(Name = "identificacion")]
-        [JsonProperty("identificacion")]
+        [Display(Name = "document")]
+        [JsonProperty("document")]
         public string Numero_Identificacion { get; set; }
 
-        [Display(Name = "nombres")]
-        [JsonProperty("nombres")]
+        [Display(Name = "names")]
+        [JsonProperty("names")]
         public string Nombres { get; set; }
 
-        [Display(Name = "apellidos")]
-        [JsonProperty("apellidos")]
+        [Display(Name = "lastnames")]
+        [JsonProperty("lastnames")]
         public string Apellidos { get; set; }
 
-        [Display(Name = "fechanacimiento")]
-        [JsonProperty("fechanacimiento")]
+        [Display(Name = "birthday")]
+        [JsonProperty("birthday")]
         public DateTime Fecha_Nacimiento { get; set; }
 
-        [Display(Name = "celular")]
-        [JsonProperty("celular")]
+        [Display(Name = "cell")]
+        [JsonProperty("cell")]
         public string Celular { get; set; }
 
-        [Display(Name = "telefono")]
-        [JsonProperty("telefono")]
+        [Display(Name = "phone")]
+        [JsonProperty("phone")]
         public string Telefono { get; set; }
 
         [Display(Name = "email")]
         [JsonProperty("email")]
         public string Email { get; set; }
 
-        [Display(Name = "direccion")]
-        [JsonProperty("direccion")]
+        [Display(Name = "address")]
+        [JsonProperty("address")]
         public string Direccion { get; set; }
 
-        [Display(Name = "confirmado")]
-        [JsonProperty("confirmado")]
+        [Display(Name = "confirm")]
+        [JsonProperty("confirm")]
         public bool Confirmado { get; set; }
+        
+        [Display(Name = "idspeciality")]
+        [JsonProperty("idspeciality")]
+        public Guid Id_Especialidad { get; set; }
 
     }
 }

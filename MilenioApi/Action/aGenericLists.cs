@@ -491,6 +491,35 @@ namespace MilenioApi.Action
             }
         }
 
+
+        public object GetCupsByEspeciality(PatientModel model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid id = Guid.Parse(model.id);
+                    var en = (from e in ent.Especialidad_Cup_Entidad
+                              where e.Id_Especialidad == model.Id_Especialidad
+                              && e.Id_Entidad == id
+                              select new ComboModel
+                              {
+                                  id = e.Id_Cups,
+                                  value = e.Cups.Codigo + "-" + e.Cups.Descripcion
+                              }).ToList();
+
+
+                    return rp.data = en;
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
         #endregion
     }
 }

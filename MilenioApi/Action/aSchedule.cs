@@ -580,7 +580,8 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
-                        List<Consultorio> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O=> O.Consultorio).ToList();
+                        //List<Consultorio> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio).ToList();
+                        List<Guid> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio.Id_Consultorio).ToList();
 
                         List<Detalle_Agenda> ldet = (from ee in ent.Especialidad_Entidad
                                                      from ap in ee.Agenda_Profesional
@@ -595,7 +596,7 @@ namespace MilenioApi.Action
                                                      && da.Fecha >= DateTime.Today
                                                      && da.Fecha.Month == model.Mes
                                                      && ha.Consultorio.Estado == true
-                                                     && ce.Contains(ha.Consultorio)
+                                                     && ce.Contains(ha.Consultorio.Id_Consultorio)
                                                      select da).OrderBy(d => d.Hora_Desde).ToList();
 
 
@@ -652,6 +653,8 @@ namespace MilenioApi.Action
                 }
             }
         }
+
+     
 
         #endregion
 

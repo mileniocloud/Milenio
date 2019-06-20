@@ -57,7 +57,7 @@ namespace MilenioApi.Controllers
         [Route("GetNeighborhood")]
         public HttpResponseMessage GetNeighborhood(Basic t)
         {
-            aGenericLists s = new aGenericLists();            
+            aGenericLists s = new aGenericLists();
             return ut.ReturnResponse(s.GetNeighborhood(t));
         }
 
@@ -153,6 +153,7 @@ namespace MilenioApi.Controllers
             Basic t = new Basic();
             return ut.ReturnResponse(s.GetServiceProviderList(t));
         }
+
 
 
 

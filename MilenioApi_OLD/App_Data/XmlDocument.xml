@@ -1,0 +1,1058 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MilenioApi</name>
+    </assembly>
+    <members>
+        <member name="M:MilenioApi.Action.aRol.GetRoles(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para tener todos los roles activos
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.GetRolesUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para tener todos los roles de un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.CreateRolUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para agregar rol a un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aRol.EditRolUsuario(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para elimiar rol a un usuario
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aUtilities.ReturnMesagge(MilenioApi.Models.Response@,System.Int32,System.String,System.Nullable{System.Guid},System.Collections.Generic.List{MilenioApi.Models.ErrorFields},System.Net.HttpStatusCode)">
+            <summary>
+            Se usa para indicar los errores de validacion de un objeto
+            </summary>
+            <param name="ret">una referencia del objeto que se llenara</param>
+            <param name="idmensje">id del mensaje que se consultara en la tabla de generic error</param>
+            <param name="custom">un mensaje customisado para mostrar</param>
+            <param name="id">no se usa</param>
+            <param name="el">lista de errores de validacion</param>
+            <param name="status">indica el estado de la transaccion</param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aUtilities.GetErrorMensaje(System.Int32)">
+            <summary>
+            este metodo trae el mensaje de error de la lista.
+            </summary>
+            <param name="idmensje">el id del mensaje de error de la tabla generic error</param>
+            <returns></returns>
+        </member>
+        <member name="M:MilenioApi.Action.aUtilities.ReturnResponse(System.Object)">
+            <summary>
+            Metodo que convierte la respuesta en un HttpResponseMessage
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="P:MilenioApi.Startup.OAuthOptions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Startup.PublicClientId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Startup.ConfigureAuth(Owin.IAppBuilder)">
+            <summary>
+            configure auth
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:MilenioApi.WebApiConfig">
+            <summary>
+            WebApiConfig
+            </summary>
+        </member>
+        <member name="M:MilenioApi.WebApiConfig.Register(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Register
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,MilenioApi.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:MilenioApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:MilenioApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,MilenioApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,MilenioApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(MilenioApi.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:MilenioApi.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},MilenioApi.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:MilenioApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:MilenioApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleKey.#ctor(MilenioApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:MilenioApi.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,MilenioApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:MilenioApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:MilenioApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MilenioApi.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:MilenioApi.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:MilenioApi.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MilenioApi.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.ValidatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para consultar si un paciente existe, regresa null si no existe
+            </summary>
+            <remarks>
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document [STRING] [REQUERIDO] <br />   
+            </remarks>
+            <returns>Regresa un id del paciente </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreateTemporalPatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document [STRING] [REQUERIDO] <br />   
+            PARAMETRO: names [STRING] [REQUERIDO] <br />   
+            PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+            PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+            PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+            PARAMETRO: phone [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: address [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: identificationtype [STRING] [REQUERIDO]<br />
+            PARAMETRO: identification [STRING] [REQUERIDO] <br />   
+            PARAMETRO: names [STRING] [REQUERIDO] <br />   
+            PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+            PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+            PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+            PARAMETRO: phone [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: address [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Crea la agenda profesional para un medico, una entidad y una especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: fromdate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: todate [STRING] fecha fin del periodo <br />
+            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.EditAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Edita la agenda profesional para un medico, una entidad y una especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: fromdate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: todate [STRING] fecha fin del periodo <br />
+            PARAMETRO: idspeciality [STRING] id de la especialidad <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Consulta las agendas profesionales de una entidad
+            </summary>
+            <remarks>
+            PARAMETRO: fromdate [DATE] fecha desde donde se quiere buscar [OPCIONAL] <br />
+            PARAMETRO: todate [STRING] fecha desde cuando inicia el periodo <br />
+            PARAMETRO: idprofetional [STRING] id del medico del que queremos ver la agenda <br />
+            PARAMETRO: between [BOOL] indica si se va a buscar por un between entre dos fechas <br />
+            PARAMETRO: idspeciality [STRING] is de la especialidad que vamos a filtrar <br />
+            PARAMETRO: idprofetional [STRING] id del medico <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa una lista con las agendas</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)">
+            <summary>
+            Crea los horarios de la agenda, dada una agenda propfesional
+            </summary>
+            <remarks>
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: idoffice [STRING] id del consultorio <br />
+            PARAMETRO: fromhour [STRING] hora desde <br />
+            PARAMETRO: tohour [STRING] hora hasta <br />
+            PARAMETRO: day [STRING] dia del horario <br />
+            PARAMETRO: duration [STRING] duracion de la cita <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.EditScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)">
+            <summary>
+            Edita los horarios de la agenda, dada una agenda profesional
+            </summary>
+            <remarks>
+            PARAMETRO: idscheduleagenda [STRING] id de horario agenda a modificar <br />
+            PARAMETRO: idprofetionalschedule [STRING] id de la agenda profesional <br />
+            PARAMETRO: idoffice [STRING] id del consultorio <br />
+            PARAMETRO: fromhour [STRING] hora desde <br />
+            PARAMETRO: tohour [STRING] hora hasta <br />
+            PARAMETRO: day [STRING] dia del horario <br />
+            PARAMETRO: duration [STRING] duracion de la cita <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <!-- El comentario XML con formato incorrecto se ha omitido para el miembro "M:MilenioApi.Controllers.ScheduleController.GetScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)" -->
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ProfetionalScheduleModel)">
+            <summary>
+            Crea los detalle de las agendas dado un horario de la tabla horario agenda
+            </summary>
+            <remarks>
+            PARAMETRO: idscheduleagenda [STRING] id horario agenda <br />
+            PARAMETRO: idoffice [STRING] id del consultorio
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o una lista con errores</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAppointment(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para crear un consultorio
+            </summary>
+            <remarks>
+            PARAMETRO: name [STRING] [REQUERIDO] <br />
+            PARAMETRO: description [STRING] [REQUERIDO]<br />
+            PARAMETRO: status [BOOL] [REQUERIDO]<br />
+            </remarks>
+            <returns>Regresa un objeto informado exito de la operacion </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.EditOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para editar un consultorio
+            </summary>
+            <remarks>
+            PARAMETRO: name [STRING] [REQUERIDO] <br />
+            PARAMETRO: description [STRING] [REQUERIDO]<br />
+            PARAMETRO: status [BOOL] [REQUERIDO]<br />
+            PARAMETRO: idoffice [GUID] [REQUERIDO]<br />
+            </remarks>
+            <returns>Regresa un objeto informado exito de la operacion </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.GetOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: name [STRING] [OPTIONAL] (si se pasa este valor, se buscara consultorios con este nombre) <br />
+            PARAMETRO: description [STRING] [OPTIONAL] (si se pasa este valor se buscara consultorios con esa descripcion)<br />
+            PARAMETRO: page [STRING] Este valor indica en que pagina del grid estamos actualmente<br />
+            PARAMETRO: pagesize [STRING] Este valor indica la cantidad de datos que queremos traer<br />
+            </remarks>
+            <returns>Regresa una lista con los consultorios que cumplan con los parametros de busqueda</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.GetEditOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: idoffice [STRING]
+            </remarks>
+            <returns>Regresa la data del consultorio consultado y una lista de las especialidades de ese consultorio</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.DeleteOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: idoffice [STRING]
+            </remarks>
+            <returns>Regresa info indicando que se elimino el registro o que no se pudo</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.CreateConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para agregar una especialidad a un consultorio
+            </summary>
+            <remarks>
+            PARAMETRO: Id_Consultorio [GUID][REQUERIDO]<br />
+            PARAMETRO: Id_Especialidad [GUID[REQUERIDO]]<br />  
+            PARAMETRO: token [STRING] [REQUERIDO]
+            </remarks>
+            <returns>Regresa un objeto indicando el resultado de la operacion</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.EditConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para editar el estado de una especialidad en un consultorio
+            </summary>
+            <remarks>
+            PARAMETRO: Id_Consultorio [GUID][REQUERIDO]<br />
+            PARAMETRO: Id_Especialidad [GUID][REQUERIDO]<br />  
+            PARAMETRO: Estado [STRING] [REQUERIDO]
+            PARAMETRO: token [STRING] [REQUERIDO]
+            
+            </remarks>
+            <returns>Regresa un objeto indicando el resultado de la operacion</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.DashboardController.Dashboard">
+            <summary>
+            Metodo para construir el dashboard
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa el json con el menu </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.EntityController.GetEntity(MilenioApi.Models.EntidadModel)">
+            <summary>
+            Metodo para consultar entidades
+            </summary>
+            <remarks>
+            PARAMETRO: nit [INT] [OPCIONAL]<br/>
+            PARAMETRO: name [STRING] [OPCIONAL]<br/>
+            PARAMETRO: organization [STRING] [OPCIONAL]<br/>        
+            PARAMETRO: email [STRING][OPCIONAL]<br/>
+            PARAMETRO: entitycode [STRING][OPCIONAL]<br/>
+            PARAMETRO: identity [STRING][OPCIONAL]<br/>
+            </remarks>
+            <returns>Regresa informacion con la lista de entidades filtradas por cada uno de los parametros que e envien </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.EntityController.CreateEntity(MilenioApi.Models.EntidadModel)">
+            <summary>
+            Metodo para crear entidades
+            </summary>
+            <remarks>
+            PARAMETRO: nit [INT] [REQUERIDO]<br/>
+            PARAMETRO: name [STRING] [REQUERIDO]<br/>
+            PARAMETRO: organization [STRING] [REQUERIDO]<br/>
+            PARAMETRO: neighborhood [STRING][REQUERIDO]<br/>
+            PARAMETRO: address [STRING][REQUERIDO]<br/>
+            PARAMETRO: email [STRING][REQUERIDO]<br/>
+            PARAMETRO: telephone [STRING][REQUERIDO]<br/>
+            PARAMETRO: entitycode [STRING][REQUERIDO]<br/>
+            PARAMETRO: priorityatention [STRING][REQUERIDO]<br/>
+            PARAMETRO: taxpayer [STRING][REQUERIDO]<br/>
+            PARAMETRO: photo [STRING][REQUERIDO]<br/>
+            PARAMETRO: opening [STRING][REQUERIDO]<br/>
+            PARAMETRO: closing [STRING][REQUERIDO]<br/>
+            PARAMETRO: specialities [STRING][REQUERIDO]<br/>
+            </remarks>
+            <returns>Regresa informacion indicando el exito de la operacion </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetDepartament">
+            <summary>
+            Metodo consultar los departamentos
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa lista con los departamentos </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetMunicipality(MilenioApi.Models.Basic)">
+            <summary>
+            Metodo consultar los municipios dado un departamento
+            </summary>
+            <remarks>
+            PARAMETRO: id [int] el id del departamento <br/>
+            </remarks>
+            <returns>Regresa una lista con los municipios </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.GenericListsController.GetNeighborhood(MilenioApi.Models.Basic)">
+            <summary>
+            Metodo consultar todos los poblado o barrios
+            </summary>
+            <remarks>
+            PARAMETRO: id [int] el id del municipio <br/>
+            </remarks>
+            <returns>Regresa una lista con todos los poblados o barrios </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.Login(MilenioApi.Models.LoginModel)">
+            <summary>
+            Metodo para loguear y traer la lista de entidades
+            </summary>
+            <remarks>
+            PARAMETRO: user [STRING] <br />
+            PARAMETRO: password [STRING]
+            </remarks>
+            <returns>Regresa un usuario con la lista de entidades a las que pertenece </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.LogOff(MilenioApi.Models.LoginModel)">
+            <summary>
+            Metodo para desloguear el usuario
+            </summary>
+            <remarks>
+            PARAMETRO: token [STRING]
+            </remarks>
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.LoginEntidad(MilenioApi.Models.LoginModel)">
+             <summary>
+             Metodo para loguear y retornar el token + los roles
+             </summary>
+             <remarks>
+             PARAMETRO: user [STRING] <br />
+             PARAMETRO: password [STRING] <br />
+             PARAMETRO: identidad [STRING] <br /> <br />
+             ON ERROR REGRESA LA SIG ESTRUCTURA: {<br />
+            "errorlist": [ <br />
+                {<br />
+                  "errorlist": [],<br />
+                  "response_code": null,<br />
+                  "custom": null,<br />
+                  "message": "El campo password es obligatorio.",<br />
+                  "name": "password",<br />
+                  "id": null<br />
+                }<br />
+              ],<br />
+              "response_code": "03",<br />
+              "custom": "",<br />
+              "message": "Login Invalido ",<br />
+              "name": null,<br />
+              "id": null<br />
+            } <br /><br />
+             </remarks>
+             <returns>Regresa el token + los roles asociados a esa entidad seleccionada</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.ChangePassword(MilenioApi.Models.LoginModel)">
+            <summary>
+            Se usa para enviar un correo que le permitira cambiar la clave
+            </summary>
+            <param name="t"></param>
+            <remarks> 
+            PARAMETRO: password [STRING]
+            PARAMETRO: oldpassword [STRING]
+            </remarks>
+            <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
+        </member>
+        <member name="M:MilenioApi.Controllers.SecurityController.ResetPassword(MilenioApi.Models.LoginModel)">
+            <summary>
+            Se usa para cambiar la clave
+            </summary>
+            <param name="t"></param>
+            <remarks>
+            PARAMETRO: password [STRING] - el usuario que desea cambiar la clave
+            </remarks>
+            <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo crear usuarios del sistema
+            </summary>
+            <remarks>
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document  [STRING] [REQUERIDO] <br />
+            PARAMETRO: fullname [STRING] [REQUERIDO] <br />
+            PARAMETRO: firstlastname  [STRING] [REQUERIDO]<br />
+            PARAMETRO: secondlastname  [STRING] [REQUERIDO]<br />
+            PARAMETRO: gender [STRING] <br />
+            PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: civilstatus  [STRING] <br />
+            PARAMETRO: bloodtype [STRING] <br />
+            PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: telephone  [STRING] <br />
+            PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: observation [STRING] <br />
+            PARAMETRO: linktype [STRING] [REQUERIDO]<br />
+            PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: login [STRING] [REQUERIDO]<br />
+            PARAMETRO: password [STRING] [REQUERIDO]<br />
+            PARAMETRO: email [STRING] [REQUERIDO]<br />
+            PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photohabeas [STRING] <br />
+            PARAMETRO: typeprofessional  [GUID] <br />
+            PARAMETRO: registryprofessional  [STRING] <br />        
+            PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
+            </remarks>
+            <returns>Regresa un objeto indicando el estado de la transaccion </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.EditUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para editar una entidad
+            </summary>
+            <remarks>        
+            PARAMETRO: gender [STRING] <br />
+            PARAMETRO: birthdate [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: civilstatus  [STRING] <br />
+            PARAMETRO: bloodtype [STRING] <br />
+            PARAMETRO: neighborhood  [INT] [REQUERIDO]<br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: telephone  [STRING] <br />
+            PARAMETRO: dateofhire [DATETIME] [FORTMAT DD/MM/YYYY] [REQUERIDO]<br />
+            PARAMETRO: observation [STRING] <br />
+            PARAMETRO: linktype [STRING] [REQUERIDO]<br />
+            PARAMETRO: serviceprovider [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: login [STRING] [REQUERIDO]<br />
+            PARAMETRO: password [STRING] [REQUERIDO]<br />
+            PARAMETRO: email [STRING] [REQUERIDO]<br />
+            PARAMETRO: habeas  [BOOL] [1 "O" 0] [REQUERIDO]<br />
+            PARAMETRO: photohabeas [STRING] <br />
+            PARAMETRO: typeprofessional  [GUID] <br />
+            PARAMETRO: registryprofessional  [STRING] <br />        
+            PARAMETRO: roles [STRING] [ID DE ROLES SEPARADOS POR ","] <br />   
+            </remarks>
+            <returns>Regresa un objeto indicando el estado de la transaccion </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.CreateEntityUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para agregar un usuario existente a la entidad a la que se esta tratando de ingresar como usuario nuevo
+            </summary>
+            <remarks>
+            PARAMETRO: document [STRING] <br />
+            PARAMETRO: typedocument [STRING]
+            </remarks>
+            <returns>Regresa informacion indicando que el registro fue exitoso </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.ValidateUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para validar si una cedula ya existe en alguna entidad para preguntar si desean agregarlo
+            </summary>
+            <remarks>
+            PARAMETRO: document [STRING] <br />
+            PARAMETRO: typedocument [STRING]
+            </remarks>
+            <returns>Regresa informacion si el usuario existe o no </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.GetUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para traer lista de usuarios, contiene logica para consultar por varios campos 
+            
+            </summary>
+            <remarks>
+            PARAMETRO: iduser [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula <br/>
+            PARAMETRO: document [STRING] [OPCIONAL] si se pasa este dato, trae el usuario de esa cedula<br/>
+            PARAMETRO: fullname [STRING] [OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: firstlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: secondlastname [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: login [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: email [STRING][OPCIONAL] si se pasa este dato, se filtra con un contains<br/>
+            PARAMETRO: dateofhire [DATE][OPCIONAL] si se pasa este dato, se filta por esa fecha formato DD/MM/YYYY  <br/>      
+            </remarks>
+            <returns>Regresa lista de usuarios dependiendo de los filtros </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.GetUserEdit(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para consultar un usuario por su ID
+            </summary>
+            <remarks>
+            PARAMETRO: Id_Usuario [GUID] [REQUERIDO]
+            PARAMETRO: token [STRING]
+            </remarks>
+            <returns>Regresa informacion completa del usuario </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.GetServiceProviderUser(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo para traer lista de usuarios que son prestadores de servicio
+            </summary>
+            <returns>Regresa lista de usuarios que son prestadores de servicios </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.UserProfile">
+            <summary>
+            Metodo consultar el perfil del usuario
+            </summary>
+            <remarks>
+            
+            </remarks>
+            <returns>Regresa informacion completa del usuario </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.UserController.EditProfile(MilenioApi.Models.UserModel)">
+            <summary>
+            Metodo editar el perfil del usuario
+            </summary>
+            <remarks>
+            PARAMETRO: telephone [STRING] <br />
+            PARAMETRO: photo [STRING] <br />
+            PARAMETRO: neighborhood [STRING] <br />
+            PARAMETRO: address [STRING] <br />
+            PARAMETRO: Email [STRING] <br />
+            PARAMETRO: civilstatus [STRING]
+            </remarks>
+            <returns>Regresa informacion completa del usuario </returns>
+        </member>
+    </members>
+</doc>

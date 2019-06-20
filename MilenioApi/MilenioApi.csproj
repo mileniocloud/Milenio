@@ -249,6 +249,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action\aPatient.cs" />
     <Compile Include="Action\aSchedule.cs" />
     <Compile Include="Action\aOffice.cs" />
     <Compile Include="Action\aDashboard.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\OfficeController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -302,7 +304,6 @@
     <Compile Include="Controllers\GenericListsController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
-    <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\TokenValidationHandler.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAO\Actividad_Economica.cs">
@@ -434,7 +435,7 @@
     <Compile Include="Models\AppointmentModel.cs" />
     <Compile Include="Models\CalendarModel.cs" />
     <Compile Include="Models\EntityByZone.cs" />
-    <Compile Include="Models\EspecialityEntityByProfessional.cs" />
+    <Compile Include="Models\PatientModel.cs" />
     <Compile Include="Models\ProfetionalScheduleModel.cs" />
     <Compile Include="Models\Basic.cs" />
     <Compile Include="Models\BasicList.cs" />
@@ -519,7 +520,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\milenioapi - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -550,7 +550,6 @@
   <ItemGroup>
     <Folder Include="Views\Dashboard\" />
     <Folder Include="Views\Entidad\" />
-    <Folder Include="Views\Specialty\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>

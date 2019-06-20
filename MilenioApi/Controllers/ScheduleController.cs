@@ -129,7 +129,7 @@ namespace MilenioApi.Controllers
         /// </summary>
         /// <remarks>
         /// PARAMETRO: idscheduleagenda [STRING] id de horario agenda a modificar <br />
-        
+
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>regresa un una lista de horarios por agenda profesional</returns>
@@ -175,7 +175,7 @@ namespace MilenioApi.Controllers
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>
-        [HttpPost]        
+        [HttpPost]
         [Route("GetAppointment")]
         public HttpResponseMessage GetAppointment(AppointmentModel t)
         {

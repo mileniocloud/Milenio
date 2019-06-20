@@ -26,10 +26,10 @@ namespace MilenioApi.Models
         [DataType(DataType.Date)]
         public DateTime Fecha_Hasta { get; set; }
 
-        //[Required]
-        //[Display(Name = "idspeciality")]
-        //[JsonProperty("idspeciality")]
-        //public Guid Id_Especialidad { get; set; }
+        [Required]
+        [Display(Name = "idspeciality")]
+        [JsonProperty("idspeciality")]
+        public Guid Id_Especialidad { get; set; }
 
         [Required]
         [Display(Name = "idprofetional")]
@@ -47,10 +47,5 @@ namespace MilenioApi.Models
         public bool Estado { get; set; }
 
         public bool between { get; set; }
-
-        [Display(Name = "specialities")]
-        [JsonProperty("specialities")]
-
-        public List<ComboListModel> specialities = new List<ComboListModel>();
     }
 }

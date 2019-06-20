@@ -7,6 +7,6 @@ namespace MilenioApi.Models
 {
     public class ProfetionalSpecialtyList
     {
-        public List<ComboModel> profetionalspecialty = new List<ComboModel>();
+        public List<BasicList> profetionalspecialty = new List<BasicList>();
     }
 }

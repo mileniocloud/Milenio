@@ -160,6 +160,7 @@ namespace MilenioApi.Controllers
         // Metodo para consultar las especialidades de una entidad
         // </summary>
         // <remarks>
+        // PARAMETRO: id [STRING] el id de la entidad 
         // </remarks>
         // <returns>Regresa una lista de Id - Value con las especialidades de una entidad </returns>
         [HttpPost]
@@ -176,12 +177,27 @@ namespace MilenioApi.Controllers
         // <remarks>
         // </remarks>
         // <returns>Regresa una lista agrupada de entidades</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("GetEntityByMunicipality")]
         public HttpResponseMessage GetEntityByMunicipality()
         {
             aGenericLists s = new aGenericLists();
             return ut.ReturnResponse(s.GetEntityByMunicipality());
         }
+
+        // <summary>
+        // Metodo para consultar los cups dada una entidad y una especialidad
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa una lista de cups</returns>
+        [HttpPost]
+        [Route("GetCupsByEspeciality")]
+        public HttpResponseMessage GetCupsByEspeciality(PatientModel t)
+        {
+            aGenericLists s = new aGenericLists();
+            return ut.ReturnResponse(s.GetCupsByEspeciality(t));
+        }
+
     }
 }

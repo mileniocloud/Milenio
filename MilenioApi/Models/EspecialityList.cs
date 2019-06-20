@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MilenioApi.Models
 {
-    public class EspecialityList
+    public class EspecialityList: ComboModel
     {
         public List<ComboModel> specialities = new List<ComboModel>();
     }

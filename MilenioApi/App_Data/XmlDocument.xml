@@ -562,6 +562,50 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:MilenioApi.Controllers.PatientController.ValidatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para consultar si un paciente existe, regresa null si no existe
+            </summary>
+            <remarks>
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document [STRING] [REQUERIDO] <br />   
+            </remarks>
+            <returns>Regresa un id del paciente </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreateTemporalPatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: typedocument [STRING] [REQUERIDO]<br />
+            PARAMETRO: document [STRING] [REQUERIDO] <br />   
+            PARAMETRO: names [STRING] [REQUERIDO] <br />   
+            PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+            PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+            PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+            PARAMETRO: phone [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: address [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.PatientController.CreatePatient(MilenioApi.Models.PatientModel)">
+            <summary>
+            Metodo para crear pacientes
+            </summary>
+            <remarks>
+            PARAMETRO: identificationtype [STRING] [REQUERIDO]<br />
+            PARAMETRO: identification [STRING] [REQUERIDO] <br />   
+            PARAMETRO: names [STRING] [REQUERIDO] <br />   
+            PARAMETRO: lastnames [STRING] [REQUERIDO] <br />   
+            PARAMETRO: birthday [DATE] [REQUERIDO] <br />   
+            PARAMETRO: cell [STRING] [REQUERIDO] <br />   
+            PARAMETRO: phone [STRING] [REQUERIDO] <br />   
+            PARAMETRO: email [STRING] [REQUERIDO] <br />   
+            PARAMETRO: address [STRING] [REQUERIDO] <br />
+            </remarks>
+            <returns>Regresa informacion indicando que sucedio </returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.CreateAgendaProfesional(MilenioApi.Models.ProfetionalScheduleModel)">
             <summary>
             Crea la agenda profesional para un medico, una entidad y una especialidad
@@ -700,6 +744,15 @@
             PARAMETRO: idoffice [STRING]
             </remarks>
             <returns>Regresa la data del consultorio consultado y una lista de las especialidades de ese consultorio</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.OfficeController.DeleteOffice(MilenioApi.Models.OfficeModel)">
+            <summary>
+            Metodo para consultar consultorios, 
+            </summary>
+            <remarks>
+            PARAMETRO: idoffice [STRING]
+            </remarks>
+            <returns>Regresa info indicando que se elimino el registro o que no se pudo</returns>
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateConsultorioEspecialidad(MilenioApi.Models.OfficeModel)">
             <summary>

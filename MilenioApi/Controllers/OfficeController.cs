@@ -83,6 +83,22 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetEditOffice(t));
         }
 
+        /// <summary>
+        /// Metodo para consultar consultorios, 
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idoffice [STRING]
+        /// </remarks>
+        /// <returns>Regresa info indicando que se elimino el registro o que no se pudo</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("DeleteOffice")]
+        public HttpResponseMessage DeleteOffice(OfficeModel t)
+        {
+            aOffice s = new aOffice();
+            return ut.ReturnResponse(s.DeleteOffice(t));
+        }
+
 
         #region Relaciondas
 

@@ -34,7 +34,7 @@ namespace MilenioApi.Action
                         Guid entidad = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.PrimaryGroupSid).Select(cd => cd.Value).SingleOrDefault());
                         Guid usuario = Guid.Parse(cp.Claims.Where(cd => cd.Type == ClaimTypes.NameIdentifier).Select(cd => cd.Value).SingleOrDefault());
                         ////
-                     
+
                         //VALIDAMOS SI EL CONSULTORIO YA EXISTE
                         Consultorio c = ent.Consultorio.Where(t => t.Id_Entidad == entidad && t.Nombre == model.Nombre).SingleOrDefault();
 
@@ -167,6 +167,60 @@ namespace MilenioApi.Action
             }
         }
 
+        public object DeleteOffice(OfficeModel model)
+        {
+            Response rp = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                    Response b = new Response();
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
+                    {
+                        Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                        Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                        Consultorio cons = ent.Consultorio.Where(t => t.Id_Consultorio == model.Id_Consultorio).SingleOrDefault();
+
+                        if (cons != null)
+                        {
+                            /*preguntamos si tiene algo en horario agenda, entonce no se puede borrar sino inactivar*/
+                            /*y e avisa diciendo que tiene registros asociados y que se debe inactivar*/
+                            if (cons.Horario_Agenda.Count() == 0)
+                            {
+                                /*si no tiene relacion, se elimina todo incluyendo las especialidades que se le asociaron*/
+                                ent.Consultorio_Especialidad.RemoveRange(cons.Consultorio_Especialidad);
+                                ent.Consultorio.Remove(cons);
+                                ent.SaveChanges();
+                                rp = autil.ReturnMesagge(ref rp, 43, string.Empty, null);
+                            }
+                            else
+                            {
+                                rp = autil.ReturnMesagge(ref rp, 44, string.Empty, null);
+                            }
+                        }
+                        model = new OfficeModel();
+                        rp.data = GetOffice(model);
+                        return rp;
+                    }
+                    else
+                    {
+                        //fallo campos requeridos
+                        return autil.ReturnMesagge(ref b, 33, string.Empty, null, rel);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //error general
+                    rp = autil.ReturnMesagge(ref rp, 4, string.Empty, null);
+                    return rp;
+                }
+            }
+        }
+
         public object GetEditOffice(OfficeModel model)
         {
             List<Consultorio> lc = new List<Consultorio>();
@@ -192,7 +246,7 @@ namespace MilenioApi.Action
                                 name = u.Nombre,
                                 description = u.Descripcion,
                                 status = u.Estado,
-                                especiality = u.Consultorio_Especialidad.Where(e=> e.Estado = true).Select(t=> t.Id_Especialidad)
+                                especiality = u.Consultorio_Especialidad.Where(e => e.Estado = true).Select(t => t.Id_Especialidad)
                             }).ToList();
                             rp.cantidad = rl.Count();
                             rp.pagina = 0;

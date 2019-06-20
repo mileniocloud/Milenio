@@ -233,7 +233,7 @@ namespace MilenioApi.Action
             }
         }
 
-        public void GetAgendaErrorDetail(ref List<ErrorFields> err, int idmensje, string proceso, DateTime fecha, DateTime horadesde, DateTime horahasta, string consultorio, string especialidad)
+        public void GetAgendaErrorDetail(ref List<ErrorFields> err, int idmensje, string proceso, DateTime fecha, DateTime horadesde, DateTime horahasta, string consultorio)
         {
             using (MilenioCloudEntities ent = new MilenioCloudEntities())
             {
@@ -244,7 +244,7 @@ namespace MilenioApi.Action
 
                 ErrorFields ef = new ErrorFields();
                 ef.field = proceso;
-                string mensaje = string.Format(ge.Message, fecha.ToShortDateString(), horadesde.ToString("HH:mm"), horahasta.ToString("HH:mm"), consultorio, especialidad);
+                string mensaje = string.Format(ge.Message, fecha.ToShortDateString(), horadesde.ToString("HH:mm"), horahasta.ToString("HH:mm"), consultorio);
                 ef.message = mensaje;
                 err.Add(ef);
             }

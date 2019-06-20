@@ -567,17 +567,56 @@ namespace MilenioApi.Action
             {
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
+                    var en = (from e in ent.Entidad
+                              select new
+                              {
+                                  grup = e.Poblado.Municipio.Nombre,
+                                  entities = new
+                                  {
+                                      id = e.Id_Entidad,
+                                      value = e.Nombre
+                                  }
+                              }).ToList();
+                    List<Object> r = new List<object>();
+                    foreach (var i in en.Select(t => t.grup).Distinct())
+                    {
+                        var t = new
+                        {
+                            group = i,
+                            entities = en.Where(y => y.grup == i).Select(s => s.entities).ToList()
+                        };
+                        r.Add(t);
+                    }
 
-                    List<EntityByZone> en = ent.Poblado.Where(p => p.Entidad.Count() > 0)
-                                 .Select(e => new EntityByZone
-                                 {
-                                     group = e.Municipio.Nombre,
-                                     entities = e.Entidad.Select(t => new BasicList
-                                     {
-                                         id = t.Nombre,
-                                         value = t.Id_Entidad.ToString()
-                                     }).ToList()
-                                 }).ToList();
+                    return rp.data = r;
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+        public object GetCupsByEspeciality(PatientModel model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid id = Guid.Parse(model.id);
+                    var en = (from e in ent.Especialidad_Cup_Entidad
+                              where e.Id_Especialidad == model.Id_Especialidad
+                              && e.Id_Entidad == id
+                              select new ComboModel
+                              {
+                                  id = e.Id_Cups,
+                                  value = e.Cups.Codigo + "-" + e.Cups.Descripcion
+                              }).ToList();
+
 
                     return rp.data = en;
                 }
@@ -588,7 +627,6 @@ namespace MilenioApi.Action
                 return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
-
         #endregion
     }
 }

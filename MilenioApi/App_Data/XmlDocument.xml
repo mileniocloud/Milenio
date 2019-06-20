@@ -635,7 +635,8 @@
             <param name="t"></param>
             <returns>regresa un mensaje de exito o error</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ScheduleDetailModel)">
+        <!-- El comentario XML con formato incorrecto se ha omitido para el miembro "M:MilenioApi.Controllers.ScheduleController.GetScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)" -->
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ProfetionalScheduleModel)">
             <summary>
             Crea los detalle de las agendas dado un horario de la tabla horario agenda
             </summary>

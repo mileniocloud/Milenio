@@ -124,8 +124,25 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.EditScheduleAgenda(t));
         }
 
-        #endregion
+        /// <summary>
+        /// Obtiene los horarios de la agenda, dada una agenda profesional
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idscheduleagenda [STRING] id de horario agenda a modificar <br />
         
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>regresa un una lista de horarios por agenda profesional</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetScheduleAgenda")]
+        public HttpResponseMessage GetScheduleAgenda(ScheduleAgendaModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.GetScheduleAgenda(t));
+        }
+        #endregion
+
         #region detalle agenda // listo para pruebas
         /// <summary>
         /// Crea los detalle de las agendas dado un horario de la tabla horario agenda
@@ -139,7 +156,7 @@ namespace MilenioApi.Controllers
         [HttpPost]
         [Authorize]
         [Route("CreateScheduleDetail")]
-        public HttpResponseMessage CreateScheduleDetail(ScheduleDetailModel t)
+        public HttpResponseMessage CreateScheduleDetail(ProfetionalScheduleModel t)
         {
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.CreateScheduleDetail(t));

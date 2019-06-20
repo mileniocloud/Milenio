@@ -224,7 +224,6 @@ namespace MilenioApi.Action
                                     ce.Id_Entidad = model.Id_Entidad;
                                     ce.Id_Especialidad = Guid.Parse(e.id);
                                     ce.Estado = true;
-                                    ce.Usuario_Create = usuario;
                                     ce.Usuario_Update = usuario;
                                     ce.Fecha_Create = DateTime.Now;
                                     ce.Fecha_Update = DateTime.Now;
@@ -268,6 +267,7 @@ namespace MilenioApi.Action
                             et.Fecha_Update = DateTime.Now;
                             et.Foto = model.Foto;
                             et.Telefono = model.Telefono;
+                            et.Usuario_Update = usuario;
                             //se envia a editar todo
                             ent.SaveChanges();
                             //se genera el codigo del mensaje de retorno exitoso

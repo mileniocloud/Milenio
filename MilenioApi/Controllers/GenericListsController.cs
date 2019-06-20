@@ -109,7 +109,35 @@ namespace MilenioApi.Controllers
             Basic t = new Basic();
             return ut.ReturnResponse(s.GetListsSheduleForm(t));
         }
-
+        // <summary>
+        // Metodo para consultar lo basico del formulario de horarios por agenda
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa la lista con la informacion necesaria para el formulario horarios por agenda</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetGenericHoraryForm")]
+        public HttpResponseMessage GetGenericHoraryForm(ScheduleAgendaModel model)
+        {
+            aGenericLists s = new aGenericLists();
+            //Basic t = new Basic();
+            return ut.ReturnResponse(s.GetGenericHoraryForm(model));
+        }
+        // <summary>
+        // Metodo para obtener las especialidades selecionadas por profesional
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa varias listas con la informacion necesaria para el formulario de agenda </returns>
+        [HttpPost]
+        [Authorize]
+        [Route("listGenericEspXProf")]
+        public HttpResponseMessage listGenericEspXProf(ProfetionalScheduleModel model)
+        {
+            aGenericLists s = new aGenericLists();
+            return ut.ReturnResponse(s.listGenericEspXProf(model));
+        }
         // <summary>
         // Metodo para consultar los doctores de una entidad
         // </summary>

@@ -474,6 +474,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\CreacionCita.html" />
     <Content Include="Content\images\IQLogo.png" />
     <Content Include="Content\password_reset.html" />
     <Content Include="Content\Welcome_Entity.html" />

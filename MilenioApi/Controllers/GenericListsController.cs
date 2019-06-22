@@ -161,6 +161,7 @@ namespace MilenioApi.Controllers
         // Metodo para consultar los cups dada una entidad y una especialidad
         // </summary>
         // <remarks>
+        // PARAMETRO: id [STRING] el id de la entidad 
         // </remarks>
         // <returns>Regresa una lista de cups</returns>
         [HttpPost]

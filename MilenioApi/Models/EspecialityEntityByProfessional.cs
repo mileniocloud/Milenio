@@ -5,8 +5,8 @@ using System.Web;
 
 namespace MilenioApi.Models
 {
-    public class ProfetionalSpecialtyList
+    public class EspecialityEntityByProfessional
     {
-        public List<ComboModel> profetionalspecialty = new List<ComboModel>();
+        public List<BasicList> specialities = new List<BasicList>();
     }
 }

@@ -282,6 +282,136 @@ namespace MilenioApi.Action
                 throw ex;
             }
         }
+        public object GetEspecialityListsByEntity(Guid entity)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    EspecialityEntityByProfessional gl = new EspecialityEntityByProfessional();
+                    gl.specialities = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new BasicList
+                    {
+                        id = l.Id_Especialidad.ToString(),
+                        value = l.Especialidad_Entidad.Especialidad.Nombre,
+                        keylink = l.Id_Usuario.ToString()
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public object listGenericEspXProf(ProfetionalScheduleModel model)
+        {
+
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    List<Especialidad> ea = (from e in ent.Agenda_Profesional
+                                             from ep in e.Especialidad_Entidad
+                                             where e.Id_Agenda_Profesional == model.Id_Agenda_Profesional
+                                             select ep.Especialidad).ToList();
+
+                    //List<Especialidad> exp = cme.Except(ea).ToList();
+                    rp.data = ea.Select(l => new ComboModel
+                    {
+                        id = l.Id_Especialidad,
+                        value = l.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+        public object GetGenericHoraryForm(ScheduleAgendaModel model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+                    List<ComboModel> lCombo = gl.GetOfficesListByEntity(model.Id_Agenda_Profesional);
+                    listas.Add(lCombo);
+                    List<Guid> lg = lCombo.Select(e => e.id).ToList();
+                    listas.Add(gl.GetSpecialtiesByOffice(lg, model.Id_Agenda_Profesional));
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+        public List<ComboModel> GetOfficesListByEntity(Guid id_agenda_profesional)
+        {
+            //Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    List<ComboModel> gl = new List<ComboModel>();
+                    Agenda_Profesional ap = ent.Agenda_Profesional.Where(t => t.Id_Agenda_Profesional == id_agenda_profesional).SingleOrDefault();
+                    List<Guid> ee = ap.Especialidad_Entidad.Select(o => o.Id_Especialidad).ToList();
+                    gl = ent.Consultorio_Especialidad.Where(f => ee.Contains(f.Id_Especialidad)).Select(r => new ComboModel
+                    {
+                        id = r.Consultorio.Id_Consultorio,
+                        value = r.Consultorio.Nombre,
+                    }).Distinct().OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public object GetSpecialtiesByOffice(List<Guid> Offices, Guid id_agenda_profesional)
+        {
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    List<ComboModel> gl = new List<ComboModel>();
+                    Agenda_Profesional ap = ent.Agenda_Profesional.Where(t => t.Id_Agenda_Profesional == id_agenda_profesional).SingleOrDefault();
+                    List<Guid> ee = ap.Especialidad_Entidad.Select(o => o.Id_Especialidad).ToList();
+                    gl = ent.Consultorio_Especialidad.Where(ce => Offices.Contains(ce.Id_Consultorio) && ee.Contains(ce.Id_Especialidad)).Select(e => new ComboModel
+                    {
+                        id = e.Id_Consultorio,
+                        value = e.Especialidad_Entidad.Especialidad.Nombre
+                    }).ToList();
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
         public object GetEspecialityListByEntity(Guid entity)
         {
             Response rp = new Response();
@@ -314,12 +444,11 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     ProfetionalSpecialtyList gl = new ProfetionalSpecialtyList();
-                    gl.profetionalspecialty = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new BasicList
+                    gl.profetionalspecialty = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entity && e.Estado == true).Select(l => new ComboModel
                     {
-                        id = l.Id_Usuario.ToString(),
-                        value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido,
-                        keylink = l.Id_Especialidad.ToString()
-                    }).OrderBy(o => o.value).ToList();
+                        id = l.Id_Usuario,
+                        value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido
+                    }).Distinct().OrderBy(o => o.value).ToList();
 
                     return gl;
                 }
@@ -372,9 +501,9 @@ namespace MilenioApi.Action
                 {
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                     List<object> listas = new List<object>();
-
-                    listas.Add(gl.GetEspecialityListByEntity(entidad));
                     listas.Add(gl.GetProfessionalListByEntity(entidad));
+                    listas.Add(gl.GetEspecialityListsByEntity(entidad));
+
 
 
                     rp.data = listas;

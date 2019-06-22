@@ -175,12 +175,32 @@ namespace MilenioApi.Controllers
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>
-        [HttpPost]        
+        [HttpPost]
         [Route("GetAppointment")]
         public HttpResponseMessage GetAppointment(AppointmentModel t)
         {
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.GetAppointment(t));
+        }
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idpatient [STRING] id del paciente <br />  
+        /// PARAMETRO: idspeciality [STRING] id de la especialidad que selecciono <br />  
+        /// PARAMETRO: idcup [STRING] id del cup <br />  
+        /// PARAMETRO: idscheduledatail [STRING] id del cup <br />  
+        /// PARAMETRO: codaprobacion [STRING] codido aprobacion<br />  
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        [HttpPost]
+        [Route("TakeAppointment")]
+        public HttpResponseMessage TakeAppointment(AppointmentModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.TakeAppointment(t));
         }
 
         #endregion

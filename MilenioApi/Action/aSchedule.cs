@@ -839,14 +839,17 @@ namespace MilenioApi.Action
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
-                        Guid idcup = ent.Especialidad_Cup_Entidad.Where(g => g.Id_Especialidad == model.Id_Especialidad && g.Id_Entidad == model.Id_Entidad && g.Cups.Codigo == model.Codigo_Cup).Select(t => t.Id_Cups).SingleOrDefault();
-
+                        // Guid idcup = ent.Especialidad_Cup_Entidad.Where(g => g.Id_Especialidad == model.Id_Especialidad && g.Id_Entidad == model.Id_Entidad && g.Cups.Codigo == model.Codigo_Cup).Select(t => t.Id_Cups).SingleOrDefault();
+                        Guid identidad = ent.Detalle_Agenda.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).Select(u => u.Horario_Agenda.Agenda_Profesional.Id_Profesional).SingleOrDefault();
                         Cita c = new Cita();
                         c.Id_Cita = Guid.NewGuid();
-                        c.Id_Entidad = model.Id_Entidad;
+                        c.Id_Entidad = identidad;
                         c.Id_Especialidad = model.Id_Especialidad;
                         c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
-                        c.Id_Cup = idcup;
+                        c.Id_Cup = model.Id_Cup;
+                        c.Id_Paciente = model.Id_Paciente;
+                        c.Confirmada = false;
+                        c.Fecha_Create = DateTime.Now;                       
 
                         return rep;
                     }

@@ -6,7 +6,8 @@ using System.Web;
 namespace MilenioApi.Models
 {
     public class CalendarModel
-    {       
+    {
+        public string idagenda { get; set; }
         public string fecha { get; set; }
         public string start { get; set; }
         public string end { get; set; }

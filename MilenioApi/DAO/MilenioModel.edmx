@@ -115,6 +115,7 @@
           </Key>
           <Property Name="Id_Detalle_Agenda" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Horario_Agenda" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Suplente" Type="uniqueidentifier" />
           <Property Name="Hora_Desde" Type="datetime" Nullable="false" />
           <Property Name="Hora_Hasta" Type="datetime" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
@@ -1356,6 +1357,7 @@
           </Key>
           <Property Name="Id_Detalle_Agenda" Type="Guid" Nullable="false" />
           <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Suplente" Type="Guid" />
           <Property Name="Hora_Desde" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Hora_Hasta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
@@ -2256,6 +2258,7 @@
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
                 <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
                 <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
+                <ScalarProperty Name="Id_Suplente" ColumnName="Id_Suplente" />
                 <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
                 <ScalarProperty Name="Id_Detalle_Agenda" ColumnName="Id_Detalle_Agenda" />
               </MappingFragment>

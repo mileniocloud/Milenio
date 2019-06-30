@@ -697,7 +697,7 @@ namespace MilenioApi.Action
                     }
                     else
                     {
-                        rp = autil.ReturnMesagge(ref rp, 43, string.Empty, null);
+                        rp = autil.ReturnMesagge(ref rp, 49, string.Empty, null);
                     }
                 }
                 catch (Exception ex)
@@ -751,7 +751,7 @@ namespace MilenioApi.Action
                             model.Mes = DateTime.Today.Month;
 
                         DateTime ft = DateTime.Now.AddMonths(2);
-                        
+
 
                         //List<Consultorio> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio).ToList();
                         List<Guid> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio.Id_Consultorio).ToList();
@@ -785,6 +785,7 @@ namespace MilenioApi.Action
                             cm.resizable.beforeStart = "true";
                             cm.color.primary = "#ad2121";
                             cm.color.secondary = "#FAE3E3";
+
                             cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
                             .Select(u => new ComboModel
                             {
@@ -868,6 +869,11 @@ namespace MilenioApi.Action
                         c.Fecha_Create = DateTime.Now;
 
                         ent.Cita.Add(c);
+
+                        //se coloca el detalle de la cita que ya fue tomada
+                        Detalle_Agenda dau = ent.Detalle_Agenda.Where(s => s.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
+                        dau.Asignada = true;
+
                         ent.SaveChanges();
                         autil.ReturnMesagge(ref rep, 47, string.Empty, null, rel, HttpStatusCode.OK);
 
@@ -903,7 +909,36 @@ namespace MilenioApi.Action
             }
         }
 
+        public object GetUnconfirmedAppoinmet(Basic model)
+        {
+            Response rep = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
+                    var citas = ent.Cita.Where(t => t.Confirmada == false & t.Paciente.Confirmado == false).Select(u => new
+                    {
+                        idappointment = u.Id_Cita,
+                        date = u.Detalle_Agenda.Fecha,
+                        fromhour = u.Detalle_Agenda.Hora_Desde,
+                        tohour = u.Detalle_Agenda.Hora_Hasta,
+                        paciente = u.Paciente
+
+                    }).SingleOrDefault();
+
+
+                    return rep;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
         #endregion
 

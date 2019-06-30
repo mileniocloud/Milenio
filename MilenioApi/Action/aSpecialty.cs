@@ -61,8 +61,8 @@ namespace MilenioApi.Action
                                 }
                                 else
                                 {
-                                    //ya existen registros iguales cambiar el mensaje
-                                    return rp = autil.ReturnMesagge(ref rp, 26, string.Empty, null, HttpStatusCode.OK);
+                                    //ya existen registros iguales
+                                    return rp = autil.ReturnMesagge(ref rp, 50, string.Empty, null, HttpStatusCode.OK);
                                 }
                             }
                         }
@@ -217,7 +217,7 @@ namespace MilenioApi.Action
                     var agenda = ece.Where(c => c.Estado == true).Select(a => new
                     {
                         idspecialty = a.Id_Especialidad,
-                        namespecialty = a.Especialidad.Nombre,
+                        namespecialty = a.Especialidad_Entidad.Especialidad.Nombre,
                         CountCup = (from spcup in ent.Especialidad_Cup_Entidad
                                     where spcup.Id_Especialidad == a.Id_Especialidad && spcup.Id_Entidad == entidad && spcup.Estado == true
                                     select new { spcup.Id_Cups }).ToList().Count,

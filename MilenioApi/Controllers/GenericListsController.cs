@@ -200,6 +200,21 @@ namespace MilenioApi.Controllers
             //Basic t = new Basic();
             return ut.ReturnResponse(s.GetGenericHoraryForm(model));
         }
+        // <summary>
+        // Metodo para consultar lo basico del formulario de especialidades por cups
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa la lista con la informacion necesaria para el formulario especialidades por cups</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsSpecialtyCupForm")]
+        public HttpResponseMessage GetListsSpecialtyCupForm()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsSpecialtyCupForm(t));
+        }
 
     }
 }

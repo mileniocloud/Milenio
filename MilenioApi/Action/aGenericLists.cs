@@ -257,6 +257,52 @@ namespace MilenioApi.Action
                 throw;
             }
         }
+        public object GetEspecialityListEntidad(Guid entidad)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    //EspecialityList gl = new EspecialityList();
+                    var gl = ent.Especialidad_Entidad.Where(x=>x.Id_Entidad == entidad).Select(l => new ComboModel
+                    {
+                        id = l.Id_Especialidad,
+                        value = l.Especialidad.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public object GetCupsList()
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    //EspecialityList gl = new EspecialityList();
+                    var gl = ent.Cups.Select(l => new ComboModel
+                    {
+                        id = l.Id_Cups,
+                        value = l.Descripcion
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public object GetEspecialityListByEntity(Basic model)
         {
@@ -476,6 +522,36 @@ namespace MilenioApi.Action
                     listas.Add(gl.GetFullMunicipality());
                     listas.Add(gl.GetFullNeighborhood());
                     listas.Add(gl.GetEspecialityList());
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object GetListsSpecialtyCupForm(Basic model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                    //listas.Add(gl.GetFullDepartament());
+                    //listas.Add(gl.GetFullMunicipality());
+                    listas.Add(gl.GetCupsList());
+                    listas.Add(gl.GetEspecialityListEntidad(entidad));
 
                     rp.data = listas;
                     //retorna un response, con el campo data lleno con la respuesta.               

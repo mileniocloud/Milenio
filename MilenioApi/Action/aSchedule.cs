@@ -3,9 +3,11 @@ using MilenioApi.DAO;
 using MilenioApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Web;
 
@@ -748,6 +750,9 @@ namespace MilenioApi.Action
                         if (model.Mes == 0)
                             model.Mes = DateTime.Today.Month;
 
+                        DateTime ft = DateTime.Now.AddMonths(2);
+                        
+
                         //List<Consultorio> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio).ToList();
                         List<Guid> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio.Id_Consultorio).ToList();
 
@@ -762,8 +767,7 @@ namespace MilenioApi.Action
                                                      && ha.Estado == true
                                                      && da.Asignada == false
                                                      && da.Fecha >= DateTime.Today
-                                                     && da.Fecha.Month == model.Mes
-                                                     && ha.Consultorio.Estado == true
+                                                     && da.Fecha <= ft
                                                      && ce.Contains(ha.Consultorio.Id_Consultorio)
                                                      select da).OrderBy(d => d.Hora_Desde).ToList();
 
@@ -822,7 +826,7 @@ namespace MilenioApi.Action
             }
         }
 
-     
+
 
         #endregion
 
@@ -835,22 +839,54 @@ namespace MilenioApi.Action
             {
                 try
                 {
-                    Guid entidad = model.id;
+
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
-                        // Guid idcup = ent.Especialidad_Cup_Entidad.Where(g => g.Id_Especialidad == model.Id_Especialidad && g.Id_Entidad == model.Id_Entidad && g.Cups.Codigo == model.Codigo_Cup).Select(t => t.Id_Cups).SingleOrDefault();
-                        Guid identidad = ent.Detalle_Agenda.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).Select(u => u.Horario_Agenda.Agenda_Profesional.Id_Profesional).SingleOrDefault();
                         Cita c = new Cita();
                         c.Id_Cita = Guid.NewGuid();
-                        c.Id_Entidad = identidad;
-                        c.Id_Especialidad = model.Id_Especialidad;
-                        c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
-                        c.Id_Cup = model.Id_Cup;
-                        c.Id_Paciente = model.Id_Paciente;
-                        c.Confirmada = false;
-                        c.Fecha_Create = DateTime.Now;                       
+                        //si el tipo de cita es privada
+                        if (model.Tipo_Cita == "1")
+                        {
+                            c.Id_Cup = null;
+                            c.Cod_Aprobacion = null;
+                        }
+                        else // si es por EPM
+                        {
+                            c.Id_Cup = model.Id_Cup;
+                            c.Cod_Aprobacion = model.Cod_Aprobacion;
+                        }
 
+                        c.Id_Paciente = model.Id_Paciente;
+                        c.Id_Entidad = model.id;
+                        c.Id_Especialidad = model.Id_Especialidad;
+
+                        c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
+
+                        c.Tipo_Cita = model.Tipo_Cita;
+                        c.Confirmada = false;
+                        c.Fecha_Create = DateTime.Now;
+
+                        ent.Cita.Add(c);
+                        ent.SaveChanges();
+                        autil.ReturnMesagge(ref rep, 47, string.Empty, null, rel, HttpStatusCode.OK);
+
+
+                        Detalle_Agenda da = ent.Detalle_Agenda.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
+                        List<string> list = new List<string>();
+                        list.Add(da.Fecha.ToShortDateString());
+                        list.Add(da.Hora_Desde.ToShortTimeString());
+                        list.Add(da.Hora_Hasta.ToShortTimeString());
+                        rep.message = autil.ReplaceCustomMesaggeText(list, rep.message);
+
+                        Paciente pc = ent.Paciente.Where(p => p.Id_Paciente == model.Id_Paciente).SingleOrDefault();
+                        Entidad et = ent.Entidad.Where(e => e.Id_Entidad == model.id).SingleOrDefault();
+                        Especialidad esp = ent.Especialidad.Where(e => e.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
+
+                        if (pc != null)
+                        {
+                            autil.SendMail(pc.Email, (SendConfirmation(pc.Nombres + " " + pc.Apellidos, et.Nombre, da.Fecha.ToShortDateString() + " " + da.Horario_Agenda.Hora_Desde.ToShortTimeString(), esp.Nombre)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
+                        }
                         return rep;
                     }
                     else
@@ -867,6 +903,40 @@ namespace MilenioApi.Action
             }
         }
 
+
+
+        #endregion
+
+
+        #region Coreo
+        private AlternateView SendConfirmation(string nombre, string entidad, string fecha, string especialidad)
+        {
+            try
+            {
+                //se arma el correo que se envia para el ambio de clave
+                string plantilla = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["CreacionCita"]);
+
+                var html = System.IO.File.ReadAllText(plantilla);
+                html = html.Replace("{{name}}", nombre);
+                html = html.Replace("{{entidad}}", entidad);
+                html = html.Replace("{{fecha}}", fecha);
+                html = html.Replace("{{especialidad}}", especialidad);
+
+                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
+
+                //create the LinkedResource (embedded image)
+                LinkedResource logo = new LinkedResource(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["LogoPath"]));
+                logo.ContentId = "companylogo";
+                //add the LinkedResource to the appropriate view
+                av.LinkedResources.Add(logo);
+
+                return av;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

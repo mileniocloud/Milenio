@@ -39,6 +39,7 @@ namespace MilenioApi.Controllers
         /// PARAMETRO: phone [STRING] [REQUERIDO] <br />   
         /// PARAMETRO: email [STRING] [REQUERIDO] <br />   
         /// PARAMETRO: address [STRING] [REQUERIDO] <br />
+        /// PARAMETRO: id [STRING] [REQUERIDO] id de la entidad <br />
         /// </remarks>
         /// <returns>Regresa informacion indicando que sucedio </returns>
         [HttpPost]        

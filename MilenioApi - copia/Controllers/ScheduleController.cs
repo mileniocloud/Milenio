@@ -123,9 +123,26 @@ namespace MilenioApi.Controllers
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.EditScheduleAgenda(t));
         }
+        /// <summary>
+        /// Obtiene los horarios de la agenda, dada una agenda profesional
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idscheduleagenda [STRING] id de horario agenda a modificar <br />
+
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>regresa un una lista de horarios por agenda profesional</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetScheduleAgenda")]
+        public HttpResponseMessage GetScheduleAgenda(ScheduleAgendaModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.GetScheduleAgenda(t));
+        }
 
         #endregion
-        
+
         #region detalle agenda // listo para pruebas
         /// <summary>
         /// Crea los detalle de las agendas dado un horario de la tabla horario agenda
@@ -139,7 +156,7 @@ namespace MilenioApi.Controllers
         [HttpPost]
         [Authorize]
         [Route("CreateScheduleDetail")]
-        public HttpResponseMessage CreateScheduleDetail(ScheduleDetailModel t)
+        public HttpResponseMessage CreateScheduleDetail(ProfetionalScheduleModel t)
         {
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.CreateScheduleDetail(t));
@@ -154,16 +171,38 @@ namespace MilenioApi.Controllers
         /// Entrega una lista con disponibilidades de citas
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+        /// PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita <br />      
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>
-        [HttpPost]        
+        [HttpPost]
         [Route("GetAppointment")]
         public HttpResponseMessage GetAppointment(AppointmentModel t)
         {
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.GetAppointment(t));
+        }
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idpatient [STRING] id del paciente <br />  
+        /// PARAMETRO: specialities [STRING] id de la especialidad que selecciono <br />  
+        /// PARAMETRO: idcup [STRING] id del cup <br />  
+        /// PARAMETRO: idscheduledatail [STRING] id del cup <br />  
+        /// PARAMETRO: autorization [STRING] codido aprobacion<br />  
+        /// PARAMETRO: id [STRING] id entidad<br /> 
+        /// PARAMETRO: typequery [STRING] indica si es por EPS o particular<br /> 
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        [HttpPost]
+        [Route("TakeAppointment")]
+        public HttpResponseMessage TakeAppointment(AppointmentModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.TakeAppointment(t));
         }
 
         #endregion

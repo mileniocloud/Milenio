@@ -586,6 +586,7 @@
             PARAMETRO: phone [STRING] [REQUERIDO] <br />   
             PARAMETRO: email [STRING] [REQUERIDO] <br />   
             PARAMETRO: address [STRING] [REQUERIDO] <br />
+            PARAMETRO: id [STRING] [REQUERIDO] id de la entidad <br />
             </remarks>
             <returns>Regresa informacion indicando que sucedio </returns>
         </member>
@@ -679,7 +680,8 @@
             <param name="t"></param>
             <returns>regresa un mensaje de exito o error</returns>
         </member>
-        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ScheduleDetailModel)">
+        <!-- El comentario XML con formato incorrecto se ha omitido para el miembro "M:MilenioApi.Controllers.ScheduleController.GetScheduleAgenda(MilenioApi.Models.ScheduleAgendaModel)" -->
+        <member name="M:MilenioApi.Controllers.ScheduleController.CreateScheduleDetail(MilenioApi.Models.ProfetionalScheduleModel)">
             <summary>
             Crea los detalle de las agendas dado un horario de la tabla horario agenda
             </summary>
@@ -695,7 +697,23 @@
             Entrega una lista con disponibilidades de citas
             </summary>
             <remarks>
-            PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+            PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita <br />      
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.TakeAppointment(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idpatient [STRING] id del paciente <br />  
+            PARAMETRO: specialities [STRING] id de la especialidad que selecciono <br />  
+            PARAMETRO: idcup [STRING] id del cup <br />  
+            PARAMETRO: idscheduledatail [STRING] id del cup <br />  
+            PARAMETRO: autorization [STRING] codido aprobacion<br />  
+            PARAMETRO: id [STRING] id entidad<br /> 
+            PARAMETRO: typequery [STRING] indica si es por EPS o particular<br /> 
             </remarks> 
             <param name="t"></param>
             <returns>Entrega una lista con disponibilidades de citas</returns>

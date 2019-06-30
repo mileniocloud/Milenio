@@ -55,5 +55,29 @@ namespace MilenioApi.Models
         [JsonProperty("idspeciality")]
         public Guid Id_Especialidad { get; set; }
 
+        [Display(Name = "specialityname")]
+        [JsonProperty("specialityname")]
+        public Guid specialityname { get; set; }
+
+        [Display(Name = "cups")]
+        [JsonProperty("cups")]
+        public string Codigo_Cup { get; set; }
+
+        [Display(Name = "cupsname")]
+        [JsonProperty("cupsname")]
+        public string cupsname { get; set; }
+
+        [Display(Name = "entityname")]
+        [JsonProperty("entityname")]
+        public string entityname { get; set; }
+
+        [Display(Name = "typequery")]
+        [JsonProperty("typequery")]
+        public string Tipo_Cita { get; set; }
+
+        [Display(Name = "autorization")]
+        [JsonProperty("autorization")]
+        public string Cod_Aprobacion { get; set; }
+
     }
 }

@@ -171,7 +171,7 @@ namespace MilenioApi.Controllers
         /// Entrega una lista con disponibilidades de citas
         /// </summary>
         /// <remarks>
-        /// PARAMETRO: idspeciality [STRING] id de la especialidad a la cual pediran cita <br />      
+        /// PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita <br />      
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>
@@ -188,10 +188,12 @@ namespace MilenioApi.Controllers
         /// </summary>
         /// <remarks>
         /// PARAMETRO: idpatient [STRING] id del paciente <br />  
-        /// PARAMETRO: idspeciality [STRING] id de la especialidad que selecciono <br />  
+        /// PARAMETRO: specialities [STRING] id de la especialidad que selecciono <br />  
         /// PARAMETRO: idcup [STRING] id del cup <br />  
         /// PARAMETRO: idscheduledatail [STRING] id del cup <br />  
-        /// PARAMETRO: codaprobacion [STRING] codido aprobacion<br />  
+        /// PARAMETRO: autorization [STRING] codido aprobacion<br />  
+        /// PARAMETRO: id [STRING] id entidad<br /> 
+        /// PARAMETRO: typequery [STRING] indica si es por EPS o particular<br /> 
         /// </remarks> 
         /// <param name="t"></param>
         /// <returns>Entrega una lista con disponibilidades de citas</returns>

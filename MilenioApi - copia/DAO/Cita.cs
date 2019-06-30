@@ -15,10 +15,11 @@ namespace MilenioApi.DAO
     public partial class Cita
     {
         public System.Guid Id_Cita { get; set; }
+        public string Tipo_Cita { get; set; }
         public System.Guid Id_Paciente { get; set; }
         public System.Guid Id_Entidad { get; set; }
-        public Nullable<System.Guid> Id_Especialidad { get; set; }
-        public System.Guid Id_Cup { get; set; }
+        public System.Guid Id_Especialidad { get; set; }
+        public Nullable<System.Guid> Id_Cup { get; set; }
         public System.Guid Id_Detalle_Agenda { get; set; }
         public string Cod_Aprobacion { get; set; }
         public bool Confirmada { get; set; }

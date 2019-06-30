@@ -68,7 +68,7 @@ namespace MilenioApi.Action
                         return rp = autil.ReturnMesagge(ref rp, 45, string.Empty, null, HttpStatusCode.OK);
                     }
 
-                   return this.ValidatePatient(model);
+                    return this.ValidatePatient(model);
                 }
             }
             catch (Exception ex)
@@ -147,6 +147,17 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     List<object> response = new List<object>();
+                    Guid identidad = Guid.Parse(model.id);
+                    Cups cup = new Cups();
+                    Especialidad ep = new Especialidad();
+                    if (model.Tipo_Cita == "0")
+                    {
+                        Guid codcup = Guid.Parse(model.Codigo_Cup);
+                        cup = ent.Cups.Where(h => h.Id_Cups == codcup).SingleOrDefault();
+                    }
+
+                    ep = ent.Especialidad.Where(g => g.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
+                    Entidad et = ent.Entidad.Where(e => e.Id_Entidad == identidad).SingleOrDefault();
 
                     var paciente = ent.Paciente.Where(p => p.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion && p.Numero_Identificacion == model.Numero_Identificacion)
                                           .Select(c => new
@@ -155,9 +166,19 @@ namespace MilenioApi.Action
                                               typedocument = c.Id_Tipo_Identificacion,
                                               document = c.Numero_Identificacion,
                                               names = c.Nombres,
-                                              lastnames = c.Apellidos
+                                              lastnames = c.Apellidos,
+                                              cups = model.Codigo_Cup,
+                                              typequery = model.Tipo_Cita,
+                                              model.Id_Especialidad,
+                                              autorization = model.Cod_Aprobacion,
+                                              entityname = et.Nombre,
+                                              cupname = cup.Descripcion,
+                                              speciality = ep.Nombre,
+                                              id = model.id
                                           }).ToList();
-                    response.Add(paciente);
+                    if (paciente.Count > 0)
+                        response.Add(paciente[0]);
+
                     if (response.Count != 0)
                     {
                         aSchedule sh = new aSchedule();
@@ -171,7 +192,7 @@ namespace MilenioApi.Action
                     rp.data = response;
 
                     //retorna un response, con el id del paciente
-                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 48, null, null, HttpStatusCode.OK);
                 }
             }
             catch (Exception ex)

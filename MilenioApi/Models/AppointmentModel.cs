@@ -6,24 +6,39 @@ namespace MilenioApi.Models
 {
     public class AppointmentModel : Basic
     {
+       
+        [Display(Name = "typequery")]
+        [JsonProperty("typequery")]
+        public string Tipo_Cita { get; set; }
+
+       
         [Display(Name = "idpatient")]
         [JsonProperty("idpatient")]
         public Guid Id_Paciente { get; set; }
+
+        [Required]
         [Display(Name = "identity")]
         [JsonProperty("identity")]
         public Guid Id_Entidad { get; set; }
-        [Display(Name = "idspeciality")]
-        [JsonProperty("idspeciality")]
+
+        [Required]
+        [Display(Name = "specialities")]
+        [JsonProperty("specialities")]
         public Guid Id_Especialidad { get; set; }
+
         [Display(Name = "idcup")]
         [JsonProperty("idcup")]
         public Guid Id_Cup { get; set; }
+
+       
         [Display(Name = "idscheduledatail")]
         [JsonProperty("idscheduledatail")]
         public Guid Id_Detalle_Agenda { get; set; }
-        [Display(Name = "codaprobacion")]
-        [JsonProperty("codaprobacion")]
+        [Display(Name = "autorization")]
+        [JsonProperty("autorization")]
         public string Cod_Aprobacion { get; set; }
+        [Display(Name = "confirmation")]
+        [JsonProperty("confirmation")]
         public bool Confirmada { get; set; }
         public DateTime Fecha_Create { get; set; }
 

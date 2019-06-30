@@ -258,7 +258,7 @@ namespace MilenioApi.Action
             {
                 string change = "{" + g + "}";
                 custom = custom.Replace(change, i);
-                g = g++;
+                g = g + 1;
             }
             return custom;
         }

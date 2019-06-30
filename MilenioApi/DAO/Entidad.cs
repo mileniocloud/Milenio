@@ -18,7 +18,6 @@ namespace MilenioApi.DAO
         public Entidad()
         {
             this.Entidad_Usuario = new HashSet<Entidad_Usuario>();
-            this.Especialidad_Cup_Entidad = new HashSet<Especialidad_Cup_Entidad>();
             this.Especialidad_Entidad = new HashSet<Especialidad_Entidad>();
             this.Licencia = new HashSet<Licencia>();
             this.Rol_Vista_Entidad = new HashSet<Rol_Vista_Entidad>();
@@ -46,8 +45,6 @@ namespace MilenioApi.DAO
         public virtual Poblado Poblado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Entidad_Usuario> Entidad_Usuario { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Especialidad_Cup_Entidad> Especialidad_Cup_Entidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Especialidad_Entidad> Especialidad_Entidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

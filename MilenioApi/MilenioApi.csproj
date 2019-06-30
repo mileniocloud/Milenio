@@ -255,6 +255,7 @@
     <Compile Include="Action\aDashboard.cs" />
     <Compile Include="Action\aGenericLists.cs" />
     <Compile Include="Action\aRol.cs" />
+    <Compile Include="Action\aSpecialty.cs" />
     <Compile Include="Action\aUser.cs" />
     <Compile Include="Action\aUtilities.cs" />
     <Compile Include="Action\aEntity.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Controllers\GenericListsController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Controllers\TokenValidationHandler.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAO\Actividad_Economica.cs">
@@ -462,6 +464,7 @@
     <Compile Include="Models\RolList.cs" />
     <Compile Include="Models\ScheduleAgendaModel.cs" />
     <Compile Include="Models\ScheduleDetailModel.cs" />
+    <Compile Include="Models\SpecialtyCupModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />

@@ -934,6 +934,38 @@
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
         </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.CreateCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            Crea la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idspecialty [STRING] id especialidad <br />
+            PARAMETRO: idcup [STRING] lista de cups <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.EditCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            edita la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idspecialty [STRING] id especialidad <br />
+            PARAMETRO: idcup [STRING] lista de cups <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.getCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            Consulta la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: No recibe parametros<br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa lista de la asociación de cups por especialidad</returns>
+        </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>
             Metodo crear usuarios del sistema

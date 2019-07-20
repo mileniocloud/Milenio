@@ -664,6 +664,7 @@ namespace MilenioApi.Action
                                                 da.Hora_Hasta = hhasta;
                                                 da.Fecha = date;
                                                 da.Asignada = false;
+                                                
                                                 da.Fecha_Create = DateTime.Now;
                                                 da.Fecha_Update = DateTime.Now;
                                                 da.Usuario_Create = usuario;
@@ -709,6 +710,153 @@ namespace MilenioApi.Action
 
             //rp.data = er;
             return rp;
+        }
+        public object GetScheduleDetail(ScheduleDetailModel model)
+        {
+            Response rp = new Response();
+            cp = tvh.getprincipal(Convert.ToString(model.token));
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                    Horario_Agenda ap = ent.Horario_Agenda.Where(a => a.Id_Agenda_Profesional == model.Id_Agenda_Profesional).SingleOrDefault();
+                    //DateTime horaIni = model.Fecha_Desde.Date + model.Hora_Desde.TimeOfDay;
+                    //DateTime horaFin = model.Fecha_Hasta.Date + model.Hora_Hasta.TimeOfDay;
+                    IQueryable<Detalle_Agenda> dt = ent.Detalle_Agenda.Where(z => z.Id_Horario_Agenda == ap.Id_Horario_Agenda);
+                    //busca por duracion
+                    if (model.Fecha_Desde != null && model.Fecha_Desde.Year>2000)
+                    {
+                        dt = dt.Where(t => t.Fecha >= model.Fecha_Desde);
+                    }
+                    if (model.Fecha_Hasta != null && model.Fecha_Hasta.Year > 2000)
+                    {
+                        dt = dt.Where(t => t.Fecha <= model.Fecha_Hasta);
+                    }
+                    //if (model.Hora_Desde != null && model.Hora_Desde.Year > 2000)
+                    //{
+                    //    dt = dt.Where(t => t.Hora_Desde >= horaIni);
+                    //}
+                    //if (model.Hora_Hasta != null && model.Hora_Hasta.Year > 2000)
+                    //{
+                    //    dt = dt.Where(t => t.Hora_Hasta <= t.Hora_Hasta);
+                    //}
+                    List<ScheduleDetailModel> detalleAgenda = dt.Select(a => new ScheduleDetailModel
+                    {
+                        Id_Agenda_Profesional = a.Horario_Agenda.Id_Agenda_Profesional,
+                        Id_Detalle_Agenda = a.Id_Detalle_Agenda,
+                        Id_Horario_Agenda = a.Id_Horario_Agenda,
+                        Hora_Desde = a.Hora_Desde,
+                        Hora_Hasta = a.Hora_Hasta,
+                        Fecha = a.Fecha,
+                        Id_Consultorio=a.Horario_Agenda.Id_Consultorio,
+                        Name_Consultorio = a.Horario_Agenda.Consultorio.Nombre
+
+
+                    }).OrderBy(s=> s.Fecha).ThenBy(n => n.Hora_Desde).ToList();
+                    var detalle = new List<object>();
+                    foreach (var item in detalleAgenda)
+                    {
+                        if (model.Hora_Desde != null && model.Hora_Desde.Year > 2000)
+                        {
+                            if (item.Hora_Desde.TimeOfDay >= model.Hora_Desde.TimeOfDay)
+                            {
+                                if (model.Hora_Hasta != null && model.Hora_Hasta.Year > 2000)
+                                {
+                                    if (item.Hora_Hasta.TimeOfDay <= model.Hora_Hasta.TimeOfDay)
+                                    {
+                                        detalle.Add(item);
+                                    }
+                                }
+                                else
+                                {
+                                    detalle.Add(item);
+                                }
+                            }
+                        }
+                        else {
+                            if (model.Hora_Hasta != null && model.Hora_Hasta.Year > 2000)
+                            {
+                                if (item.Hora_Hasta.TimeOfDay <= model.Hora_Hasta.TimeOfDay)
+                                {
+                                    detalle.Add(item);
+                                }
+                            }
+                            else {
+                                detalle.Add(item);
+                            }
+                        }
+                    }
+                    rp.cantidad = detalle.Count();
+                    rp.pagina = 0;
+                    rp.data = detalle;
+
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object EditProfesionalScheduleDetail(List<ScheduleDetailModel> model) {
+            Response rp = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                List<string> lsError = new List<string>();
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model[0].token));
+                    
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+                    foreach (var item in model)
+                    {
+                        Detalle_Agenda da = ent.Detalle_Agenda.Where(x => x.Id_Detalle_Agenda == item.Id_Detalle_Agenda).SingleOrDefault();
+                        List<Detalle_Agenda> dapro = ent.Detalle_Agenda.Where(d => d.Id_Suplente == item.id_Suplente
+                        && d.Fecha == da.Fecha && d.Hora_Desde == da.Hora_Desde && d.Hora_Hasta == da.Hora_Hasta).ToList();
+
+                        List<Agenda_Profesional> lap = (from da_ in ent.Detalle_Agenda
+                                   join ha_ in ent.Horario_Agenda on da_.Id_Horario_Agenda equals ha_.Id_Horario_Agenda
+                                   join ap in ent.Agenda_Profesional on ha_.Id_Agenda_Profesional equals ap.Id_Agenda_Profesional
+                                   where da_.Id_Detalle_Agenda == item.Id_Detalle_Agenda
+                                   && ap.Id_Profesional == item.id_Suplente && ap.Fecha_Desde >= da.Fecha && ap.Fecha_Hasta <= da.Fecha &&
+                                   ha_.Hora_Desde >= da.Hora_Desde && ha_.Hora_Hasta <= da.Hora_Hasta
+                                   select (
+                                   ap
+
+                                   )
+                        ).ToList();
+                        if (lap.Count == 0 && dapro.Count == 0)
+                        {
+                            da.Id_Suplente = item.id_Suplente;
+                            ent.SaveChanges();
+                        }
+                        else {
+                            lsError.Add("Fecha: " + da.Fecha.ToShortDateString() + " con hora inicial: " + da.Hora_Desde.ToLongTimeString() + " y con hora final: " + da.Hora_Hasta.ToLongTimeString() + " no fue posible asignar al profesional elegido ya que tiene una agenda propuesta o generada para estos registros");
+                        }
+                    }
+                }
+                
+                catch (Exception ex) {
+                    rp = autil.ReturnMesagge(ref rp, 4, ex.Message, null, HttpStatusCode.InternalServerError);
+                }
+                if (lsError.Count == 0)
+                {
+                    //se genera el codigo del mensaje de retorno exitoso
+                    return rp = autil.ReturnMesagge(ref rp, 20, string.Empty, null);
+                }
+                else
+                {
+                    rp.data = lsError;
+                    //retorna un response, con los datos que no fueron modificados en data.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
         }
         private string traslateDay(string day)
         {

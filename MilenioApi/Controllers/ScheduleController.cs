@@ -161,7 +161,40 @@ namespace MilenioApi.Controllers
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.CreateScheduleDetail(t));
         }
+        /// <summary>
+        /// Crea los detalle de las agendas dado un horario de la tabla horario agenda
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idscheduleagenda [STRING] id horario agenda <br />
+        /// PARAMETRO: idoffice [STRING] id del consultorio
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>regresa un mensaje de exito o una lista con errores</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetScheduleDetail")]
+        public HttpResponseMessage GetScheduleDetail(ScheduleDetailModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.GetScheduleDetail(t));
+        }
 
+        /// <summary>
+        /// Obtiene el detalle de las agendas segun filtros 
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: Varios parametros <br />
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns> Obtiene la lista el detalle de las agendas segun filtros </returns>
+        [HttpPost]
+        [Authorize]
+        [Route("EditProfScheduleDetail")]
+        public HttpResponseMessage EditProfScheduleDetail(List<ScheduleDetailModel> t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.EditProfesionalScheduleDetail(t));
+        }
         #endregion
 
 

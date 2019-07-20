@@ -726,6 +726,63 @@ namespace MilenioApi.Action
                 return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
             }
         }
+        public object GetListsDetailSheduleForm(ScheduleDetailModel model)
+        {
+            Response rp = new Response();
+            aGenericLists gl = new aGenericLists();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    List<object> listas = new List<object>();
+
+                   listas.Add(gl.GetProfetionalBySpecialty(model, entidad));
+
+                    rp.data = listas;
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general
+                return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public object GetProfetionalBySpecialty(ScheduleDetailModel model, Guid entidad)
+        {
+            Response rp = new Response();
+            try
+            {
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    var lista = ent.Agenda_Profesional.Where(z => z.Id_Agenda_Profesional == model.Id_Agenda_Profesional && z.Id_Entidad == entidad).SingleOrDefault();
+                    List<Guid> listSpecialities = new List<Guid>();
+                    
+                    var lo = lista.Especialidad_Entidad.Select(x => x.Especialidad).ToList();
+                    foreach (var item in lo)
+                    {
+                        listSpecialities.Add(item.Id_Especialidad);
+                    }
+                    ProfetionalSpecialtyList gl = new ProfetionalSpecialtyList();
+                    gl.profetionalspecialty = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entidad && e.Estado == true && listSpecialities.Contains(e.Id_Especialidad) && e.Id_Usuario != lista.Id_Profesional ).Select(l => new ComboModel
+                    {
+                        id = l.Id_Usuario,
+                        value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido
+                    }).Distinct().OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         #endregion
     }
 }

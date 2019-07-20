@@ -216,5 +216,20 @@ namespace MilenioApi.Controllers
             return ut.ReturnResponse(s.GetListsSpecialtyCupForm(t));
         }
 
+        // <summary>
+        // Metodo para consultar lo basico del formulario de Detalle Agenda
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa vrias listas con la informacion necesaria para el formulario detalle Agenda </returns>
+        [HttpPost]
+        [Authorize]
+        [Route("GetListsDetailSheduleForm")]
+        public HttpResponseMessage GetListsDetailSheduleForm(ScheduleDetailModel model)
+        {
+            aGenericLists s = new aGenericLists();
+            return ut.ReturnResponse(s.GetListsDetailSheduleForm(model));
+        }
+
     }
 }

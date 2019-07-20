@@ -692,6 +692,27 @@
             <param name="t"></param>
             <returns>regresa un mensaje de exito o una lista con errores</returns>
         </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetScheduleDetail(MilenioApi.Models.ScheduleDetailModel)">
+            <summary>
+            Crea los detalle de las agendas dado un horario de la tabla horario agenda
+            </summary>
+            <remarks>
+            PARAMETRO: idscheduleagenda [STRING] id horario agenda <br />
+            PARAMETRO: idoffice [STRING] id del consultorio
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o una lista con errores</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.EditProfScheduleDetail(System.Collections.Generic.List{MilenioApi.Models.ScheduleDetailModel})">
+            <summary>
+            Obtiene el detalle de las agendas segun filtros 
+            </summary>
+            <remarks>
+            PARAMETRO: Varios parametros <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns> Obtiene la lista el detalle de las agendas segun filtros </returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.GetAppointment(MilenioApi.Models.AppointmentModel)">
             <summary>
             Entrega una lista con disponibilidades de citas

@@ -6,40 +6,39 @@
     <edmx:Diagrams>
       <Diagram DiagramId="c5d09a04b6f94026a0dbaacde9846aca" Name="Diagram1" >
         <EntityTypeShape EntityType="MilenioCloudModel.Actividad_Economica" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Agenda_Profesional" Width="1.5" PointX="9.75" PointY="18.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Agenda_Profesional" Width="1.5" PointX="14.75" PointY="24.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.CIE" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Cita" Width="1.5" PointX="16.5" PointY="18.375" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Consultorio" Width="1.5" PointX="9.75" PointY="13.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Consultorio_Especialidad" Width="1.5" PointX="15" PointY="30" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Cups" Width="1.5" PointX="15.75" PointY="34.5" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Cita" Width="1.5" PointX="21.5" PointY="25.375" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Consultorio" Width="1.5" PointX="12.75" PointY="5.875" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Consultorio_Especialidad" Width="1.5" PointX="15" PointY="14" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Cups" Width="1.5" PointX="15.75" PointY="10.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Departamento" Width="1.5" PointX="0.75" PointY="19.875" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Detalle_Agenda" Width="1.5" PointX="14.25" PointY="18.375" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="7.5" PointY="28.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Usuario" Width="1.5" PointX="9.75" PointY="23.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad" Width="1.5" PointX="10.5" PointY="39.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Cup_Entidad" Width="1.5" PointX="18" PointY="30" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Entidad" Width="1.5" PointX="12.75" PointY="29.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Profesional" Width="1.5" PointX="15" PointY="23.125" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Detalle_Agenda" Width="1.5" PointX="19.25" PointY="25.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="7.5" PointY="16.75" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Usuario" Width="1.5" PointX="9.75" PointY="16" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad" Width="1.5" PointX="10.5" PointY="7.125" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Cup_Entidad" Width="1.5" PointX="18" PointY="14" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Entidad" Width="1.5" PointX="12.75" PointY="13.75" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Especialidad_Profesional" Width="1.5" PointX="15" PointY="20.375" />
         <EntityTypeShape EntityType="MilenioCloudModel.GenericError" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Horario_Agenda" Width="1.5" PointX="12" PointY="18" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="9.75" PointY="42.75" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Horario_Agenda" Width="1.5" PointX="17" PointY="25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="9.75" PointY="19.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Medicamentos_Esenciales" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Menu" Width="1.5" PointX="7.5" PointY="36.125" />
         <EntityTypeShape EntityType="MilenioCloudModel.Municipio" Width="1.5" PointX="3" PointY="19.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Ocupacion" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Paciente" Width="1.5" PointX="14.25" PointY="13.375" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Paciente" Width="1.5" PointX="19.25" PointY="20.375" />
         <EntityTypeShape EntityType="MilenioCloudModel.Poblado" Width="1.5" PointX="5.25" PointY="19.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="9.75" PointY="35.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Rol_Usuario" Width="1.5" PointX="12" PointY="23.625" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Rol_Vista_Entidad" Width="1.5" PointX="9.75" PointY="28.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Rol" Width="1.5" PointX="9.75" PointY="10.125" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Rol_Usuario" Width="1.5" PointX="12" PointY="10" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Rol_Vista_Entidad" Width="1.5" PointX="12.75" PointY="18.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="9.75" PointY="31.75" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Telefono" Width="1.5" PointX="9.75" PointY="26.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Identificacion" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Profesional" Width="1.5" PointX="5.25" PointY="16" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Vinculacion" Width="1.5" PointX="5.25" PointY="23.5" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Ubicacion" Width="1.5" PointX="7.5" PointY="24.875" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Usuario" Width="1.5" PointX="7.5" PointY="16" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Vistas" Width="1.5" PointX="7.5" PointY="39.5" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Profesional" Width="1.5" PointX="10.25" PointY="31.25" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Tipo_Vinculacion" Width="1.5" PointX="10.25" PointY="24" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Ubicacion" Width="1.5" PointX="7.5" PointY="23.625" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Usuario" Width="1.5" PointX="12.5" PointY="22" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Vistas" Width="1.5" PointX="10.5" PointY="3.5" />
         <AssociationConnector Association="MilenioCloudModel.FK_Agenda_Profesional_Usuario" />
         <AssociationConnector Association="MilenioCloudModel.FK_Horario_Agenda_Agenda_Profesional" />
         <AssociationConnector Association="MilenioCloudModel.FK_Cita_Detalle_Agenda" />
@@ -71,6 +70,7 @@
         <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Tipo_Profesional" />
         <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Tipo_Vinculacion" />
         <AssociationConnector Association="MilenioCloudModel.Agenda_Especialidad" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Menu" Width="1.5" PointX="7.5" PointY="10.25" />
         <AssociationConnector Association="MilenioCloudModel.Rol_Menu" />
       </Diagram>
     </edmx:Diagrams>

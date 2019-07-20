@@ -24,6 +24,9 @@ namespace MilenioApi.DAO
         public string Titulo { get; set; }
         public string Ruta { get; set; }
         public string Estilo { get; set; }
+        public string Icon { get; set; }
+        public Nullable<System.Guid> Padre { get; set; }
+        public int Posicion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Rol> Rol { get; set; }

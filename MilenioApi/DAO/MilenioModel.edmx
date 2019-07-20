@@ -1094,7 +1094,6 @@
           <EntitySet Name="Consultorio_Especialidad" EntityType="MilenioCloudModel.Consultorio_Especialidad" />
           <EntitySet Name="Cups" EntityType="MilenioCloudModel.Cups" />
           <EntitySet Name="Departamento" EntityType="MilenioCloudModel.Departamento" />
-          <EntitySet Name="Detalle_Agenda" EntityType="MilenioCloudModel.Detalle_Agenda" />
           <EntitySet Name="Entidad" EntityType="MilenioCloudModel.Entidad" />
           <EntitySet Name="Entidad_Usuario" EntityType="MilenioCloudModel.Entidad_Usuario" />
           <EntitySet Name="Especialidad" EntityType="MilenioCloudModel.Especialidad" />
@@ -1128,10 +1127,6 @@
             <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
             <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
           </AssociationSet>
-          <AssociationSet Name="FK_Cita_Detalle_Agenda" Association="MilenioCloudModel.FK_Cita_Detalle_Agenda">
-            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
-            <End Role="Cita" EntitySet="Cita" />
-          </AssociationSet>
           <AssociationSet Name="FK_Cita_Paciente" Association="MilenioCloudModel.FK_Cita_Paciente">
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="Cita" EntitySet="Cita" />
@@ -1155,10 +1150,6 @@
           <AssociationSet Name="FK_MDepartamento" Association="MilenioCloudModel.FK_MDepartamento">
             <End Role="Departamento" EntitySet="Departamento" />
             <End Role="Municipio" EntitySet="Municipio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Detalle_Agenda_Horario_Agenda" Association="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda">
-            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
-            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
           </AssociationSet>
           <AssociationSet Name="FK_Entidad_Poblado" Association="MilenioCloudModel.FK_Entidad_Poblado">
             <End Role="Poblado" EntitySet="Poblado" />
@@ -1249,6 +1240,15 @@
             <End Role="Menu" EntitySet="Menu" />
             <End Role="Rol" EntitySet="Rol" />
           </AssociationSet>
+          <EntitySet Name="Detalle_Agenda" EntityType="MilenioCloudModel.Detalle_Agenda" />
+          <AssociationSet Name="FK_Cita_Detalle_Agenda" Association="MilenioCloudModel.FK_Cita_Detalle_Agenda">
+            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Detalle_Agenda_Horario_Agenda" Association="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda">
+            <End Role="Horario_Agenda" EntitySet="Horario_Agenda" />
+            <End Role="Detalle_Agenda" EntitySet="Detalle_Agenda" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Actividad_Economica">
           <Key>
@@ -1298,9 +1298,9 @@
           <Property Name="Cod_Aprobacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Confirmada" Type="Boolean" Nullable="false" />
           <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Detalle_Agenda" Relationship="MilenioCloudModel.FK_Cita_Detalle_Agenda" FromRole="Cita" ToRole="Detalle_Agenda" />
           <NavigationProperty Name="Paciente" Relationship="MilenioCloudModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
           <Property Name="Asistio" Type="Boolean" />
+          <NavigationProperty Name="Detalle_Agenda" Relationship="MilenioCloudModel.FK_Cita_Detalle_Agenda" FromRole="Cita" ToRole="Detalle_Agenda" />
         </EntityType>
         <EntityType Name="Consultorio">
           <Key>
@@ -1355,24 +1355,6 @@
           <Property Name="Created_At" Type="DateTime" Precision="3" />
           <Property Name="Updated_At" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Municipio" Relationship="MilenioCloudModel.FK_MDepartamento" FromRole="Departamento" ToRole="Municipio" />
-        </EntityType>
-        <EntityType Name="Detalle_Agenda">
-          <Key>
-            <PropertyRef Name="Id_Detalle_Agenda" />
-          </Key>
-          <Property Name="Id_Detalle_Agenda" Type="Guid" Nullable="false" />
-          <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
-          <Property Name="Id_Suplente" Type="Guid" />
-          <Property Name="Hora_Desde" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Hora_Hasta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Asignada" Type="Boolean" Nullable="false" />
-          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
-          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="Cita" Relationship="MilenioCloudModel.FK_Cita_Detalle_Agenda" FromRole="Detalle_Agenda" ToRole="Cita" />
-          <NavigationProperty Name="Horario_Agenda" Relationship="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" FromRole="Detalle_Agenda" ToRole="Horario_Agenda" />
         </EntityType>
         <EntityType Name="Entidad">
           <Key>
@@ -1774,18 +1756,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Cita_Detalle_Agenda">
-          <End Type="MilenioCloudModel.Detalle_Agenda" Role="Detalle_Agenda" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Cita" Role="Cita" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Detalle_Agenda">
-              <PropertyRef Name="Id_Detalle_Agenda" />
-            </Principal>
-            <Dependent Role="Cita">
-              <PropertyRef Name="Id_Detalle_Agenda" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Cita_Paciente">
           <End Type="MilenioCloudModel.Paciente" Role="Paciente" Multiplicity="1" />
           <End Type="MilenioCloudModel.Cita" Role="Cita" Multiplicity="*" />
@@ -1859,18 +1829,6 @@
             </Principal>
             <Dependent Role="Municipio">
               <PropertyRef Name="Departamento_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Detalle_Agenda_Horario_Agenda">
-          <End Type="MilenioCloudModel.Horario_Agenda" Role="Horario_Agenda" Multiplicity="1" />
-          <End Type="MilenioCloudModel.Detalle_Agenda" Role="Detalle_Agenda" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Horario_Agenda">
-              <PropertyRef Name="Id_Horario_Agenda" />
-            </Principal>
-            <Dependent Role="Detalle_Agenda">
-              <PropertyRef Name="Id_Horario_Agenda" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2149,6 +2107,48 @@
           <End Type="MilenioCloudModel.Menu" Role="Menu" Multiplicity="*" />
           <End Type="MilenioCloudModel.Rol" Role="Rol" Multiplicity="*" />
         </Association>
+        <EntityType Name="Detalle_Agenda">
+          <Key>
+            <PropertyRef Name="Id_Detalle_Agenda" />
+          </Key>
+          <Property Name="Id_Detalle_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Suplente" Type="Guid" />
+          <Property Name="Hora_Desde" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Hora_Hasta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Asignada" Type="Boolean" Nullable="false" />
+          <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fecha_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario_Create" Type="Guid" Nullable="false" />
+          <Property Name="Usuario_Update" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Cita" Relationship="MilenioCloudModel.FK_Cita_Detalle_Agenda" FromRole="Detalle_Agenda" ToRole="Cita" />
+          <NavigationProperty Name="Horario_Agenda" Relationship="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" FromRole="Detalle_Agenda" ToRole="Horario_Agenda" />
+        </EntityType>
+        <Association Name="FK_Cita_Detalle_Agenda">
+          <End Type="MilenioCloudModel.Detalle_Agenda" Role="Detalle_Agenda" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Cita" Role="Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Detalle_Agenda">
+              <PropertyRef Name="Id_Detalle_Agenda" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="Id_Detalle_Agenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Detalle_Agenda_Horario_Agenda">
+          <End Type="MilenioCloudModel.Horario_Agenda" Role="Horario_Agenda" Multiplicity="1" />
+          <End Type="MilenioCloudModel.Detalle_Agenda" Role="Detalle_Agenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Horario_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Principal>
+            <Dependent Role="Detalle_Agenda">
+              <PropertyRef Name="Id_Horario_Agenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2253,23 +2253,6 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Dane_Id" ColumnName="Dane_Id" />
                 <ScalarProperty Name="Codigo_Id" ColumnName="Codigo_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Detalle_Agenda">
-            <EntityTypeMapping TypeName="MilenioCloudModel.Detalle_Agenda">
-              <MappingFragment StoreEntitySet="Detalle_Agenda">
-                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
-                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
-                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
-                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
-                <ScalarProperty Name="Asignada" ColumnName="Asignada" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
-                <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
-                <ScalarProperty Name="Id_Suplente" ColumnName="Id_Suplente" />
-                <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
-                <ScalarProperty Name="Id_Detalle_Agenda" ColumnName="Id_Detalle_Agenda" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2644,6 +2627,23 @@
               <ScalarProperty Name="Id_Menu" ColumnName="Id_Menu" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Detalle_Agenda">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Detalle_Agenda">
+              <MappingFragment StoreEntitySet="Detalle_Agenda">
+                <ScalarProperty Name="Usuario_Update" ColumnName="Usuario_Update" />
+                <ScalarProperty Name="Usuario_Create" ColumnName="Usuario_Create" />
+                <ScalarProperty Name="Fecha_Update" ColumnName="Fecha_Update" />
+                <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
+                <ScalarProperty Name="Asignada" ColumnName="Asignada" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
+                <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
+                <ScalarProperty Name="Id_Suplente" ColumnName="Id_Suplente" />
+                <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
+                <ScalarProperty Name="Id_Detalle_Agenda" ColumnName="Id_Detalle_Agenda" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

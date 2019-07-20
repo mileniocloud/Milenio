@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="MilenioCloudModel.Consultorio_Especialidad" Width="1.5" PointX="15" PointY="14" />
         <EntityTypeShape EntityType="MilenioCloudModel.Cups" Width="1.5" PointX="15.75" PointY="10.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Departamento" Width="1.5" PointX="0.75" PointY="19.875" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Detalle_Agenda" Width="1.5" PointX="19.25" PointY="25.25" />
         <EntityTypeShape EntityType="MilenioCloudModel.Entidad" Width="1.5" PointX="7.5" PointY="16.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Entidad_Usuario" Width="1.5" PointX="9.75" PointY="16" />
         <EntityTypeShape EntityType="MilenioCloudModel.Especialidad" Width="1.5" PointX="10.5" PointY="7.125" />
@@ -41,14 +40,12 @@
         <EntityTypeShape EntityType="MilenioCloudModel.Vistas" Width="1.5" PointX="10.5" PointY="3.5" />
         <AssociationConnector Association="MilenioCloudModel.FK_Agenda_Profesional_Usuario" />
         <AssociationConnector Association="MilenioCloudModel.FK_Horario_Agenda_Agenda_Profesional" />
-        <AssociationConnector Association="MilenioCloudModel.FK_Cita_Detalle_Agenda" />
         <AssociationConnector Association="MilenioCloudModel.FK_Cita_Paciente" />
         <AssociationConnector Association="MilenioCloudModel.FK_Consultorio_Especialidad_Consultorio" />
         <AssociationConnector Association="MilenioCloudModel.FK_Horario_Agenda_Consultorio" />
         <AssociationConnector Association="MilenioCloudModel.FK_Consultorio_Especialidad_Especialidad_Entidad" />
         <AssociationConnector Association="MilenioCloudModel.FK_Especialidad_Cup_Entidad_Cups" />
         <AssociationConnector Association="MilenioCloudModel.FK_MDepartamento" />
-        <AssociationConnector Association="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" />
         <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Poblado" />
         <AssociationConnector Association="MilenioCloudModel.FK_Entidad_Usuario_Entidad" />
         <AssociationConnector Association="MilenioCloudModel.FK_Especialidad_Entidad_Entidad" />
@@ -72,6 +69,9 @@
         <AssociationConnector Association="MilenioCloudModel.Agenda_Especialidad" />
         <EntityTypeShape EntityType="MilenioCloudModel.Menu" Width="1.5" PointX="7.5" PointY="10.25" />
         <AssociationConnector Association="MilenioCloudModel.Rol_Menu" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Detalle_Agenda" Width="1.5" PointX="19.25" PointY="25.25" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Cita_Detalle_Agenda" />
+        <AssociationConnector Association="MilenioCloudModel.FK_Detalle_Agenda_Horario_Agenda" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

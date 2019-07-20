@@ -26,7 +26,7 @@ namespace MilenioApi.DAO
         public System.DateTime Fecha_Create { get; set; }
         public Nullable<bool> Asistio { get; set; }
     
-        public virtual Detalle_Agenda Detalle_Agenda { get; set; }
         public virtual Paciente Paciente { get; set; }
+        public virtual Detalle_Agenda Detalle_Agenda { get; set; }
     }
 }

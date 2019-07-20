@@ -31,10 +31,9 @@ namespace MilenioApi.DAO
         public System.DateTime Fecha_Update { get; set; }
         public System.Guid Usuario_Create { get; set; }
         public System.Guid Usuario_Update { get; set; }
-        public Nullable<System.Guid> Id_Suplente { get; set; }
     
-        public virtual Horario_Agenda Horario_Agenda { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cita> Cita { get; set; }
+        public virtual Horario_Agenda Horario_Agenda { get; set; }
     }
 }

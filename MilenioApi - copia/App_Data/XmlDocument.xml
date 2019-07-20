@@ -702,6 +702,17 @@
             <param name="t"></param>
             <returns>Entrega una lista con disponibilidades de citas</returns>
         </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAppointmentByFilter(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita [requerido]<br />
+            PARAMETRO: idprofetional [STRING] id de la especialidad a la cual pediran cita [optional]<br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.TakeAppointment(MilenioApi.Models.AppointmentModel)">
             <summary>
             Entrega una lista con disponibilidades de citas
@@ -717,6 +728,38 @@
             </remarks> 
             <param name="t"></param>
             <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetUnconfirmedAppoinmet">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>        
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.ConfirmAppoinmet(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.DeleteAppoinmet(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>
@@ -933,6 +976,38 @@
             PARAMETRO: password [STRING] - el usuario que desea cambiar la clave
             </remarks>
             <returns>REGRESA UN MENSAJE INDICANDO QUE LA CLAVE CAMBIO</returns>   
+        </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.CreateCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            Crea la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idspecialty [STRING] id especialidad <br />
+            PARAMETRO: idcup [STRING] lista de cups <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.EditCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            edita la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: idspecialty [STRING] id especialidad <br />
+            PARAMETRO: idcup [STRING] lista de cups <br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa un mensaje de exito o error</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.SpecialtyController.getCupXSpecialty(MilenioApi.Models.SpecialtyCupModel)">
+            <summary>
+            Consulta la asociación de cups por especialidad
+            </summary>
+            <remarks>
+            PARAMETRO: No recibe parametros<br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>regresa lista de la asociación de cups por especialidad</returns>
         </member>
         <member name="M:MilenioApi.Controllers.UserController.CreateUser(MilenioApi.Models.UserModel)">
             <summary>

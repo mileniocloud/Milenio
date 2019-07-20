@@ -434,6 +434,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppointmentConfirmationModel.cs" />
     <Compile Include="Models\AppointmentModel.cs" />
     <Compile Include="Models\CalendarModel.cs" />
     <Compile Include="Models\EntityByZone.cs" />

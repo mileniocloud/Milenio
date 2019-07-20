@@ -854,7 +854,7 @@ namespace MilenioApi.Action
                 {
                     rp.data = lsError;
                     //retorna un response, con los datos que no fueron modificados en data.               
-                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                    return autil.ReturnMesagge(ref rp, 54, null, null, HttpStatusCode.OK);
                 }
             }
         }

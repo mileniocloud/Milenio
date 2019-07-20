@@ -35,7 +35,6 @@ namespace MilenioApi.DAO
         public virtual DbSet<Consultorio_Especialidad> Consultorio_Especialidad { get; set; }
         public virtual DbSet<Cups> Cups { get; set; }
         public virtual DbSet<Departamento> Departamento { get; set; }
-        public virtual DbSet<Detalle_Agenda> Detalle_Agenda { get; set; }
         public virtual DbSet<Entidad> Entidad { get; set; }
         public virtual DbSet<Entidad_Usuario> Entidad_Usuario { get; set; }
         public virtual DbSet<Especialidad> Especialidad { get; set; }
@@ -62,6 +61,7 @@ namespace MilenioApi.DAO
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Vistas> Vistas { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<Detalle_Agenda> Detalle_Agenda { get; set; }
     
         public virtual int Validate_Create_User(string login, string identificacion, string email, string registroprofesional)
         {

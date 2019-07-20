@@ -144,6 +144,37 @@ namespace MilenioApi.Controllers
         }
 
         // <summary>
+        // Metodo para consultar las especialidades de una entidad, enviando solo el token
+        // </summary>
+        // <remarks>
+        // 
+        // </remarks>
+        // <returns>Regresa una lista de Id - Value con las especialidades de una entidad </returns>
+        [HttpPost]
+        [Route("GetEntityEspecialties")]
+        public HttpResponseMessage GetentityEspecialies()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetentityEspecialies(t));
+        }
+
+        // <summary>
+        // Metodo para consultar los profesionales dada una especialidad de una entidad
+        // </summary>
+        // <remarks>
+        // 
+        // </remarks>
+        // <returns>Regresa una lista de Id - Value con llos profesionales de esa especialidad </returns>
+        [HttpPost]
+        [Route("GetProfetionalByEspeciality")]
+        public HttpResponseMessage GetProfetionalByEspeciality(AppointmentModel t)
+        {
+            aGenericLists s = new aGenericLists();            
+            return ut.ReturnResponse(s.GetProfetionalByEspeciality(t));
+        }
+
+        // <summary>
         // Metodo para consultar las especialidades agrupadas por municipio
         // </summary>
         // <remarks>
@@ -199,6 +230,38 @@ namespace MilenioApi.Controllers
             aGenericLists s = new aGenericLists();
             //Basic t = new Basic();
             return ut.ReturnResponse(s.GetGenericHoraryForm(model));
+        }
+
+        // <summary>
+        // Metodo para consultar lo basico del formulario de especialidades por cups
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa la lista con la informacion necesaria para el formulario especialidades por cups</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetListsSpecialtyCupForm")]
+        public HttpResponseMessage GetListsSpecialtyCupForm()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetListsSpecialtyCupForm(t));
+        }
+
+        // <summary>
+        // Metodo para consultar las especialidades activas de una entidad con sus medicos asociados
+        // </summary>
+        // <remarks>
+        // </remarks>
+        // <returns>Regresa la lista de especialidades con el medico que tiene esa especialidad</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("GetSpecialityAndProfetionalByEntity")]
+        public HttpResponseMessage GetSpecialityAndProfetionalByEntity()
+        {
+            aGenericLists s = new aGenericLists();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetSpecialityAndProfetionalByEntity(t));
         }
 
     }

@@ -9,5 +9,7 @@ namespace MilenioApi.Models
     {
         public string id { get; set; }
         public string value { get; set; }
+
+        List<ComboModel> lista = new List<ComboModel>();
     }
 }

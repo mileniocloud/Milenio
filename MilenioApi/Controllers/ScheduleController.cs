@@ -187,6 +187,24 @@ namespace MilenioApi.Controllers
         /// Entrega una lista con disponibilidades de citas
         /// </summary>
         /// <remarks>
+        /// PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita [requerido]<br />
+        /// PARAMETRO: idprofetional [STRING] id de la especialidad a la cual pediran cita [optional]<br />
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        [Authorize]
+        [HttpPost]
+        [Route("GetAppointmentByFilter")]
+        public HttpResponseMessage GetAppointmentByFilter(AppointmentModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.GetAppointmentByFilter(t));
+        }
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
         /// PARAMETRO: idpatient [STRING] id del paciente <br />  
         /// PARAMETRO: specialities [STRING] id de la especialidad que selecciono <br />  
         /// PARAMETRO: idcup [STRING] id del cup <br />  
@@ -203,6 +221,61 @@ namespace MilenioApi.Controllers
         {
             aSchedule s = new aSchedule();
             return ut.ReturnResponse(s.TakeAppointment(t));
+        }
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>        
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        /// 
+        [Authorize]
+        [HttpGet]
+        [Route("GetUnconfirmedAppoinmet")]
+        public HttpResponseMessage GetUnconfirmedAppoinmet()
+        {
+            aSchedule s = new aSchedule();
+            Basic t = new Basic();
+            return ut.ReturnResponse(s.GetUnconfirmedAppoinmet(t));
+        }
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        /// 
+        [Authorize]
+        [HttpPost]
+        [Route("ConfirmAppoinmet")]
+        public HttpResponseMessage ConfirmAppoinmet(AppointmentModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.ConfirmAppoinmet(t));
+        }
+
+
+        /// <summary>
+        /// Entrega una lista con disponibilidades de citas
+        /// </summary>
+        /// <remarks>
+        /// PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+        /// </remarks> 
+        /// <param name="t"></param>
+        /// <returns>Entrega una lista con disponibilidades de citas</returns>
+        /// 
+        [Authorize]
+        [HttpPost]
+        [Route("DeleteAppoinmet")]
+        public HttpResponseMessage DeleteAppoinmet(AppointmentModel t)
+        {
+            aSchedule s = new aSchedule();
+            return ut.ReturnResponse(s.DeleteAppoinmet(t));
         }
 
         #endregion

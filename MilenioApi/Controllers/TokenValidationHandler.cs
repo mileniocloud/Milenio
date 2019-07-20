@@ -23,26 +23,35 @@ namespace MilenioApi.Controllers
     {
         public ClaimsPrincipal getprincipal(string token)
         {
-            //token = Decrypt(token);
-
-            var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
-            var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
-            var issuerToken = ConfigurationManager.AppSettings["JWT_ISSUER_TOKEN"];
-            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
-
-            SecurityToken securityToken;
+            Response rp = new Response();
+            aUtilities autil = new aUtilities();            
+            HttpResponseMessage st = new HttpResponseMessage();
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            TokenValidationParameters validationParameters = new TokenValidationParameters()
-            {
-                ValidAudience = audienceToken,
-                ValidIssuer = issuerToken,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                LifetimeValidator = this.LifetimeValidator,
-                IssuerSigningKey = securityKey
-            };
-            return tokenHandler.ValidateToken(token, validationParameters, out securityToken);
+            SecurityToken securityToken;
+            try
+            {                
+                //token = Decrypt(token);
+                var secretKey = ConfigurationManager.AppSettings["JWT_SECRET_KEY"];
+                var audienceToken = ConfigurationManager.AppSettings["JWT_AUDIENCE_TOKEN"];
+                var issuerToken = ConfigurationManager.AppSettings["JWT_ISSUER_TOKEN"];
+                var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
 
+               
+                TokenValidationParameters validationParameters = new TokenValidationParameters()
+                {
+                    ValidAudience = audienceToken,
+                    ValidIssuer = issuerToken,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    LifetimeValidator = this.LifetimeValidator,
+                    IssuerSigningKey = securityKey
+                };
+                return tokenHandler.ValidateToken(token, validationParameters, out securityToken);
+            }
+            catch (SecurityTokenValidationException ex)
+            {
+                return null;
+            }
         }
 
         public bool LifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
@@ -171,7 +180,7 @@ namespace MilenioApi.Controllers
                         Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
                         sg.TimeLogOff(usuario);
 
-                        st.StatusCode = HttpStatusCode.Unauthorized;
+                        st.StatusCode = HttpStatusCode.Redirect;
                         st.Headers.Add("Message", "Session Vencida");
                         //autil.MensajeRetorno(ref rp, 1, string.Empty, null, HttpStatusCode.Redirect);
                     }

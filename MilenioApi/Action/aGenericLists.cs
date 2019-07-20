@@ -265,7 +265,7 @@ namespace MilenioApi.Action
                 using (MilenioCloudEntities ent = new MilenioCloudEntities())
                 {
                     //EspecialityList gl = new EspecialityList();
-                    var gl = ent.Especialidad_Entidad.Where(x=>x.Id_Entidad == entidad).Select(l => new ComboModel
+                    var gl = ent.Especialidad_Entidad.Where(x => x.Id_Entidad == entidad).Select(l => new ComboModel
                     {
                         id = l.Id_Especialidad,
                         value = l.Especialidad.Nombre
@@ -481,6 +481,128 @@ namespace MilenioApi.Action
                 throw;
             }
         }
+
+        public object GetentityEspecialies(Basic model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    EspecialityList gl = new EspecialityList();
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    gl.specialities = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entidad && e.Estado == true && e.Especialidad_Profesional.Count() >= 1).Select(l => new ComboModel
+                    {
+                        id = l.Id_Especialidad,
+                        value = l.Especialidad.Nombre
+
+                    }).OrderBy(o => o.value).ToList();
+
+                    return gl;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //        public object GetentityEspecialiesAndProfetional(Basic model)
+        //        {
+        //            Response rp = new Response();
+        //            try
+        //            {
+        //                cp = tvh.getprincipal(Convert.ToString(model.token));
+        //                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+        //                {
+        //                    EspecialityList gl = new EspecialityList();
+        //                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+        //                    gl.specialities = ent.Especialidad_Entidad.Where(e => e.Id_Entidad == entidad && e.Estado == true
+        //                    && e.Especialidad_Profesional.Count() >= 1).Select(l => new ComboModel
+        //                    {
+        //                        id = l.Id_Especialidad,
+        //                        value = l.Especialidad.Nombre,
+        //                        lista = l.Especialidad_Profesional.Select(p => new ComboModel
+        //                        {
+        //                            id = p.Usuario.Id_Usuario,
+        //                            value = p.Usuario.Nombres + " " + p.Usuario.Primer_Apellido + " " + p.Usuario.Segundo_Apellido
+        //                        })
+
+
+        //                    }).OrderBy(o => o.value).ToList();
+
+        //                return gl;
+        //            }
+        //            }
+        //            catch (Exception)
+        //            {
+        //                throw;
+        //            }
+        //}
+
+        public object GetProfetionalByEspeciality(AppointmentModel model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {                   
+
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+
+                    rp.data = ent.Especialidad_Profesional.Where(e => e.Id_Entidad == entidad && e.Estado == true
+                    && e.Especialidad_Entidad.Estado == true && e.Id_Especialidad == model.Id_Especialidad).Select(l => new ComboModel
+                    {
+                        id = l.Id_Usuario,
+                        value = l.Usuario.Nombres + " " + l.Usuario.Primer_Apellido + " " + l.Usuario.Segundo_Apellido
+
+                    }).OrderBy(o => o.value).ToList();
+                   
+                    return rp;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public object GetSpecialityAndProfetionalByEntity(Basic model)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(model.token));
+
+                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                {
+                    ProfetionalSpecialtyList gl = new ProfetionalSpecialtyList();
+
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+
+                    var specialities = ent.Especialidad_Entidad.Where(i => i.Estado == true && i.Id_Entidad == entidad).Select(u => new
+                    {
+                        id = u.Id_Especialidad,
+                        value = u.Especialidad.Nombre,
+                        profetional = ent.Especialidad_Profesional.Where(t => t.Estado == true && t.Id_Especialidad == u.Id_Especialidad && t.Id_Entidad == entidad)
+                        .Select(h => new ComboModel
+                        {
+                            id = h.Id_Usuario,
+                            value = h.Usuario.Nombres + " " + h.Usuario.Primer_Apellido + " " + h.Usuario.Segundo_Apellido
+                        })
+                    }).ToList();
+
+                    return specialities;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         public object GetProfessionalListByEntity(Guid entity)
         {

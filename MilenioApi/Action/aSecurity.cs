@@ -177,15 +177,14 @@ namespace MilenioApi.Action
                         //fallo campos requeridos
                         return autil.ReturnMesagge(ref rp, 8, string.Empty, null, rel);
                     }
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
                 }
                 catch (Exception ex)
                 {
                     //error general
                     return autil.ReturnMesagge(ref rp, 4, string.Empty, null, HttpStatusCode.InternalServerError);
-                }
-
-                //retorna un response, con el campo data lleno con la respuesta.               
-                return autil.ReturnMesagge(ref rp, 9, null, null, HttpStatusCode.OK);
+                }                
             }
         }
 
@@ -349,7 +348,7 @@ namespace MilenioApi.Action
             catch (Exception ex)
             {
                 //Error General
-                ret = autil.ReturnMesagge(ref ret, 4, ex.Message, null);
+                ret = autil.ReturnMesagge(ref ret, 4, null, null);
                 return ret;
             }
         }
@@ -362,40 +361,48 @@ namespace MilenioApi.Action
                 cp = tvh.getprincipal(model.changetoken);
                 //cp = tvh.getprincipal(Convert.ToString(Encoding.Unicode.GetString(Convert.FromBase64String(model.changetoken))));
 
-                Guid? user_id = null;
-                string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
-                if (!string.IsNullOrEmpty(usid))
-                    user_id = Guid.Parse(usid);
-
-                using (MilenioCloudEntities ent = new MilenioCloudEntities())
+                if (cp != null)
                 {
-                    Usuario p = ent.Usuario.Where(u => u.Id_Usuario == user_id).SingleOrDefault();
+                    Guid? user_id = null;
+                    string usid = cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                    if (!string.IsNullOrEmpty(usid))
+                        user_id = Guid.Parse(usid);
 
-                    if (p != null)
+                    using (MilenioCloudEntities ent = new MilenioCloudEntities())
                     {
-                        if (p.Token_Password_Change == model.changetoken)
+                        Usuario p = ent.Usuario.Where(u => u.Id_Usuario == user_id).SingleOrDefault();
+
+                        if (p != null)
                         {
-                            p.Password = autil.Sha(model.Password);
-                            p.Token_Password_Change = null;
-                            ent.SaveChanges();
-                            ret = autil.ReturnMesagge(ref ret, 10, string.Empty, null);
+                            if (p.Token_Password_Change == model.changetoken)
+                            {
+                                p.Password = autil.Sha(model.Password);
+                                p.Token_Password_Change = null;
+                                ent.SaveChanges();
+                                ret = autil.ReturnMesagge(ref ret, 10, string.Empty, null);
+                            }
+                            else
+                            {
+                                ret = autil.ReturnMesagge(ref ret, 34, string.Empty, null);
+                            }
                         }
                         else
                         {
-                            ret = autil.ReturnMesagge(ref ret, 34, string.Empty, null);
+                            ret = autil.ReturnMesagge(ref ret, 15, string.Empty, null);
                         }
                     }
-                    else
-                    {
-                        ret = autil.ReturnMesagge(ref ret, 15, string.Empty, null);
-                    }
                 }
+                else
+                {
+                    ret = autil.ReturnMesagge(ref ret, 34, string.Empty, null);
+                }
+
                 return ret;
             }
             catch (Exception ex)
             {
                 //Error General
-                ret = autil.ReturnMesagge(ref ret, 4, ex.Message, null);
+                ret = autil.ReturnMesagge(ref ret, 4, null, null);
                 return ret;
             }
         }

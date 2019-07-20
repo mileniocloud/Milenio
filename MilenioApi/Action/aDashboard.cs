@@ -42,12 +42,22 @@ namespace MilenioApi.Action
                                      && ru.Id_Entidad == entidad
                                      select m).Distinct().ToList();
 
-                    foreach (var m in mn)
+                    foreach (var m in mn.Where(p => p.Padre == null).ToList())
                     {
                         menu = new MenuModel();
                         menu.name = m.Titulo;
                         menu.url = m.Ruta;
-                        menu.icon = m.Estilo;
+                        menu.icon = m.Icon;
+                        menu.estilo = m.Estilo;
+                        menu.posicion = m.Posicion;
+                        menu.child = mn.Where(h => h.Padre == m.Id_Menu).Select(t => new MenuModel
+                        {
+                            name = t.Titulo,
+                            url = t.Ruta,
+                            icon = t.Icon,
+                            estilo = t.Estilo,
+                            posicion = t.Posicion
+                        }).ToList();
                         lmenu.Add(menu);
                     }
                     //se adjunta el menu

@@ -773,6 +773,8 @@ namespace MilenioApi.Action
 
 
                         List<CalendarModel> lcm = new List<CalendarModel>();
+                        // consultamos todos los usuarios de esa entidad que son medicos
+                        List<Usuario> user = ent.Entidad_Usuario.Where(i => i.Id_Entidad == model.id && i.Usuario.Presta_Servicio == true).Select(r => r.Usuario).ToList();
                         foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta }))
                         {
                             CalendarModel cm = new CalendarModel();
@@ -785,13 +787,164 @@ namespace MilenioApi.Action
                             cm.resizable.beforeStart = "true";
                             cm.color.primary = "#ad2121";
                             cm.color.secondary = "#FAE3E3";
+                            Guid? idsuplente = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta).Select(y => y.Id_Suplente).SingleOrDefault();
 
-                            cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
-                            .Select(u => new ComboModel
+                            //si el id de suplente llega vacio retornamos los datos del doctor que originalmente atendera
+                            if (idsuplente == null)
                             {
-                                id = u.Id_Detalle_Agenda,
-                                value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
-                            }).ToList();
+                                cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
+                                .Select(u => new ComboModel
+                                {
+                                    id = u.Id_Detalle_Agenda,
+                                    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
+                                }).ToList();
+                            }
+                            else
+                            {
+                                string profesional = user.Where(j => j.Id_Usuario == idsuplente).Select(f => f.Nombres + " " + f.Primer_Apellido + " " + f.Segundo_Apellido).SingleOrDefault();
+                                //si existe un id de suplente mostramos esos datos del doctor que sera el que atiende ahora
+                                cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
+                                .Select(u => new ComboModel
+                                {
+                                    id = u.Id_Detalle_Agenda,
+                                    value = profesional
+                                }).ToList();
+                            }
+
+                            lcm.Add(cm);
+                        }
+
+                        lcm = lcm.OrderBy(t => t.start).ToList();
+                        if (lcm.Count() != 0)
+                        {
+                            //si tiene agenda e infrorma los resultados
+                            rep.data = lcm;
+                            autil.ReturnMesagge(ref rep, 41, string.Empty, null, rel, HttpStatusCode.OK);
+                            List<string> list = new List<string>();
+                            list.Add(lcm[0].fecha);
+                            rep.message = autil.ReplaceCustomMesaggeText(list, rep.message);
+                            return rep;
+                        }
+                        else
+                        {
+                            //informa que no hay disponibilidad
+                            return autil.ReturnMesagge(ref rep, 42, string.Empty, null, rel, HttpStatusCode.OK);
+                        }
+                    }
+                    else
+                    {
+                        //fallo campos requeridos
+                        return autil.ReturnMesagge(ref rep, 33, string.Empty, null, rel, HttpStatusCode.OK);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public object GetAppointmentByFilter(AppointmentModel model)
+        {
+            Response rep = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    List<ErrorFields> rel = autil.ValidateObject(model);
+                    if (rel.Count == 0)
+                    {
+                        if (model.Mes == 0)
+                            model.Mes = DateTime.Today.Month;
+
+                        DateTime ft = new DateTime(DateTime.Today.Year, model.Mes, 1);
+
+                        List<Guid> ce = ent.Consultorio_Especialidad.Where(c => c.Estado == true && c.Id_Especialidad == model.Id_Especialidad && c.Id_Entidad == entidad && c.Consultorio.Estado == true).Select(O => O.Consultorio.Id_Consultorio).ToList();
+
+                        List<Detalle_Agenda> ldet = new List<Detalle_Agenda>();
+
+                        IQueryable<Detalle_Agenda> ldet2 = (from ee in ent.Especialidad_Entidad
+                                                            from ap in ee.Agenda_Profesional
+                                                            from ha in ap.Horario_Agenda
+                                                            from da in ha.Detalle_Agenda
+                                                            where
+                                                            ee.Id_Especialidad == model.Id_Especialidad
+                                                            && ee.Id_Entidad == entidad
+                                                            && ap.Estado == true
+                                                            && ha.Estado == true
+                                                            && da.Asignada == model.tipo_consulta
+                                                            && da.Fecha.Month == ft.Month
+                                                            && ce.Contains(ha.Consultorio.Id_Consultorio)
+                                                            select da);
+
+                        if (model.tipo_consulta == true)
+                            ldet2.Select(m => m.Cita.Where(n => n.Confirmada == true));
+
+                        //si bucan por profesional
+                        if (model.Id_Profetional != null && model.Id_Profetional != Guid.Empty)
+                        {
+                            //agenda del medico;
+                            ldet2 = ldet2.Where(u => u.Id_Suplente == null && u.Horario_Agenda.Agenda_Profesional.Id_Profesional == model.Id_Profetional);
+                            //agenda del medico cuando es suplente
+                            ldet2 = ldet2.Where(u => u.Id_Suplente == model.Id_Profetional);
+                        }
+
+                        //si buscan por paciente
+                        if (!string.IsNullOrEmpty(model.Id_Tipo_Identificacion) && !string.IsNullOrEmpty(model.Numero_Identificacion))
+                        {
+                            ldet2 = (from b in ldet2
+                                     from t in b.Cita
+                                     where t.Paciente.Id_Tipo_Identificacion == model.Id_Tipo_Identificacion
+                                     && t.Paciente.Numero_Identificacion == model.Numero_Identificacion
+                                     select b);
+                        }
+
+                        //llevamos el iquereable a una lista completa
+                        ldet = ldet2.ToList();
+
+                        List<CalendarModel> lcm = new List<CalendarModel>();
+                        // consultamos todos los usuarios de esa entidad que son medicos
+                        List<Usuario> user = ent.Entidad_Usuario.Where(i => i.Id_Entidad == entidad && i.Usuario.Presta_Servicio == true).Select(r => r.Usuario).ToList();
+                        foreach (var i in ldet.GroupBy(g => new { g.Fecha, g.Hora_Desde, g.Hora_Hasta }))
+                        {
+                            CalendarModel cm = new CalendarModel();
+                            cm.title = i.Key.Fecha.ToString("dd/MM/yyyy") + " " + i.Key.Hora_Desde.ToString("HH:mm");
+                            cm.fecha = i.Key.Fecha.ToString("dd/MM/yyyy");
+                            cm.start = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Desde.ToString("HH:mm");
+                            cm.end = i.Key.Fecha.ToString("yyyy-MM-dd") + " " + i.Key.Hora_Hasta.ToString("HH:mm");
+                            cm.draggable = "false";
+                            cm.resizable.afterEnd = "true";
+                            cm.resizable.beforeStart = "true";
+                            cm.color.primary = "#ad2121";
+                            cm.color.secondary = "#FAE3E3";
+                            Guid? idsuplente = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta).Select(y => y.Id_Suplente).SingleOrDefault();
+
+                            //si el id de suplente llega vacio retornamos los datos del doctor que originalmente atendera
+                            if (idsuplente == null)
+                            {
+                                cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
+                                .Select(u => new ComboModel
+                                {
+                                    id = u.Id_Detalle_Agenda,
+                                    value = u.Horario_Agenda.Agenda_Profesional.Usuario.Nombres + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Primer_Apellido + " " + u.Horario_Agenda.Agenda_Profesional.Usuario.Segundo_Apellido
+                                }).ToList();
+                            }
+                            else
+                            {
+                                string profesional = user.Where(j => j.Id_Usuario == idsuplente).Select(f => f.Nombres + " " + f.Primer_Apellido + " " + f.Segundo_Apellido).SingleOrDefault();
+                                //si existe un id de suplente mostramos esos datos del doctor que sera el que atiende ahora
+                                cm.profetional = ldet.Where(d => d.Fecha == i.Key.Fecha && d.Hora_Desde == i.Key.Hora_Desde && d.Hora_Hasta == i.Key.Hora_Hasta)
+                                .Select(u => new ComboModel
+                                {
+                                    id = u.Id_Detalle_Agenda,
+                                    value = profesional
+                                }).ToList();
+                            }
 
                             lcm.Add(cm);
                         }
@@ -844,54 +997,73 @@ namespace MilenioApi.Action
                     List<ErrorFields> rel = autil.ValidateObject(model);
                     if (rel.Count == 0)
                     {
-                        Cita c = new Cita();
-                        c.Id_Cita = Guid.NewGuid();
-                        //si el tipo de cita es privada
-                        if (model.Tipo_Cita == "1")
+                        //se valida si esa cita ya fue tomada
+                        Cita ct = ent.Cita.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
+                        if (ct == null)
                         {
-                            c.Id_Cup = null;
-                            c.Cod_Aprobacion = null;
+                            //se consulta el paciente
+                            Paciente pc = ent.Paciente.Where(o => o.Id_Paciente == model.Id_Paciente).SingleOrDefault();
+                            Cita c = new Cita();
+                            c.Id_Cita = Guid.NewGuid();
+                            //si el tipo de cita es privada
+                            if (model.Tipo_Cita == "1")
+                            {
+                                c.Id_Cup = null;
+                                c.Cod_Aprobacion = null;
+                            }
+                            else // si es por EPM
+                            {
+                                c.Id_Cup = model.Id_Cup;
+                                c.Cod_Aprobacion = model.Cod_Aprobacion;
+                            }
+
+                            c.Id_Paciente = model.Id_Paciente;
+                            c.Id_Entidad = model.id;
+                            c.Id_Especialidad = model.Id_Especialidad;
+
+                            c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
+
+                            c.Tipo_Cita = model.Tipo_Cita;
+
+                            //si el paciente esta confirmado, la cita tambien se guarda confirmada
+                            if (pc.Confirmado)
+                                c.Confirmada = true;
+                            else
+                                c.Confirmada = false;
+
+                            c.Fecha_Create = DateTime.Now;
+
+                            ent.Cita.Add(c);
+
+                            //se coloca el detalle de la cita que ya fue tomada
+                            Detalle_Agenda dau = ent.Detalle_Agenda.Where(s => s.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
+                            dau.Asignada = true;
+
+                            ent.SaveChanges();
+                            autil.ReturnMesagge(ref rep, 47, string.Empty, null, rel, HttpStatusCode.OK);
+
+
+                            Detalle_Agenda da = ent.Detalle_Agenda.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
+                            List<string> list = new List<string>();
+                            list.Add(da.Fecha.ToShortDateString());
+                            list.Add(da.Hora_Desde.ToShortTimeString());
+                            list.Add(da.Hora_Hasta.ToShortTimeString());
+                            string email = new string(pc.Email.Take(3).ToArray());
+                            string emailserver = pc.Email.Substring(pc.Email.LastIndexOf('@') + 1);
+                            list.Add(email + "*******@" + emailserver);
+                            rep.message = autil.ReplaceCustomMesaggeText(list, rep.message);
+
+                            Entidad et = ent.Entidad.Where(e => e.Id_Entidad == model.id).SingleOrDefault();
+                            Especialidad esp = ent.Especialidad.Where(e => e.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
+
+                            if (pc != null)
+                            {
+                                autil.SendMail(pc.Email, (SendConfirmation(pc.Nombres + " " + pc.Apellidos, et.Nombre, da.Fecha.ToShortDateString() + " " + da.Hora_Desde.ToShortTimeString(), esp.Nombre)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
+                            }
                         }
-                        else // si es por EPM
+                        else
                         {
-                            c.Id_Cup = model.Id_Cup;
-                            c.Cod_Aprobacion = model.Cod_Aprobacion;
-                        }
-
-                        c.Id_Paciente = model.Id_Paciente;
-                        c.Id_Entidad = model.id;
-                        c.Id_Especialidad = model.Id_Especialidad;
-
-                        c.Id_Detalle_Agenda = model.Id_Detalle_Agenda;
-
-                        c.Tipo_Cita = model.Tipo_Cita;
-                        c.Confirmada = false;
-                        c.Fecha_Create = DateTime.Now;
-
-                        ent.Cita.Add(c);
-
-                        //se coloca el detalle de la cita que ya fue tomada
-                        Detalle_Agenda dau = ent.Detalle_Agenda.Where(s => s.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
-                        dau.Asignada = true;
-
-                        ent.SaveChanges();
-                        autil.ReturnMesagge(ref rep, 47, string.Empty, null, rel, HttpStatusCode.OK);
-
-
-                        Detalle_Agenda da = ent.Detalle_Agenda.Where(t => t.Id_Detalle_Agenda == model.Id_Detalle_Agenda).SingleOrDefault();
-                        List<string> list = new List<string>();
-                        list.Add(da.Fecha.ToShortDateString());
-                        list.Add(da.Hora_Desde.ToShortTimeString());
-                        list.Add(da.Hora_Hasta.ToShortTimeString());
-                        rep.message = autil.ReplaceCustomMesaggeText(list, rep.message);
-
-                        Paciente pc = ent.Paciente.Where(p => p.Id_Paciente == model.Id_Paciente).SingleOrDefault();
-                        Entidad et = ent.Entidad.Where(e => e.Id_Entidad == model.id).SingleOrDefault();
-                        Especialidad esp = ent.Especialidad.Where(e => e.Id_Especialidad == model.Id_Especialidad).SingleOrDefault();
-
-                        if (pc != null)
-                        {
-                            autil.SendMail(pc.Email, (SendConfirmation(pc.Nombres + " " + pc.Apellidos, et.Nombre, da.Fecha.ToShortDateString() + " " + da.Horario_Agenda.Hora_Desde.ToShortTimeString(), esp.Nombre)), ConfigurationManager.AppSettings["WelcomeSubjec"]);
+                            autil.ReturnMesagge(ref rep, 51, string.Empty, null, rel, HttpStatusCode.OK);
                         }
                         return rep;
                     }
@@ -920,18 +1092,27 @@ namespace MilenioApi.Action
                     Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
                     Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
 
-                    var citas = ent.Cita.Where(t => t.Confirmada == false & t.Paciente.Confirmado == false).Select(u => new
+
+                    DateTime fechaconsulta = DateTime.Today.AddDays(1);
+
+                    var citas = ent.Cita.Where(t => t.Confirmada == false
+                    //&& (t.Detalle_Agenda.Fecha <= fechaconsulta
+                    && t.Id_Entidad == entidad).Select(u => new AppointmentConfirmationModel
                     {
-                        idappointment = u.Id_Cita,
-                        date = u.Detalle_Agenda.Fecha,
-                        fromhour = u.Detalle_Agenda.Hora_Desde,
-                        tohour = u.Detalle_Agenda.Hora_Hasta,
-                        paciente = u.Paciente
+                        Id_Appointment = u.Id_Cita,
+                        Fecha_Cita = u.Detalle_Agenda.Fecha,
+                        Hora_Desde = u.Detalle_Agenda.Hora_Desde,
+                        Hora_Hasta = u.Detalle_Agenda.Hora_Hasta,
+                        Nombre_paciente = u.Paciente.Nombres + " " + u.Paciente.Apellidos,
+                        Id_Paciente = u.Paciente.Id_Paciente,
+                        Telefono = u.Paciente.Telefono,
+                        Celular = u.Paciente.Celular,
+                        Correo = u.Paciente.Email
+                    }).OrderBy(o => o.Fecha_Cita).ToList();
 
-                    }).SingleOrDefault();
+                    rep.data = citas;
+                    return autil.ReturnMesagge(ref rep, 9, null, null, HttpStatusCode.OK);
 
-
-                    return rep;
                 }
                 catch (Exception ex)
                 {
@@ -939,6 +1120,65 @@ namespace MilenioApi.Action
                 }
             }
         }
+
+        public object ConfirmAppoinmet(AppointmentModel model)
+        {
+            Response rep = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    Cita ct = ent.Cita.Where(t => t.Id_Cita == model.Id_Cita).SingleOrDefault();
+
+                    if (ct != null)
+                    {
+                        ct.Confirmada = true;
+                        ct.Paciente.Confirmado = true;
+                        ent.SaveChanges();
+                    }
+                    return autil.ReturnMesagge(ref rep, 52, null, null, HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+        public object DeleteAppoinmet(AppointmentModel model)
+        {
+            Response rep = new Response();
+            using (MilenioCloudEntities ent = new MilenioCloudEntities())
+            {
+                try
+                {
+                    cp = tvh.getprincipal(Convert.ToString(model.token));
+                    Guid entidad = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.PrimaryGroupSid).Select(c => c.Value).SingleOrDefault());
+                    Guid usuario = Guid.Parse(cp.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault());
+
+                    Cita ct = ent.Cita.Where(t => t.Id_Cita == model.Id_Cita).SingleOrDefault();
+
+                    if (ct != null)
+                    {
+                        Detalle_Agenda da = ct.Detalle_Agenda;
+
+                        da.Asignada = false;
+                        ent.Cita.Remove(ct);
+                        ent.SaveChanges();
+                    }
+                    return autil.ReturnMesagge(ref rep, 53, null, null, HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+
 
         #endregion
 

@@ -24,7 +24,6 @@
         <EntityTypeShape EntityType="MilenioCloudModel.Horario_Agenda" Width="1.5" PointX="17" PointY="25" />
         <EntityTypeShape EntityType="MilenioCloudModel.Licencia" Width="1.5" PointX="9.75" PointY="19.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Medicamentos_Esenciales" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MilenioCloudModel.Menu" Width="1.5" PointX="7.5" PointY="10.5" />
         <EntityTypeShape EntityType="MilenioCloudModel.Municipio" Width="1.5" PointX="3" PointY="19.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Ocupacion" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="MilenioCloudModel.Paciente" Width="1.5" PointX="19.25" PointY="20.375" />
@@ -71,6 +70,7 @@
         <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Tipo_Profesional" />
         <AssociationConnector Association="MilenioCloudModel.FK_Usuario_Tipo_Vinculacion" />
         <AssociationConnector Association="MilenioCloudModel.Agenda_Especialidad" />
+        <EntityTypeShape EntityType="MilenioCloudModel.Menu" Width="1.5" PointX="7.5" PointY="10.25" />
         <AssociationConnector Association="MilenioCloudModel.Rol_Menu" />
       </Diagram>
     </edmx:Diagrams>

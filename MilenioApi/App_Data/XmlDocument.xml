@@ -702,6 +702,17 @@
             <param name="t"></param>
             <returns>Entrega una lista con disponibilidades de citas</returns>
         </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetAppointmentByFilter(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: specialities [STRING] id de la especialidad a la cual pediran cita [requerido]<br />
+            PARAMETRO: idprofetional [STRING] id de la especialidad a la cual pediran cita [optional]<br />
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
         <member name="M:MilenioApi.Controllers.ScheduleController.TakeAppointment(MilenioApi.Models.AppointmentModel)">
             <summary>
             Entrega una lista con disponibilidades de citas
@@ -717,6 +728,38 @@
             </remarks> 
             <param name="t"></param>
             <returns>Entrega una lista con disponibilidades de citas</returns>
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.GetUnconfirmedAppoinmet">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>        
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.ConfirmAppoinmet(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
+        </member>
+        <member name="M:MilenioApi.Controllers.ScheduleController.DeleteAppoinmet(MilenioApi.Models.AppointmentModel)">
+            <summary>
+            Entrega una lista con disponibilidades de citas
+            </summary>
+            <remarks>
+            PARAMETRO: idappointment [STRING] id del detalle de la cita <br />    
+            </remarks> 
+            <param name="t"></param>
+            <returns>Entrega una lista con disponibilidades de citas</returns>
+            
         </member>
         <member name="M:MilenioApi.Controllers.OfficeController.CreateOffice(MilenioApi.Models.OfficeModel)">
             <summary>

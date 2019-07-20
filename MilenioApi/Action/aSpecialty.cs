@@ -61,8 +61,8 @@ namespace MilenioApi.Action
                                 }
                                 else
                                 {
-                                    //ya existen registros iguales cambiar el mensaje
-                                    return rp = autil.ReturnMesagge(ref rp, 26, string.Empty, null, HttpStatusCode.OK);
+                                    //ya existen registros iguales
+                                    return rp = autil.ReturnMesagge(ref rp, 50, string.Empty, null, HttpStatusCode.OK);
                                 }
                             }
                         }

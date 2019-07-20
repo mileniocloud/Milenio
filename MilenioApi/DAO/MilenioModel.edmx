@@ -59,6 +59,7 @@
           <Property Name="Id_Detalle_Agenda" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Cod_Aprobacion" Type="nvarchar" MaxLength="50" />
           <Property Name="Confirmada" Type="bit" Nullable="false" />
+          <Property Name="Asistio" Type="bit" />
           <Property Name="Fecha_Create" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Consultorio">
@@ -115,6 +116,7 @@
           </Key>
           <Property Name="Id_Detalle_Agenda" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id_Horario_Agenda" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_Suplente" Type="uniqueidentifier" />
           <Property Name="Hora_Desde" Type="datetime" Nullable="false" />
           <Property Name="Hora_Hasta" Type="datetime" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
@@ -269,7 +271,10 @@
           <Property Name="Id_Menu" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Titulo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Ruta" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Estilo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Estilo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Icon" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Padre" Type="uniqueidentifier" />
+          <Property Name="Posicion" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Municipio">
           <Key>
@@ -1100,7 +1105,6 @@
           <EntitySet Name="Horario_Agenda" EntityType="MilenioCloudModel.Horario_Agenda" />
           <EntitySet Name="Licencia" EntityType="MilenioCloudModel.Licencia" />
           <EntitySet Name="Medicamentos_Esenciales" EntityType="MilenioCloudModel.Medicamentos_Esenciales" />
-          <EntitySet Name="Menu" EntityType="MilenioCloudModel.Menu" />
           <EntitySet Name="Municipio" EntityType="MilenioCloudModel.Municipio" />
           <EntitySet Name="Ocupacion" EntityType="MilenioCloudModel.Ocupacion" />
           <EntitySet Name="Paciente" EntityType="MilenioCloudModel.Paciente" />
@@ -1240,6 +1244,7 @@
             <End Role="Agenda_Profesional" EntitySet="Agenda_Profesional" />
             <End Role="Especialidad_Entidad" EntitySet="Especialidad_Entidad" />
           </AssociationSet>
+          <EntitySet Name="Menu" EntityType="MilenioCloudModel.Menu" />
           <AssociationSet Name="Rol_Menu" Association="MilenioCloudModel.Rol_Menu">
             <End Role="Menu" EntitySet="Menu" />
             <End Role="Rol" EntitySet="Rol" />
@@ -1295,6 +1300,7 @@
           <Property Name="Fecha_Create" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Detalle_Agenda" Relationship="MilenioCloudModel.FK_Cita_Detalle_Agenda" FromRole="Cita" ToRole="Detalle_Agenda" />
           <NavigationProperty Name="Paciente" Relationship="MilenioCloudModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
+          <Property Name="Asistio" Type="Boolean" />
         </EntityType>
         <EntityType Name="Consultorio">
           <Key>
@@ -1356,6 +1362,7 @@
           </Key>
           <Property Name="Id_Detalle_Agenda" Type="Guid" Nullable="false" />
           <Property Name="Id_Horario_Agenda" Type="Guid" Nullable="false" />
+          <Property Name="Id_Suplente" Type="Guid" />
           <Property Name="Hora_Desde" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Hora_Hasta" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
@@ -1528,16 +1535,6 @@
           <Property Name="Concentracion" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Presentacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Menu">
-          <Key>
-            <PropertyRef Name="Id_Menu" />
-          </Key>
-          <Property Name="Id_Menu" Type="Guid" Nullable="false" />
-          <Property Name="Titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Ruta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Estilo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.Rol_Menu" FromRole="Menu" ToRole="Rol" />
         </EntityType>
         <EntityType Name="Municipio">
           <Key>
@@ -2135,6 +2132,19 @@
           <End Type="MilenioCloudModel.Agenda_Profesional" Role="Agenda_Profesional" Multiplicity="*" />
           <End Type="MilenioCloudModel.Especialidad_Entidad" Role="Especialidad_Entidad" Multiplicity="*" />
         </Association>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="Id_Menu" />
+          </Key>
+          <Property Name="Id_Menu" Type="Guid" Nullable="false" />
+          <Property Name="Titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ruta" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Estilo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Icon" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Padre" Type="Guid" />
+          <Property Name="Posicion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Rol" Relationship="MilenioCloudModel.Rol_Menu" FromRole="Menu" ToRole="Rol" />
+        </EntityType>
         <Association Name="Rol_Menu">
           <End Type="MilenioCloudModel.Menu" Role="Menu" Multiplicity="*" />
           <End Type="MilenioCloudModel.Rol" Role="Rol" Multiplicity="*" />
@@ -2182,6 +2192,7 @@
           <EntitySetMapping Name="Cita">
             <EntityTypeMapping TypeName="MilenioCloudModel.Cita">
               <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="Asistio" ColumnName="Asistio" />
                 <ScalarProperty Name="Fecha_Create" ColumnName="Fecha_Create" />
                 <ScalarProperty Name="Confirmada" ColumnName="Confirmada" />
                 <ScalarProperty Name="Cod_Aprobacion" ColumnName="Cod_Aprobacion" />
@@ -2256,6 +2267,7 @@
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
                 <ScalarProperty Name="Hora_Hasta" ColumnName="Hora_Hasta" />
                 <ScalarProperty Name="Hora_Desde" ColumnName="Hora_Desde" />
+                <ScalarProperty Name="Id_Suplente" ColumnName="Id_Suplente" />
                 <ScalarProperty Name="Id_Horario_Agenda" ColumnName="Id_Horario_Agenda" />
                 <ScalarProperty Name="Id_Detalle_Agenda" ColumnName="Id_Detalle_Agenda" />
               </MappingFragment>
@@ -2400,16 +2412,6 @@
                 <ScalarProperty Name="Principio_Activo" ColumnName="Principio_Activo" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="Id_Medicamento" ColumnName="Id_Medicamento" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Menu">
-            <EntityTypeMapping TypeName="MilenioCloudModel.Menu">
-              <MappingFragment StoreEntitySet="Menu">
-                <ScalarProperty Name="Estilo" ColumnName="Estilo" />
-                <ScalarProperty Name="Ruta" ColumnName="Ruta" />
-                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
-                <ScalarProperty Name="Id_Menu" ColumnName="Id_Menu" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2621,6 +2623,19 @@
               <ScalarProperty Name="Id_Agenda_Profesional" ColumnName="Id_Agenda_Profesional" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Menu">
+            <EntityTypeMapping TypeName="MilenioCloudModel.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
+                <ScalarProperty Name="Padre" ColumnName="Padre" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Estilo" ColumnName="Estilo" />
+                <ScalarProperty Name="Ruta" ColumnName="Ruta" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Id_Menu" ColumnName="Id_Menu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="Rol_Menu" TypeName="MilenioCloudModel.Rol_Menu" StoreEntitySet="Rol_Menu">
             <EndProperty Name="Rol">
               <ScalarProperty Name="Id_Rol" ColumnName="Id_Rol" />

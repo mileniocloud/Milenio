@@ -24,6 +24,7 @@ namespace MilenioApi.DAO
         public string Cod_Aprobacion { get; set; }
         public bool Confirmada { get; set; }
         public System.DateTime Fecha_Create { get; set; }
+        public Nullable<bool> Asistio { get; set; }
     
         public virtual Detalle_Agenda Detalle_Agenda { get; set; }
         public virtual Paciente Paciente { get; set; }

@@ -22,6 +22,7 @@ namespace MilenioApi.DAO
     
         public System.Guid Id_Detalle_Agenda { get; set; }
         public System.Guid Id_Horario_Agenda { get; set; }
+        public Nullable<System.Guid> Id_Suplente { get; set; }
         public System.DateTime Hora_Desde { get; set; }
         public System.DateTime Hora_Hasta { get; set; }
         public System.DateTime Fecha { get; set; }

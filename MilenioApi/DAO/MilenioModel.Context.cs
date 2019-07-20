@@ -46,7 +46,6 @@ namespace MilenioApi.DAO
         public virtual DbSet<Horario_Agenda> Horario_Agenda { get; set; }
         public virtual DbSet<Licencia> Licencia { get; set; }
         public virtual DbSet<Medicamentos_Esenciales> Medicamentos_Esenciales { get; set; }
-        public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<Ocupacion> Ocupacion { get; set; }
         public virtual DbSet<Paciente> Paciente { get; set; }
@@ -62,6 +61,7 @@ namespace MilenioApi.DAO
         public virtual DbSet<Ubicacion> Ubicacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Vistas> Vistas { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
     
         public virtual int Validate_Create_User(string login, string identificacion, string email, string registroprofesional)
         {
